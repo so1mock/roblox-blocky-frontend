@@ -29,5 +29,3 @@ dist-ssr
 coverage/
 # (TypeScript incremental build info)
 *.tsbuildinfo
-# 같은 패키지 매니저 lock 파일은 보통 커밋하는 게 좋음 (버전 동기화를 위해)
-pnpm-lock.yaml
