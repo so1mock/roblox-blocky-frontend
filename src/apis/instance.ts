@@ -1,8 +1,16 @@
 import axios from "axios";
 
+const baseURL = import.meta.env.VITE_API_BASE_URL;
+
+if (!baseURL) {
+  throw new Error("VITE_API_BASE_URL is not set. Please check your .env file.");
+}
+
+const API_TIMEOUT = 5000; // 타임아웃을 명확한 상수로 지정
+
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  timeout: 1000,
+  baseURL,
+  timeout: API_TIMEOUT,
 });
 
 export default instance;
