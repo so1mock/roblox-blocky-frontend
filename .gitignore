@@ -29,3 +29,6 @@ dist-ssr
 coverage/
 # (TypeScript incremental build info)
 *.tsbuildinfo
+
+# TanStack Router가 생성해주는 파일
+/src/routeTree.gen.ts
