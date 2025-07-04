@@ -4,10 +4,10 @@ import { Header } from "../shared/components/Header";
 
 export const Route = createRootRoute({
   component: () => (
-    <>
-      <Header/>
+    <div className="min-w-[1024px]">
+      <Header />
       <Outlet />
       <TanStackRouterDevtools />
-    </>
+    </div>
   ),
 });
