@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+@theme {
+  --color-rbLightPurple: #e6cdfd;
+  --color-rbPurple: #9d7cde;
+  --color-rbDarkPurple: #855cd6;
+  --color-rbGreen: #328554;
+  --color-rbDrakGray: #797979;
+  --color-rbBlue: #3795ed;
+  --color-rbDarkBlue: #5d4cf9;
+  --color-rbYellow: #ffbc05;
+  --color-rbBlack: #454545;
+  --color-rbRed: #ff7b7b;
+  --color-rbGreen: #8dff7b;
+}
