@@ -1,4 +1,4 @@
-import { LinkNavButton } from "./LinkNavButton";
+import { LinkNavButton } from "./LinkNavButton";
 
 export function Header() {
   return (
