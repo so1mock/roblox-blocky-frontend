@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 
 export function LinkNavButton({ to, title }: { to: string; title: string }) {
   return (
-    <Link to={to} className="flex items-center text-white h-full">
+    <Link to={to} className="text-white">
       {title}
     </Link>
   );
