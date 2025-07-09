@@ -1,11 +1,8 @@
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-import { useTheme } from "./common/hooks/useTheme";
 
 function App() {
-  const [theme, setTheme] = useTheme();
-
   return (
     <>
       <div>
