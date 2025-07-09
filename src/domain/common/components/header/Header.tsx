@@ -1,5 +1,6 @@
 import { LinkNavButton } from "./LinkNavButton";
 import { Link } from "@tanstack/react-router";
+import { SocialLoginButton } from "../../../User/components/SocialLoginButton";
 
 export function Header() {
   return (
@@ -12,8 +13,9 @@ export function Header() {
         <LinkNavButton to="/project" title="만들기" />
         <LinkNavButton to="/tutorial" title="튜토리얼" />
         <LinkNavButton to="/about" title="소개" />
-        <LinkNavButton to="/signup" title="회원가입" />
-        <LinkNavButton to="/login" title="로그인" />
+        {/* <LinkNavButton to="/signup" title="회원가입" />
+        <LinkNavButton to="/login" title="로그인" /> */}
+        <SocialLoginButton />
       </nav>
     </header>
   );
