@@ -7,7 +7,7 @@ export const Route = createRootRoute({
     <>
       <div className="min-h-screen flex flex-col">
         <Header />
-        <main className="bg-[#F5FAFF] flex-1 flex items-center justify-center">
+        <main className="bg-rbBg flex-1 flex items-center justify-center">
           <Outlet />
         </main>
         <TanStackRouterDevtools />
