@@ -11,6 +11,7 @@
   --color-rbBorderEmpty: #ffbc05;
   --color-rbText: #454545;
   --color-rbDanger: #ff7b7b;
+  --color-rbLogin: #335fff;
 }
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
