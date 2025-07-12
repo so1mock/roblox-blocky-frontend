@@ -5,5 +5,5 @@ export const Route = createFileRoute("/project")({
 });
 
 function RouteComponent() {
-  return <div>Project Page</div>;
+  return <div className="text-rbText">Project Page</div>;
 }

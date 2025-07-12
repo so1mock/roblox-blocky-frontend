@@ -5,5 +5,5 @@ export const Route = createFileRoute("/signUp")({
 });
 
 function RouteComponent() {
-  return <div>Sign Up Page</div>;
+  return <div className="text-rbText">Sign Up Page</div>;
 }

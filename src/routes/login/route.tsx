@@ -5,5 +5,5 @@ export const Route = createFileRoute("/login")({
 });
 
 function RouteComponent() {
-  return <div>Log In Page</div>;
+  return <div className="text-rbText">Log In Page</div>;
 }
