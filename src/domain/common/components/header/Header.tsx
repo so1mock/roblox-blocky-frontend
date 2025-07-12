@@ -4,19 +4,18 @@ import { SocialLoginButton } from "../../../User/components/SocialLoginButton";
 
 export function Header() {
   return (
-    <header className="relative flex items-center bg-rbLeftNav p-2 min-w-[600px]">
-      <Link to="/">
-        <img src="/LuaBlock_logo.png" className="z-10" />
+    <header className="relative flex items-center bg-rbSurface p-2 pr-5 min-w-[800px] justify-center">
+      <Link to="/" className="absolute left-2">
+        <img src="/LuaBlock_logo.png" />
       </Link>
 
-      <nav className="absolute left-1/2 transform -translate-x-1/2 flex gap-8  min-w-[320px]">
+      <nav className="flex gap-12 justify-center">
         <LinkNavButton to="/project" title="만들기" />
         <LinkNavButton to="/tutorial" title="튜토리얼" />
         <LinkNavButton to="/about" title="소개" />
-        {/* <LinkNavButton to="/signup" title="회원가입" />
-        <LinkNavButton to="/login" title="로그인" /> */}
-        <SocialLoginButton />
       </nav>
+
+      <SocialLoginButton className="absolute right-5" />
     </header>
   );
 }
