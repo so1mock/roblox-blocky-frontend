@@ -4,7 +4,7 @@ import { SocialLoginButton } from "../../../User/components/SocialLoginButton";
 
 export function Header() {
   return (
-    <header className="relative flex items-center bg-rbSurface p-2 min-w-[600px]">
+    <header className="relative flex items-center bg-rbLeftNav p-2 min-w-[600px]">
       <Link to="/">
         <img src="/LuaBlock_logo.png" className="z-10" />
       </Link>
