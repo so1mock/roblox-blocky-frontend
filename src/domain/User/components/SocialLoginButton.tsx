@@ -1,8 +1,4 @@
-interface SocialLoginButtonProps {
-  className?: string;
-}
-
-export function SocialLoginButton({ className = "" }: SocialLoginButtonProps) {
+export function SocialLoginButton({ className = "" }: { className: string }) {
   return (
     <a
       className={`flex items-center whitespace-nowrap gap-1 h-10 bg-rbLogin min-w-fit p-2 rounded-lg ${className}`}
