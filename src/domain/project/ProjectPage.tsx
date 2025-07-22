@@ -1,8 +1,7 @@
 import { useRef } from "react";
-import * as Blockly from "blockly";
 import { useBlocklyUI } from "./hooks/useBlocklyUI";
 import rectangleBlue from "../assets/rectangle-blue.png";
-import { flyoutToolbox } from "./blocky/toolbox";
+import { Scrollbar } from "blockly";
 
 function ProjectPage() {
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
@@ -26,9 +25,7 @@ function ProjectPage() {
         </button>
         <button
           className="flex items-center py-2 pr-10 pl-2 bg-[#EBF0FF] rounded-xl cursor-pointer"
-          onClick={() => {
-            console.log(workspaceRef.current);
-          }}
+          onClick={() => {}}
         >
           <img src={rectangleBlue} alt="Rectangle Blue" />
           <span className="pl-3 text-lg font-bold">수식</span>
