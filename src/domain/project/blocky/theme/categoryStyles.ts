@@ -1,23 +1,23 @@
 export const categoryStyles = {
-  logic_category: {
+  math_category: {
     colour: "#9CC7FF",
   },
-  loop_category: {
+  logic_category: {
     colour: "#B8FF9C",
   },
-  math_category: {
-    colour: "#FFBE9C",
-  },
-  text_category: {
-    colour: "#B59CFF",
-  },
-  list_category: {
+  loop_category: {
     colour: "#FF9CB9",
   },
-  variable_category: {
+  control_category: {
+    colour: "#B59CFF",
+  },
+  event_category: {
     colour: "#9CF3FF",
   },
-  procedure_category: {
-    colour: "#FFFC9C",
+  service_category: {
+    colour: "#FF007B",
+  },
+  variable_category: {
+    colour: "#FFBE9C",
   },
 };

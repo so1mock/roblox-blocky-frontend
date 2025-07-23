@@ -1,0 +1,103 @@
+import * as Blockly from "blockly";
+
+export const defineMathCategoryBlocks = () => {
+  Blockly.Blocks["plus_block"] = {
+    init: function () {
+      this.appendValueInput("A").setCheck("Number"); // 첫 번째 피연산자
+      this.appendDummyInput().appendField("+");
+      this.appendValueInput("B").setCheck("Number"); // 두 번째 피연산자
+      this.setOutput(true, "Number");
+      this.setStyle("math_block");
+    },
+  };
+
+  Blockly.Blocks["minus_block"] = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME")
+        .appendField("-")
+        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME");
+      this.setStyle("math_block");
+    },
+  };
+
+  Blockly.Blocks["multify_block"] = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME")
+        .appendField("*")
+        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME");
+      this.setStyle("math_block");
+    },
+  };
+
+  Blockly.Blocks["divide_block"] = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME")
+        .appendField("/")
+        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME");
+      this.setStyle("math_block");
+    },
+  };
+
+  Blockly.Blocks["mod_block"] = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME")
+        .appendField("%")
+        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME");
+      this.setStyle("math_block");
+    },
+  };
+
+  Blockly.Blocks["random_block"] = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME")
+        .appendField("에서")
+        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME")
+        .appendField("사이의 랜덤 수");
+      this.setStyle("math_block");
+    },
+  };
+
+  Blockly.Blocks["vector_block"] = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField("위치(")
+        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME")
+        .appendField(",")
+        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME")
+        .appendField(",")
+        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME")
+        .appendField(")");
+      this.setStyle("math_block");
+    },
+  };
+
+  Blockly.Blocks["cframe_block"] = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField("Cframe.new(")
+        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME")
+        .appendField(",")
+        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME")
+        .appendField(",")
+        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME")
+        .appendField(")");
+      this.setStyle("math_block");
+    },
+  };
+
+  Blockly.Blocks["look_vector_block"] = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField("Cframe from")
+        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME")
+        .appendField("to")
+        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME");
+      this.setStyle("math_block");
+    },
+  };
+};
