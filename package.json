@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@blockly/continuous-toolbox": "^7.0.2",
+    "@blockly/create-package": "^3.0.2",
     "@tanstack/react-router": "^1.121.0",
     "@tanstack/react-router-devtools": "^1.121.27",
     "axios": "^1.10.0",

@@ -1,27 +1,139 @@
 export const mathContents = [
   {
+    type: "math_number",
+    kind: "block",
+  },
+  {
     type: "plus_block",
     kind: "block",
+    inputs: {
+      A: {
+        shadow: {
+          type: "math_number",
+          fields: {
+            NUM: 0,
+          },
+        },
+      },
+      B: {
+        shadow: {
+          type: "math_number",
+          fields: {
+            NUM: 0,
+          },
+        },
+      },
+    },
   },
   {
     type: "minus_block",
     kind: "block",
+    inputs: {
+      A: {
+        shadow: {
+          type: "math_number",
+          fields: {
+            NUM: 0,
+          },
+        },
+      },
+      B: {
+        shadow: {
+          type: "math_number",
+          fields: {
+            NUM: 0,
+          },
+        },
+      },
+    },
   },
   {
     type: "multify_block",
     kind: "block",
+    inputs: {
+      A: {
+        shadow: {
+          type: "math_number",
+          fields: {
+            NUM: 0,
+          },
+        },
+      },
+      B: {
+        shadow: {
+          type: "math_number",
+          fields: {
+            NUM: 0,
+          },
+        },
+      },
+    },
   },
   {
     type: "divide_block",
     kind: "block",
+    inputs: {
+      A: {
+        shadow: {
+          type: "math_number",
+          fields: {
+            NUM: 0,
+          },
+        },
+      },
+      B: {
+        shadow: {
+          type: "math_number",
+          fields: {
+            NUM: 0,
+          },
+        },
+      },
+    },
   },
   {
     type: "mod_block",
     kind: "block",
+    inputs: {
+      A: {
+        shadow: {
+          type: "math_number",
+          fields: {
+            NUM: 0,
+          },
+        },
+      },
+      B: {
+        shadow: {
+          type: "math_number",
+          fields: {
+            NUM: 0,
+          },
+        },
+      },
+    },
   },
   {
     type: "random_block",
     kind: "block",
+    inputs: {
+      A: {
+        shadow: {
+          type: "math_number",
+          fields: {
+            NUM: 0,
+          },
+        },
+      },
+      B: {
+        shadow: {
+          type: "math_number",
+          fields: {
+            NUM: 0,
+          },
+        },
+      },
+    },
   },
   {
     type: "vector_block",

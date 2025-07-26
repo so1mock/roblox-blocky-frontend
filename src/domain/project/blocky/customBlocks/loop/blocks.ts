@@ -39,7 +39,7 @@ export const defineLoopCategoryBlocks = () => {
       this.appendValueInput("CONDITION")
         .setCheck("Boolean")
         .appendField("조건을 만족할 때 까지 반복");
-      this.appendStatementInput("DO").appendField("do");
+      this.appendStatementInput("do-blocks").appendField("do");
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
       this.setStyle("loop_block");
