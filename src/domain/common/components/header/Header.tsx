@@ -1,6 +1,6 @@
 import { LinkNavButton } from "./LinkNavButton";
 import { Link } from "@tanstack/react-router";
-import { SocialLoginButton } from "../../../User/components/SocialLoginButton";
+import { SocialLoginButton } from "../../../user/components/SocialLoginButton";
 
 export function Header() {
   return (
