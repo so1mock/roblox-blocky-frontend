@@ -4,7 +4,6 @@ import {
   type GetTokenResponse,
 } from "../../../domain/user/apis/getToken";
 import { useEffect, useState } from "react";
-// import { useSearch } from "@tanstack/react-router";
 
 type SearchParams = {
   code?: string;
