@@ -1,10 +1,49 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useBlocklyUI } from "./hooks/useBlocklyUI";
 import * as Blockly from "blockly";
 
+const state = {
+  blocks: {
+    languageVersion: 0,
+    blocks: [
+      {
+        type: "mod_block",
+        id: ")|w2#+p.@BTruM/|5hDS",
+        x: 65,
+        y: 326,
+        inputs: {
+          A: {
+            shadow: {
+              type: "math_number",
+
+              fields: {
+                NUM: 123,
+              },
+            },
+          },
+          B: {
+            shadow: {
+              type: "math_number",
+
+              fields: {
+                NUM: 0,
+              },
+            },
+          },
+        },
+      },
+    ],
+  },
+};
 function ProjectPage() {
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
   const workspaceRef = useBlocklyUI(blocklyDivRef);
+
+  useEffect(() => {
+    if (workspaceRef.current) {
+      Blockly.serialization.workspaces.load(state, workspaceRef.current);
+    }
+  }, []);
 
   const handleSave = () => {
     if (workspaceRef.current) {
