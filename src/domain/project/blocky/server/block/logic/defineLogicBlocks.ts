@@ -4,7 +4,7 @@ import type { BlockWithToolboxList } from "../../../../types/block";
 export const defineLogicBlocks = (blocks: BlockWithToolboxList) => {
   // 1. 등록
   blocks.forEach((block) => {
-    Blockly.Blocks[block.toolBoxDefinition.type] = {
+    Blockly.Blocks[block.type] = {
       init: function () {
         block.definition.components.forEach((component) => {
           if (component.componentType === "ValueInput") {
