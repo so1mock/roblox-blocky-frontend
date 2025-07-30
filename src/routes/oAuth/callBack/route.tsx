@@ -1,9 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  useNavigate,
+  useSearch,
+} from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
 import {
   getToken,
   type GetTokenResponse,
 } from "../../../domain/user/apis/getToken";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 type SearchParams = {
   code?: string;
@@ -11,7 +16,7 @@ type SearchParams = {
   error?: string;
 };
 
-export const Route = createFileRoute("/oAuth/callBack/")({
+export const Route = createFileRoute("/oauth/callback")({
   component: RouteComponent,
   validateSearch: (search): SearchParams => {
     return {
@@ -23,42 +28,34 @@ export const Route = createFileRoute("/oAuth/callBack/")({
 });
 
 export function RouteComponent() {
-  const { code, state, error } = Route.useSearch();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [response, setResponse] = useState<GetTokenResponse | null>(null);
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      if (code) {
-        const result = await getToken(code);
-        setResponse(result);
-        setIsLoading(false);
+  const { code, state, error } = useSearch({ from: "/oauth/callback" });
+  console.log(code, state, error);
+  const navigate = useNavigate();
+
+  const { mutate: handleGetToken } = useMutation({
+    mutationFn: getToken,
+    onSuccess: (data: GetTokenResponse) => {
+      if (data.success) {
+        alert("토큰 발급 성공" + JSON.stringify(data));
+
+        localStorage.setItem("access_token", data.data.token);
+        localStorage.setItem("user_info", JSON.stringify(data.data.info));
+
+        navigate({ to: "/" });
+      } else {
+        alert("토큰 발급 실패" + data.error);
       }
-    };
-    fetchData();
-  }, [code]);
+    },
+    onError: (error: Error) => {
+      alert("Mutation 에러" + error);
+    },
+  });
 
-  if (!code) {
-    return <div>인증 코드가 없음</div>;
-  }
+  useEffect(() => {
+    if (code) {
+      handleGetToken(code);
+    }
+  }, []);
 
-  if (error) {
-    return <div>인증 코드 에러 발생</div>;
-  }
-
-  if (isLoading) {
-    return <div> 로딩중</div>;
-  }
-
-  console.log(response);
-  if (response?.success) {
-    return (
-      <div>
-        <div>토큰 발급 성공</div>
-        <div>{response.data.info.nickname}</div>
-      </div>
-    );
-  } else {
-    return <div>토큰 발급 실패</div>;
-  }
+  return <div> Redirecting...</div>;
 }

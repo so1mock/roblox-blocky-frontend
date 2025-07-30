@@ -8,7 +8,7 @@ export function SocialLoginButton({ className = "" }: { className: string }) {
       onClick={() =>
         getOauthCode({
           clientId: import.meta.env.VITE_CLIENT_ID,
-          redirectUri: "http://localhost:5173/oAuth/callBack",
+          redirectUri: "http://localhost:5173/oauth/callback",
           scope: ["openid", "profile", "universe-messaging-service:publish"],
           state: "1234",
         })

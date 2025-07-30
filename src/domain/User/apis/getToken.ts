@@ -1,4 +1,5 @@
 import { api } from "../../common/apis/axios";
+import { AxiosError } from "axios";
 
 export type GetTokenResponse = {
   success: boolean;
@@ -6,7 +7,7 @@ export type GetTokenResponse = {
   error: string | null;
 };
 
-export const getToken = async (code: string) => {
+export const getToken = async (code: string): Promise<GetTokenResponse> => {
   console.log("a code", code);
   try {
     const response = await api.post("oauth2/roblox/callback", { code: code });
@@ -16,11 +17,13 @@ export const getToken = async (code: string) => {
       data: response.data,
       error: null,
     };
-  } catch (error: any) {
-    return {
-      success: false,
-      data: null,
-      error: error.response?.data?.message || "An unknown error occurred",
-    };
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      return {
+        success: false,
+        data: null,
+        error: error.message,
+      };
+    }
   }
 };
