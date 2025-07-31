@@ -1,29 +1,22 @@
 import { api } from "../../common/apis/axios";
-import { AxiosError } from "axios";
+import { type BaseUser, type Auth } from "../types.ts";
 
 export type GetTokenResponse = {
-  success: boolean;
-  data: any | null;
-  error: string | null;
+  info: BaseUser;
+  auth: Auth;
 };
 
 export const getToken = async (code: string): Promise<GetTokenResponse> => {
-  console.log("a code", code);
   try {
     const response = await api.post("oauth2/roblox/callback", { code: code });
-    console.log(response);
+    const { accessToken, info } = response.data;
     return {
-      success: true,
-      data: response.data,
-      error: null,
+      info: info,
+      auth: {
+        accessToken: accessToken,
+      },
     };
   } catch (error: unknown) {
-    if (error instanceof AxiosError) {
-      return {
-        success: false,
-        data: null,
-        error: error.message,
-      };
-    }
+    throw error;
   }
 };

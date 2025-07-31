@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { type User } from "../domain/user/types.ts";
+import { type BaseUser } from "../domain/user/types.ts";
 import { useEffect } from "react";
 
 export const Route = createFileRoute("/")({
@@ -9,13 +9,15 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const {
-    data: user,
+    data: baseUser,
     isSuccess: isLogin,
     isLoading,
   } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
-      const user: User = JSON.parse(localStorage.getItem("user_info") || "");
+      const user: BaseUser = JSON.parse(
+        localStorage.getItem("user_info") || "",
+      );
       return user;
     },
   });
@@ -23,7 +25,7 @@ function Index() {
   useEffect(() => {
     if (!isLoading) {
       if (isLogin) {
-        alert("환영합니다" + user.nickname);
+        alert("환영합니다" + baseUser.nickname);
       } else {
         alert("로그인을 해주세요");
       }
