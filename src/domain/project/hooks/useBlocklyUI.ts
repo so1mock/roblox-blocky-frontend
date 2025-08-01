@@ -18,7 +18,7 @@ export function useBlocklyUI(
 
       // 1. 등록
       defineMathBlocks(blockListByCategory[0].blocks);
-      defineLogicBlocks(blockListByCategory[1].blocks);
+      // defineLogicBlocks(blockListByCategory[1].blocks);
 
       // 2. Toolbox 생성
       const toolboxFromServer = {
@@ -34,16 +34,16 @@ export function useBlocklyUI(
               inputs: block.toolBoxDefinition.toolboxInputs,
             })),
           },
-          {
-            kind: "category",
-            name: "수식", // 또는 서버에 따라 카테고리별 분류 가능
-            categorystyle: "math_category",
-            contents: blockListByCategory[1].blocks.map((block) => ({
-              kind: block.toolBoxDefinition.kind,
-              type: block.toolBoxDefinition.type,
-              inputs: block.toolBoxDefinition.toolboxInputs,
-            })),
-          },
+          // {
+          //   kind: "category",
+          //   name: "수식", // 또는 서버에 따라 카테고리별 분류 가능
+          //   categorystyle: "math_category",
+          //   contents: blockListByCategory[1].blocks.map((block) => ({
+          //     kind: block.toolBoxDefinition.kind,
+          //     type: block.toolBoxDefinition.type,
+          //     inputs: block.toolBoxDefinition.toolboxInputs,
+          //   })),
+          // },
         ],
       };
 
