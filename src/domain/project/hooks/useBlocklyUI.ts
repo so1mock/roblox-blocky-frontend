@@ -6,66 +6,67 @@ import { getBlockList } from "../apis/block";
 import type { BlockListResponse } from "../types/block";
 import { defineMathBlocks } from "../blocky/server/block/math/defineMathBlocks";
 import { defineLogicBlocks } from "../blocky/server/block/logic/defineLogicBlocks";
+import { toolboxFromServer } from "../blocky/server/toolbox";
+import { defineLocalBlocks } from "../blocky/local/blocks/defineLocalBlocks";
+import toolbox from "../blocky/local/toolbox/toolbox";
 
 export function useBlocklyUI(
   blocklyDivRef: React.RefObject<HTMLDivElement | null>,
+  options?: { useServer?: boolean },
 ) {
   const workspaceRef = useRef<Blockly.WorkspaceSvg | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const blockListByCategory: BlockListResponse[] = await getBlockList();
+    const fetchAndInitialize = async () => {
+      let blockListByCategory: BlockListResponse[];
+      if (options?.useServer === true) {
+        // 0. 서버로부터 데이터 받아오기
+        blockListByCategory = await getBlockList();
 
-      // 1. 등록
-      defineMathBlocks(blockListByCategory[0].blocks);
-      // defineLogicBlocks(blockListByCategory[1].blocks);
+        // 1. 블럭 등록
+        defineMathBlocks(blockListByCategory[0].blocks);
+        defineLogicBlocks(blockListByCategory[1].blocks);
 
-      // 2. Toolbox 생성
-      const toolboxFromServer = {
-        kind: "categoryToolbox",
-        contents: [
-          {
-            kind: "category",
-            name: "수식", // 또는 서버에 따라 카테고리별 분류 가능
-            categorystyle: "math_category",
-            contents: blockListByCategory[0].blocks.map((block) => ({
-              kind: block.toolBoxDefinition.kind,
-              type: block.toolBoxDefinition.type,
-              inputs: block.toolBoxDefinition.toolboxInputs,
-            })),
+        if (!blocklyDivRef.current) return;
+
+        registerContinuousToolbox();
+
+        // 2. 블럭 주입
+        const workspaceSvg = Blockly.inject(blocklyDivRef.current, {
+          toolbox: toolboxFromServer(blockListByCategory), // 툴 박스 정의
+          plugins: {
+            flyoutsVerticalToolbox: "ContinuousFlyout",
+            metricsManager: "ContinuousMetrics",
+            toolbox: "ContinuousToolbox",
           },
-          // {
-          //   kind: "category",
-          //   name: "수식", // 또는 서버에 따라 카테고리별 분류 가능
-          //   categorystyle: "math_category",
-          //   contents: blockListByCategory[1].blocks.map((block) => ({
-          //     kind: block.toolBoxDefinition.kind,
-          //     type: block.toolBoxDefinition.type,
-          //     inputs: block.toolBoxDefinition.toolboxInputs,
-          //   })),
-          // },
-        ],
-      };
+          theme: customTheme,
+        });
 
-      // 3. inject
-      if (!blocklyDivRef.current) return;
+        workspaceRef.current = workspaceSvg;
+      } else {
+        // 1. local 데이터로 렌더링
+        defineLocalBlocks();
 
-      registerContinuousToolbox();
+        if (!blocklyDivRef.current) return;
 
-      const workspaceSvg = Blockly.inject(blocklyDivRef.current, {
-        toolbox: toolboxFromServer,
-        plugins: {
-          flyoutsVerticalToolbox: "ContinuousFlyout",
-          metricsManager: "ContinuousMetrics",
-          toolbox: "ContinuousToolbox",
-        },
-        theme: customTheme,
-      });
+        registerContinuousToolbox();
 
-      workspaceRef.current = workspaceSvg;
+        // 2. 블럭 주입
+        const workspaceSvg = Blockly.inject(blocklyDivRef.current, {
+          toolbox: toolbox, // 툴 박스 정의
+          plugins: {
+            flyoutsVerticalToolbox: "ContinuousFlyout",
+            metricsManager: "ContinuousMetrics",
+            toolbox: "ContinuousToolbox",
+          },
+          theme: customTheme,
+        });
+
+        workspaceRef.current = workspaceSvg;
+      }
     };
 
-    fetchData();
+    fetchAndInitialize();
   }, [blocklyDivRef]);
 
   return workspaceRef;

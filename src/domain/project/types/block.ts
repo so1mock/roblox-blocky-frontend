@@ -34,12 +34,12 @@ export type ToolboxInputs = {
 };
 
 export type ToolboxDefinition = {
-  type: string;
   kind: "block";
   toolboxInputs: ToolboxInputs;
 };
 
 export type BlockWithToolbox = {
+  type: string;
   definition: BlockDefinition;
   toolBoxDefinition: ToolboxDefinition;
 };

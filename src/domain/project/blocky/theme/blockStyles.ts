@@ -1,9 +1,26 @@
-import { control_block } from "../customBlocks/control/style";
-import { event_block } from "../customBlocks/event/style";
-import { logic_block } from "../server/block/logic/style";
-import { loop_block } from "../customBlocks/loop/style";
-import { math_block } from "../server/block/math/style";
-import { service_block } from "../customBlocks/service/style";
+export const control_block = {
+  colourPrimary: "#B59CFF",
+};
+
+export const event_block = {
+  colourPrimary: "#9CF3FF",
+};
+
+export const logic_block = {
+  colourPrimary: "#68FF2C",
+};
+
+export const loop_block = {
+  colourPrimary: "#FF9CB9",
+};
+
+export const math_block = {
+  colourPrimary: "#9CC7FF",
+};
+
+export const service_block = {
+  colourPrimary: "#FF007B",
+};
 
 export const blockStyles = {
   math_block,
