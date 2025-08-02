@@ -6,6 +6,8 @@ import { getBlockList } from "../apis/block";
 import type { BlockListResponse } from "../types/block";
 import { defineMathBlocks } from "../blocky/server/block/math/defineMathBlocks";
 import { defineLogicBlocks } from "../blocky/server/block/logic/defineLogicBlocks";
+import { defineControlBlocks } from "../blocky/server/block/control/defineControlBlocks";
+import { defineLoopBlocks } from "../blocky/server/block/loop/defineLoopBlocks";
 import { toolboxFromServer } from "../blocky/server/toolbox";
 import { defineLocalBlocks } from "../blocky/local/blocks/defineLocalBlocks";
 import toolbox from "../blocky/local/toolbox/toolbox";
@@ -26,6 +28,8 @@ export function useBlocklyUI(
         // 1. 블럭 등록
         defineMathBlocks(blockListByCategory[0].blocks);
         defineLogicBlocks(blockListByCategory[1].blocks);
+        defineControlBlocks(blockListByCategory[2].blocks);
+        defineLoopBlocks(blockListByCategory[3].blocks);
 
         if (!blocklyDivRef.current) return;
 

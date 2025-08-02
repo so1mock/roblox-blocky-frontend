@@ -19,6 +19,15 @@ export const defineMathBlocks = (blocks: BlockWithToolboxList) => {
               new Blockly.FieldTextInput(component.fieldValue ?? ""),
               component.name,
             );
+          } else if (component.componentType === "FieldDropdown") {
+            const dummy = this.appendDummyInput();
+            const options = component.options.map(
+              (option) => [option.name, option.value] as [string, string],
+            );
+            dummy.appendField(
+              new Blockly.FieldDropdown(options),
+              component.name,
+            );
           }
         });
 

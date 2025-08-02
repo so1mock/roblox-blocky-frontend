@@ -1,7 +1,7 @@
 import * as Blockly from "blockly";
 import type { BlockWithToolboxList } from "../../../../types/block";
 
-export const defineLogicBlocks = (blocks: BlockWithToolboxList) => {
+export const defineLoopBlocks = (blocks: BlockWithToolboxList) => {
   // 1. 등록
   blocks.forEach((block) => {
     Blockly.Blocks[block.type] = {
@@ -28,11 +28,17 @@ export const defineLogicBlocks = (blocks: BlockWithToolboxList) => {
               new Blockly.FieldDropdown(options),
               component.name,
             );
+          } else if (component.componentType === "Component$StatementInput") {
+            const statement = this.appendStatementInput(component.name);
+            if (component.fieldText) statement.appendField(component.fieldText);
           }
         });
 
-        if (block.definition.output) {
-          this.setOutput(true, block.definition.output);
+        if (block.definition.previousStatement !== undefined) {
+          this.setPreviousStatement(block.definition.previousStatement, null);
+        }
+        if (block.definition.nextStatement !== undefined) {
+          this.setNextStatement(block.definition.nextStatement, null);
         }
         if (block.definition.inputsInline !== undefined) {
           this.setInputsInline(block.definition.inputsInline);

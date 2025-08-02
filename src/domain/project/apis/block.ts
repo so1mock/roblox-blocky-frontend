@@ -7,3 +7,8 @@ export const getBlockList = async (): Promise<BlockListResponse[]> => {
   console.log(data);
   return data;
 };
+
+export const parseBlocks = async (blocks: any): Promise<any> => {
+  const { data } = await instance.post("/test/block/parse", { blocks });
+  return data;
+};

@@ -147,4 +147,8 @@ export const mathContents = [
     type: "look_vector_block",
     kind: "block",
   },
+  {
+    type: "create_player_variable",
+    kind: "block",
+  },
 ];

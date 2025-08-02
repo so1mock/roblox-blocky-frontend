@@ -100,4 +100,15 @@ export const defineMathCategoryBlocks = () => {
       this.setStyle("math_block");
     },
   };
+
+  Blockly.Blocks["create_player_variable"] = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField("플레이어 변수 생성")
+        .appendField(new Blockly.FieldTextInput("playerName"), "VARIABLE_NAME");
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setStyle("player_block");
+    },
+  };
 };
