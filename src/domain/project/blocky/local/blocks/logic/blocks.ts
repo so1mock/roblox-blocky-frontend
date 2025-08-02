@@ -84,4 +84,18 @@ export const defineLogicCategoryBlocks = () => {
       this.setStyle("logic_block");
     },
   };
+
+  Blockly.Blocks["logic_boolean"] = {
+    init: function () {
+      this.appendDummyInput().appendField(
+        new Blockly.FieldDropdown([
+          ["참", "true"],
+          ["거짓", "false"],
+        ]),
+        "BOOL",
+      );
+      this.setOutput(true, "Boolean"); // 결과는 Boolean이 맞음
+      this.setStyle("logic_block");
+    },
+  };
 };

@@ -1,7 +1,7 @@
 import * as Blockly from "blockly";
-import type { BlockWithToolboxList } from "../../../../types/block";
+import type { BlockWithToolboxList } from "../../../types/block";
 
-export const defineMathBlocks = (blocks: BlockWithToolboxList) => {
+export const defineLogicBlocks = (blocks: BlockWithToolboxList) => {
   // 1. 등록
   blocks.forEach((block) => {
     Blockly.Blocks[block.type] = {
@@ -19,6 +19,18 @@ export const defineMathBlocks = (blocks: BlockWithToolboxList) => {
               new Blockly.FieldTextInput(component.fieldValue ?? ""),
               component.name,
             );
+          } else if (component.componentType === "FieldDropdown") {
+            const dummy = this.appendDummyInput();
+            dummy.appendField(
+              new Blockly.FieldDropdown(
+                component.options.map((option) => [option.name, option.value]),
+              ),
+              component.name,
+            );
+          } else if (component.componentType === "Component$StatementInput") {
+            this.appendStatementInput(component.name).appendField(
+              component.fieldText,
+            );
           }
         });
 
@@ -30,6 +42,12 @@ export const defineMathBlocks = (blocks: BlockWithToolboxList) => {
         }
         if (block.definition.style) {
           this.setStyle(block.definition.style);
+        }
+        if (block.definition.nextStatement) {
+          this.setNextStatement(block.definition.style);
+        }
+        if (block.definition.previousStatement) {
+          this.setPreviousStatement(block.definition.style);
         }
       },
     };

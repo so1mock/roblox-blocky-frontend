@@ -19,5 +19,17 @@ export const toolboxFromServer = (
       categorystyle: "logic_category",
       contents: makeLogicContens(blockListByCategory[1]),
     },
+    {
+      kind: "category",
+      name: "제어", // 또는 서버에 따라 카테고리별 분류 가능
+      categorystyle: "control_category",
+      contents: makeLogicContens(blockListByCategory[2]),
+    },
+    {
+      kind: "category",
+      name: "흐름", // 또는 서버에 따라 카테고리별 분류 가능
+      categorystyle: "loop_category",
+      contents: makeLogicContens(blockListByCategory[3]),
+    },
   ],
 });

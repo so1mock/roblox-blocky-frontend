@@ -13,11 +13,23 @@ export type BlockComponent =
       fieldType: string; // 예: "text"
       fieldValue: string;
       name: string;
+    }
+  | {
+      componentType: "FieldDropdown";
+      name: string;
+      options: { name: string; value: string }[];
+    }
+  | {
+      componentType: "Component$StatementInput";
+      fieldText: string;
+      name: string;
     };
 
 export type BlockDefinition = {
   style?: string | null;
   output?: string;
+  nextStatement?: string | null;
+  previousStatement?: string | null;
   inputsInline?: boolean;
   components: BlockComponent[];
 };

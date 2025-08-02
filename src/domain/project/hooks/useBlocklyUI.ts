@@ -4,11 +4,13 @@ import { registerContinuousToolbox } from "@blockly/continuous-toolbox";
 import { customTheme } from "../blocky/theme/customTheme";
 import { getBlockList } from "../apis/block";
 import type { BlockListResponse } from "../types/block";
-import { defineMathBlocks } from "../blocky/server/block/math/defineMathBlocks";
-import { defineLogicBlocks } from "../blocky/server/block/logic/defineLogicBlocks";
+import { defineMathBlocks } from "../blocky/server/block/defineMathBlocks";
+import { defineLogicBlocks } from "../blocky/server/block/defineLogicBlocks";
 import { toolboxFromServer } from "../blocky/server/toolbox";
 import { defineLocalBlocks } from "../blocky/local/blocks/defineLocalBlocks";
 import toolbox from "../blocky/local/toolbox/toolbox";
+import { defineControlBlocks } from "../blocky/server/block/defineControlBlocks";
+import { defineLoopBlocks } from "../blocky/server/block/defineLoopBlocks";
 
 export function useBlocklyUI(
   blocklyDivRef: React.RefObject<HTMLDivElement | null>,
@@ -26,6 +28,8 @@ export function useBlocklyUI(
         // 1. 블럭 등록
         defineMathBlocks(blockListByCategory[0].blocks);
         defineLogicBlocks(blockListByCategory[1].blocks);
+        defineControlBlocks(blockListByCategory[2].blocks);
+        defineLoopBlocks(blockListByCategory[3].blocks);
 
         if (!blocklyDivRef.current) return;
 
