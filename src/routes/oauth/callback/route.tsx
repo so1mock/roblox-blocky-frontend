@@ -28,23 +28,18 @@ export const Route = createFileRoute("/oauth/callback")({
 });
 
 export function RouteComponent() {
-  const { code, state, error } = useSearch({ from: "/oauth/callback" });
-  console.log(code, state, error);
+  const { code } = useSearch({ from: "/oauth/callback" });
   const navigate = useNavigate();
 
   const { mutate: handleGetToken } = useMutation({
     mutationFn: getToken,
     onSuccess: (data: GetTokenResponse) => {
-      if (data.success) {
-        alert("토큰 발급 성공" + JSON.stringify(data));
+      console.log("토큰 발급 성공" + JSON.stringify(data));
 
-        localStorage.setItem("access_token", data.data.token);
-        localStorage.setItem("user_info", JSON.stringify(data.data.info));
+      localStorage.setItem("access_token", data.auth.accessToken);
+      localStorage.setItem("user_info", JSON.stringify(data.info));
 
-        navigate({ to: "/" });
-      } else {
-        alert("토큰 발급 실패" + data.error);
-      }
+      navigate({ to: "/" });
     },
     onError: (error: Error) => {
       alert("Mutation 에러" + error);
