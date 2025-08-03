@@ -46,6 +46,11 @@ export function useBlocklyUI(
           theme: customTheme,
         });
 
+        // 변수 생성 버튼 콜백 등록
+        workspaceSvg.registerButtonCallback("CREATE_VARIABLE", () => {
+          Blockly.Variables.createVariableButtonHandler(workspaceSvg);
+        });
+
         workspaceRef.current = workspaceSvg;
       } else {
         // 1. local 데이터로 렌더링
@@ -64,6 +69,11 @@ export function useBlocklyUI(
             toolbox: "ContinuousToolbox",
           },
           theme: customTheme,
+        });
+
+        // 변수 생성 버튼 콜백 등록
+        workspaceSvg.registerButtonCallback("CREATE_VARIABLE", () => {
+          Blockly.Variables.createVariableButtonHandler(workspaceSvg);
         });
 
         workspaceRef.current = workspaceSvg;
