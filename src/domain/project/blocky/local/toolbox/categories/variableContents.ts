@@ -8,7 +8,14 @@ export const variableContents = [
     type: "variables_get",
   },
   {
-    kind: "block", 
-    type: "variables_get_dynamic",
+    kind: "sep",
+  },
+  {
+    kind: "block",
+    type: "variables_type_check",
+  },
+  {
+    kind: "block",
+    type: "variables_type_convert",
   },
 ];
