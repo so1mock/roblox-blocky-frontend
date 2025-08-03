@@ -5,7 +5,7 @@ import * as Blockly from "blockly";
 function ProjectPage() {
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
   const workspaceRef = useBlocklyUI(blocklyDivRef, {
-    useServer: true,
+    useServer: false,
   });
 
   const handleSave = () => {

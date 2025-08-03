@@ -4,6 +4,7 @@ import { defineLogicCategoryBlocks } from "./logic/blocks";
 import { defineLoopCategoryBlocks } from "./loop/blocks";
 import { defineMathCategoryBlocks } from "./math/blocks";
 import { defineServiceCategoryBlocks } from "./service/blocks";
+import { defineVariableCategoryBlocks } from "./variable/blocks";
 
 export const defineLocalBlocks = () => {
   defineMathCategoryBlocks();
@@ -12,4 +13,5 @@ export const defineLocalBlocks = () => {
   defineControlCategoryBlocks();
   defineEventCategoryBlocks();
   defineServiceCategoryBlocks();
+  defineVariableCategoryBlocks();
 };

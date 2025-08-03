@@ -4,6 +4,7 @@ import { logicContents } from "./categories/logicContents";
 import { loopContents } from "./categories/loopContents";
 import { mathContents } from "./categories/mathContents";
 import { serviceContents } from "./categories/serviceContents";
+import { variableContents } from "./categories/variableContents";
 
 export default {
   kind: "categoryToolbox",
@@ -52,6 +53,12 @@ export default {
       name: "변수",
       custom: "VARIABLE",
       categorystyle: "variable_category",
+    },
+    {
+      kind: "category",
+      name: "내 변수",
+      categorystyle: "my_variable_category",
+      contents: variableContents,
     },
   ],
 };

@@ -22,6 +22,10 @@ export const service_block = {
   colourPrimary: "#FF007B",
 };
 
+export const variable_block = {
+  colourPrimary: "#2FBE9C",
+};
+
 export const blockStyles = {
   math_block,
   logic_block,
@@ -29,4 +33,5 @@ export const blockStyles = {
   control_block,
   event_block,
   service_block,
+  variable_block,
 };
