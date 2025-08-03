@@ -48,6 +48,11 @@ const createTypedVariable = (workspace: Blockly.WorkspaceSvg) => {
     workspace.refreshToolboxSelection();
     
     console.log(`변수 "${variableName}"이 ${selectedType} 타입으로 생성되었습니다.`);
+    console.log("변수 ID:", variable.getId());
+    console.log("변수 정보:", variable);
+    console.log("현재 워크스페이스의 모든 변수:", workspace.getAllVariables());
+  } else {
+    console.error("변수 생성에 실패했습니다.");
   }
 };
 
