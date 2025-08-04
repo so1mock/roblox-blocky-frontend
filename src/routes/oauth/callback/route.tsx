@@ -1,14 +1,6 @@
-import {
-  createFileRoute,
-  useNavigate,
-  useSearch,
-} from "@tanstack/react-router";
-import { useMutation } from "@tanstack/react-query";
-import {
-  getToken,
-  type GetTokenResponse,
-} from "../../../domain/user/apis/getToken";
+import { createFileRoute, useSearch } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { useUser } from "../../../domain/user/hooks/useUser.ts";
 
 type SearchParams = {
   code?: string;
@@ -29,26 +21,11 @@ export const Route = createFileRoute("/oauth/callback")({
 
 export function RouteComponent() {
   const { code } = useSearch({ from: "/oauth/callback" });
-  const navigate = useNavigate();
-
-  const { mutate: handleGetToken } = useMutation({
-    mutationFn: getToken,
-    onSuccess: (data: GetTokenResponse) => {
-      console.log("토큰 발급 성공" + JSON.stringify(data));
-
-      localStorage.setItem("access_token", data.auth.accessToken);
-      localStorage.setItem("user_info", JSON.stringify(data.info));
-
-      navigate({ to: "/" });
-    },
-    onError: (error: Error) => {
-      alert("Mutation 에러" + error);
-    },
-  });
+  const { handleLogin } = useUser();
 
   useEffect(() => {
     if (code) {
-      handleGetToken(code);
+      handleLogin(code);
     }
   }, []);
 
