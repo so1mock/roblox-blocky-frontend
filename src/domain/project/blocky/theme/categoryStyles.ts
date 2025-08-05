@@ -20,7 +20,7 @@ export const categoryStyles = {
   variable_category: {
     colour: "#FFBE9C",
   },
-  my_variable_category: {
-    colour: "#2FBE9C",
+  hit_category: {
+    colour: "#BF3E9A",
   },
 };

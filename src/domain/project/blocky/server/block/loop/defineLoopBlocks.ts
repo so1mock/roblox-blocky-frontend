@@ -1,7 +1,7 @@
 import * as Blockly from "blockly";
-import type { BlockWithToolboxList } from "../../../types/block";
+import type { BlockWithToolboxList } from "../../../../types/block";
 
-export const defineLogicBlocks = (blocks: BlockWithToolboxList) => {
+export const defineLoopBlocks = (blocks: BlockWithToolboxList) => {
   // 1. 등록
   blocks.forEach((block) => {
     Blockly.Blocks[block.type] = {
@@ -21,33 +21,30 @@ export const defineLogicBlocks = (blocks: BlockWithToolboxList) => {
             );
           } else if (component.componentType === "FieldDropdown") {
             const dummy = this.appendDummyInput();
+            const options = component.options.map(
+              (option) => [option.name, option.value] as [string, string],
+            );
             dummy.appendField(
-              new Blockly.FieldDropdown(
-                component.options.map((option) => [option.name, option.value]),
-              ),
+              new Blockly.FieldDropdown(options),
               component.name,
             );
           } else if (component.componentType === "Component$StatementInput") {
-            this.appendStatementInput(component.name).appendField(
-              component.fieldText,
-            );
+            const statement = this.appendStatementInput(component.name);
+            if (component.fieldText) statement.appendField(component.fieldText);
           }
         });
 
-        if (block.definition.output) {
-          this.setOutput(true, block.definition.output);
+        if (block.definition.previousStatement !== undefined) {
+          this.setPreviousStatement(block.definition.previousStatement, null);
+        }
+        if (block.definition.nextStatement !== undefined) {
+          this.setNextStatement(block.definition.nextStatement, null);
         }
         if (block.definition.inputsInline !== undefined) {
           this.setInputsInline(block.definition.inputsInline);
         }
         if (block.definition.style) {
           this.setStyle(block.definition.style);
-        }
-        if (block.definition.nextStatement) {
-          this.setNextStatement(block.definition.style);
-        }
-        if (block.definition.previousStatement) {
-          this.setPreviousStatement(block.definition.style);
         }
       },
     };

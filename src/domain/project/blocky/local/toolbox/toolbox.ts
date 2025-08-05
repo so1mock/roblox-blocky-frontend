@@ -51,14 +51,15 @@ export default {
     {
       kind: "category",
       name: "변수",
-      custom: "VARIABLE",
       categorystyle: "variable_category",
-    },
-    {
-      kind: "category",
-      name: "내 변수",
-      categorystyle: "my_variable_category",
-      contents: variableContents,
+      contents: [
+        {
+          kind: "button",
+          text: "새 변수 만들기",
+          callbackKey: "CREATE_VARIABLE",
+        },
+        ...variableContents,
+      ],
     },
   ],
 };

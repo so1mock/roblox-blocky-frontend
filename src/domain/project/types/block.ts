@@ -15,22 +15,25 @@ export type BlockComponent =
       name: string;
     }
   | {
-      componentType: "FieldDropdown";
+      componentType: "Component$StatementInput";
       name: string;
-      options: { name: string; value: string }[];
+      fieldText?: string;
     }
   | {
-      componentType: "Component$StatementInput";
-      fieldText: string;
+      componentType: "FieldDropdown";
       name: string;
+      options: Array<{
+        name: string;
+        value: string;
+      }>;
     };
 
 export type BlockDefinition = {
   style?: string | null;
   output?: string;
-  nextStatement?: string | null;
-  previousStatement?: string | null;
   inputsInline?: boolean;
+  previousStatement?: boolean;
+  nextStatement?: boolean;
   components: BlockComponent[];
 };
 

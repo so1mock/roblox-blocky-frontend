@@ -143,8 +143,4 @@ export const logicContents = [
       },
     },
   },
-  {
-    type: "logic_boolean",
-    kind: "block",
-  },
 ];

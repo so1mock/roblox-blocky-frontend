@@ -23,7 +23,11 @@ export const service_block = {
 };
 
 export const variable_block = {
-  colourPrimary: "#2FBE9C",
+  colourPrimary: "#FFA500",
+};
+
+export const hit_block = {
+  colourPrimary: "#BF3E9A",
 };
 
 export const blockStyles = {
@@ -34,4 +38,5 @@ export const blockStyles = {
   event_block,
   service_block,
   variable_block,
+  hit_block,
 };
