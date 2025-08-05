@@ -1,6 +1,5 @@
 import axios from "axios";
-import { useNavigate } from "@tanstack/react-router";
-import { useUser } from "../../user/hooks/useUser.ts";
+import { refreshToken } from "../../user/apis/user.ts";
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASEURL,
@@ -10,9 +9,6 @@ export const api = axios.create({
     "Content-Type": "application/json",
   },
 });
-
-const { refetch, handleLogout } = useUser();
-const navigate = useNavigate();
 
 interface FailedRequest {
   resolve: (token: string) => void;
@@ -42,9 +38,8 @@ api.interceptors.response.use(
       if (originalRequest._retry) {
         // 이미 리프레시 토큰을 통한 재요청을 시도해본 경우 -> 리프레시 토큰이 만료됐다는 뜻
         // _retry는 원래는 존재하지 않고 우리가 추가한 프로퍼티 이다.
-        handleLogout();
         console.log("리프레시 토큰이 만료되어 메인 페이지로 이동");
-        navigate({ to: "/" });
+        window.location.href = "/";
         return Promise.reject(error);
       }
 
@@ -68,9 +63,9 @@ api.interceptors.response.use(
       // 리프레시 요청이 진행 중이 아니라면 본격적으로 리프레시 요청 진행
       isRefreshing = true;
       try {
-        await refetch();
-
-        const newToken = api.defaults.headers.common["Authorization"] as string;
+        const reponse = await refreshToken();
+        const newToken = reponse.auth.accessToken;
+        api.defaults.headers.common["Authorization"] = newToken;
         // data에서 받아온 데이터로 유저 정보 다시 초기화 시키기
         processQueue(null, newToken); // 전역에 토큰이 있는데 굳이 매개변수로 전달해야 할까에 대한 고민
 

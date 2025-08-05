@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { getToken, logout, refreshToken } from "../apis.ts";
+import { getToken, getUserInfo, logout, refreshToken } from "../apis/user.ts";
 import { api } from "../../common/apis/axios.ts";
 
 /*
@@ -15,16 +15,12 @@ export const useUser = () => {
     data: userInfo,
     isSuccess: isLogin,
     isLoading,
-    refetch,
   } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
-      const response = await refreshToken();
-      api.defaults.headers.common["Authorization"] = response.auth.accessToken;
-      return response.info || null;
+      const response = await getUserInfo();
+      return response;
     },
-    enabled: true,
-    retry: false,
   });
 
   const handleLogin = useMutation({
@@ -57,7 +53,6 @@ export const useUser = () => {
     userInfo: userInfo,
     isLogin: isLogin,
     isLoading: isLoading,
-    refetch: refetch,
     handleLogin: handleLogin.mutate,
     handleLogout: handleLogout.mutate,
   };

@@ -1,5 +1,5 @@
-import { api } from "../common/apis/axios.ts";
-import { type BaseUser, type DetailedUser, type Auth } from "./types.ts";
+import { api } from "../../common/apis/axios.ts";
+import { type BaseUser, type DetailedUser, type Auth } from "../types/user.ts";
 
 interface getOauthCodeParams {
   clientId: string;
