@@ -13,7 +13,7 @@ import { useEffect } from "react";
 type SearchParams = {
   code?: string;
   state?: string;
-  error?: string;
+  error?: Error;
 };
 
 export const Route = createFileRoute("/oauth/callback")({
@@ -22,13 +22,13 @@ export const Route = createFileRoute("/oauth/callback")({
     return {
       code: search.code as string,
       state: search.state as string,
-      error: search.error as string,
+      error: search.error as Error,
     };
   },
 });
 
 export function RouteComponent() {
-  const { code } = useSearch({ from: "/oauth/callback" });
+  const { code, error } = useSearch({ from: "/oauth/callback" });
   const navigate = useNavigate();
 
   const { mutate: handleGetToken } = useMutation({
