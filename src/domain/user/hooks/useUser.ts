@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { getToken, getUserInfo, logout, refreshToken } from "../apis/user.ts";
+import { getToken, getUserInfo, logout } from "../apis/user.ts";
 import { api } from "../../common/apis/axios.ts";
 
 /*
@@ -28,8 +28,8 @@ export const useUser = () => {
     onSuccess: (data) => {
       console.log("로그인 성공" + JSON.stringify(data));
 
-      queryClient.setQueryData(["user"], data.info);
-      api.defaults.headers.common["Authorization"] = data.auth.accessToken;
+      api.defaults.headers.common["Authorization"] =
+        `Bearer ${data.auth.accessToken}`;
       navigate({ to: "/" });
     },
     onError: (error) => {

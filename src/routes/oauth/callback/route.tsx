@@ -35,7 +35,7 @@ export function RouteComponent() {
     } else if (code) {
       handleLogin(code);
     }
-  });
+  }, []);
 
   return <div> Redirecting...</div>;
 }

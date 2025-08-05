@@ -55,7 +55,7 @@ api.interceptors.response.use(
           failedQueue.push({ resolve, reject });
         }).then((token) => {
           // processQueue 에서 매개변수로 쓰는 토큰
-          originalRequest.headers["Authorization"] = token; // 이미 요청된 요청이기 때문에 토큰을 직접 수정해 줘야 함
+          originalRequest.headers["Authorization"] = `Bearer ${token}`; // 이미 요청된 요청이기 때문에 토큰을 직접 수정해 줘야 함
           return api(originalRequest);
         });
       }
@@ -65,11 +65,11 @@ api.interceptors.response.use(
       try {
         const reponse = await refreshToken();
         const newToken = reponse.auth.accessToken;
-        api.defaults.headers.common["Authorization"] = newToken;
+        api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
         // data에서 받아온 데이터로 유저 정보 다시 초기화 시키기
         processQueue(null, newToken); // 전역에 토큰이 있는데 굳이 매개변수로 전달해야 할까에 대한 고민
 
-        originalRequest.headers["Authorization"] = newToken;
+        originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
         return api(originalRequest);
       } catch (error) {
         processQueue(error, null);
