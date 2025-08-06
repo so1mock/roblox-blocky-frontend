@@ -52,7 +52,18 @@ function ProjectPage() {
               key={index}
               type="button"
               className="flex items-center gap-1 p-1 hover:bg-blue-100 transition-colors cursor-pointer"
-              onClick={() => console.log(`${part} 클릭됨`)}
+              onClick={() => {
+                console.log(`Part${index + 1} 클릭`);
+                if (workspaceRef.current) {
+                  const block = workspaceRef.current.newBlock("part_block");
+
+                  // 필드 값을 직접 지정
+                  block.setFieldValue(`Part${index + 1}`, "PART_NAME");
+
+                  block.initSvg();
+                  block.render();
+                }
+              }}
             >
               <img src={part_icon} alt="part icon" className="w-5 h-5" />
               <span className="text-md font-medium">{part}</span>
