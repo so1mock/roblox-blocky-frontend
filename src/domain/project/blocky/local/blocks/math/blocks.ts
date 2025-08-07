@@ -3,10 +3,10 @@ import * as Blockly from "blockly";
 export const defineMathCategoryBlocks = () => {
   Blockly.Blocks["plus_block"] = {
     init: function () {
-      this.appendValueInput("A").setCheck("Number"); // 첫 번째 피연산자
+      this.appendValueInput("A").setCheck(["Number"]); // 첫 번째 피연산자
       this.appendDummyInput().appendField("+");
       this.appendValueInput("B").setCheck("Number"); // 두 번째 피연산자
-      this.setOutput(true, "Number");
+      this.setOutput(true, "sumber");
       this.setStyle("math_block");
     },
   };
@@ -64,14 +64,20 @@ export const defineMathCategoryBlocks = () => {
 
   Blockly.Blocks["vector_block"] = {
     init: function () {
-      this.appendDummyInput()
-        .appendField("위치(")
-        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME")
-        .appendField(",")
-        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME")
-        .appendField(",")
-        .appendField(new Blockly.FieldNumber(0), "FIELD_NAME")
-        .appendField(")");
+      this.appendDummyInput().appendField("위치(");
+
+      this.appendValueInput("X")
+        .setCheck(["Boolean", "Number"])
+        .appendField("X:");
+
+      this.appendValueInput("Y").setCheck("Number").appendField("Y:");
+
+      this.appendValueInput("Z").setCheck("Number").appendField("Z:");
+
+      this.appendDummyInput().appendField(")");
+
+      this.setInputsInline(true);
+      this.setOutput(true, "Vector"); // 예시로 Vector 타입 반환
       this.setStyle("math_block");
     },
   };

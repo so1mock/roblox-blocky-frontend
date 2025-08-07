@@ -54,15 +54,28 @@ function ProjectPage() {
               className="flex items-center gap-1 p-1 hover:bg-blue-100 transition-colors cursor-pointer"
               onClick={() => {
                 console.log(`Part${index + 1} 클릭`);
-                if (workspaceRef.current) {
-                  const block = workspaceRef.current.newBlock("part_block");
+                const workspace = workspaceRef.current;
+                if (!workspace) return;
 
-                  // 필드 값을 직접 지정
-                  block.setFieldValue(`Part${index + 1}`, "PART_NAME");
+                const variableName = `Part${index + 1}`;
 
-                  block.initSvg();
-                  block.render();
-                }
+                // 변수 생성 (이미 있으면 기존 변수 반환)
+                const variable = workspace
+                  .getVariableMap()
+                  .createVariable(variableName, "Part");
+
+                // 1. 새 블록 생성
+                const block = workspace.newBlock("variables_get");
+
+                // 2. 변수 필드 설정
+                block.setFieldValue(variable.getId(), "VAR"); // 내부적으로 이름도 설정됨
+
+                // 3. 블록 초기화 및 렌더링
+                block.initSvg();
+                block.render();
+
+                // 4. 위치 지정 (원하는 위치로)
+                block.moveBy(50, 50);
               }}
             >
               <img src={part_icon} alt="part icon" className="w-5 h-5" />

@@ -42,6 +42,7 @@ export const defineEventCategoryBlocks = () => {
         .appendField(new Blockly.FieldVariable("player"));
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
+      this.appendStatementInput("DO").appendField("실행");
       this.setStyle("event_block");
     },
   };
@@ -53,6 +54,7 @@ export const defineEventCategoryBlocks = () => {
         .appendField(new Blockly.FieldVariable("E Key"));
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
+      this.appendStatementInput("DO").appendField("실행");
       this.setStyle("event_block");
     },
   };
