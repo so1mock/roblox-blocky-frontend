@@ -4,7 +4,7 @@ import {
   useSearch,
 } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { useUser } from "../../../../domain/user/hooks/useUser.ts";
+import { useUser } from "../../../domain/user/hooks/useUser";
 
 type SearchParams = {
   code?: string;
@@ -12,7 +12,7 @@ type SearchParams = {
   error?: Error;
 };
 
-export const Route = createFileRoute("/_mainLayout/oauth/callback")({
+export const Route = createFileRoute("/oauth/callback")({
   component: RouteComponent,
   validateSearch: (search): SearchParams => {
     return {

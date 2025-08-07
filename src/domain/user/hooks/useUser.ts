@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { getToken, getUserInfo, logout } from "../apis/user.ts";
 import { api } from "../../common/apis/axios.ts";
+import { useNavigate } from "@tanstack/react-router";
 
 /*
 필요한 거)
@@ -8,6 +9,7 @@ import { api } from "../../common/apis/axios.ts";
 */
 export const useUser = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const {
     data: userInfo,
@@ -28,7 +30,7 @@ export const useUser = () => {
 
       api.defaults.headers.common["Authorization"] =
         `Bearer ${data.auth.accessToken}`;
-      window.location.href = "/";
+      navigate({ to: "/" });
     },
     onError: (error) => {
       console.log("로그인 오류" + error.message);
