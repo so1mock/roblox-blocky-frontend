@@ -30,7 +30,6 @@ export const useUser = () => {
 
       api.defaults.headers.common["Authorization"] =
         `Bearer ${data.auth.accessToken}`;
-      navigate({ to: "/" });
     },
     onError: (error) => {
       console.log("로그인 오류" + error.message);
@@ -53,7 +52,7 @@ export const useUser = () => {
     userInfo: userInfo,
     isLogin: isLogin,
     isLoading: isLoading,
-    handleLogin: handleLogin.mutate,
-    handleLogout: handleLogout.mutate,
+    handleLogin,
+    handleLogout,
   };
 };
