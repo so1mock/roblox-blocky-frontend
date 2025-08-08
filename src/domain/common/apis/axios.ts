@@ -1,5 +1,6 @@
 import axios from "axios";
 import { refreshToken } from "../../user/apis/user.ts";
+import { useAuthStore } from "../../user/stores/authStore.ts";
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASEURL,
@@ -64,7 +65,7 @@ api.interceptors.response.use(
       isRefreshing = true;
       try {
         const reponse = await refreshToken();
-
+        console.log("성공");
         const newToken = reponse.auth.accessToken;
         api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
         // data에서 받아온 데이터로 유저 정보 다시 초기화 시키기
@@ -74,8 +75,7 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (error) {
         processQueue(error, null);
-        console.log("리프래쉬 에러");
-        window.location.href = import.meta.env.VITE_FRONTEND_URL;
+        useAuthStore.getState().clearAuth(); // 로그인 상태 false로 변경
         return Promise.reject(error);
       } finally {
         isRefreshing = false;

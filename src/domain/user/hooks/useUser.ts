@@ -1,36 +1,35 @@
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { getToken, getUserInfo, logout } from "../apis/user.ts";
 import { api } from "../../common/apis/axios.ts";
 import { useNavigate } from "@tanstack/react-router";
+import { useAuthStore } from "../stores/authStore.ts";
 
 /*
 필요한 거)
 로그인 여부, 유저 데이터, 로그아웃 기능, 로그인 기능
 */
 export const useUser = () => {
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const {
-    data: userInfo,
-    isSuccess: isLogin,
-    isLoading,
-  } = useQuery({
-    queryKey: ["user"],
-    queryFn: async () => {
-      const response = await getUserInfo();
-      return response;
-    },
-  });
+  const setAuth = useAuthStore((state) => state.setAuth);
+  const clearAuth = useAuthStore((state) => state.clearAuth);
 
   const handleLogin = useMutation({
     mutationFn: getToken,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       console.log("로그인 성공" + JSON.stringify(data));
 
       api.defaults.headers.common["Authorization"] =
         `Bearer ${data.auth.accessToken}`;
-      navigate({ to: "/" });
+
+      try {
+        const user = await getUserInfo();
+        setAuth(user);
+        navigate({ to: "/" });
+      } catch (error) {
+        clearAuth();
+        navigate({ to: "/" });
+      }
     },
     onError: (error) => {
       console.log("로그인 오류" + error.message);
@@ -41,7 +40,7 @@ export const useUser = () => {
   const handleLogout = useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      queryClient.removeQueries({ queryKey: ["user"] });
+      clearAuth();
     },
     onError: (error) => {
       console.log("로그아웃 오류" + error.message);
@@ -50,10 +49,7 @@ export const useUser = () => {
   });
 
   return {
-    userInfo: userInfo,
-    isLogin: isLogin,
-    isLoading: isLoading,
     handleLogin: handleLogin.mutate,
-    handleLogout: handleLogout.mutate,
+    handleLogout,
   };
 };

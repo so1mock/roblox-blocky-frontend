@@ -5,6 +5,8 @@ import {
 } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useUser } from "../../../domain/user/hooks/useUser";
+import { getUserInfo } from "../../../domain/user/apis/user";
+import { useAuthStore } from "../../../domain/user/stores/authStore";
 
 type SearchParams = {
   code?: string;
@@ -28,6 +30,7 @@ export function RouteComponent() {
   const navigate = useNavigate();
   const { handleLogin } = useUser();
 
+  // RouteComponent 내 useEffect 예시
   useEffect(() => {
     if (error) {
       alert("로블록스 로그인에서 에러 발생: " + error.message);

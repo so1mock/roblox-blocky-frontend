@@ -1,10 +1,10 @@
 import { LinkNavButton } from "./LinkNavButton";
 import { Link } from "@tanstack/react-router";
 import { SocialLoginButton } from "../../../user/components/SocialLoginButton";
-import { useUser } from "../../../user/hooks/useUser";
+import { useAuthStore } from "../../../user/stores/authStore";
 
 export function Header() {
-  const { isLogin, userInfo } = useUser();
+  const { isLogin, userInfo } = useAuthStore();
   return (
     <header className="relative flex items-center bg-rbSurface p-2 pr-5 min-w-[800px] justify-center">
       <Link to="/" className="absolute left-2">
