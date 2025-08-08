@@ -5,7 +5,13 @@ import { useEffect } from "react";
 import { getUserInfo } from "../domain/user/apis/user";
 import { useAuthStore } from "../domain/user/stores/authStore";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 3, // 실패 시 3번 재시도 (기본값)
+    },
+  },
+});
 
 export const Route = createRootRoute({
   component: () => {

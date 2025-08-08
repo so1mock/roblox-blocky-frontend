@@ -5,8 +5,6 @@ import {
 } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useUser } from "../../../domain/user/hooks/useUser";
-import { getUserInfo } from "../../../domain/user/apis/user";
-import { useAuthStore } from "../../../domain/user/stores/authStore";
 
 type SearchParams = {
   code?: string;
@@ -38,7 +36,6 @@ export function RouteComponent() {
     } else if (code) {
       handleLogin(code);
     }
-  }, []);
-
+  }, [code, error]);
   return <div> Redirecting...</div>;
 }

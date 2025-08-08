@@ -19,8 +19,8 @@ interface FailedRequest {
 let isRefreshing: boolean = false;
 let failedQueue: FailedRequest[] = [];
 
-// failedQueue 에 있는 요청을 현재 토큰 상태에 따라 처리?
-// 원래는 진작에 reject 했어야 하는 걸 일단은 토큰때문일 수 있으까 잠시 미뤄뒀던 것들
+// // failedQueue 에 있는 요청을 현재 토큰 상태에 따라 처리?
+// // 원래는 진작에 reject 했어야 하는 걸 일단은 토큰때문일 수 있으까 잠시 미뤄뒀던 것들
 const processQueue = (error: unknown, token: string | null = null) => {
   failedQueue.forEach((request) => {
     if (error || token === null)
@@ -30,6 +30,15 @@ const processQueue = (error: unknown, token: string | null = null) => {
   failedQueue = [];
 };
 
+api.interceptors.request.use((config) => {
+  console.log(
+    "[API Request] ",
+    config.method,
+    config.url,
+    config.headers.Authorization,
+  );
+  return config;
+});
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -81,7 +90,5 @@ api.interceptors.response.use(
         isRefreshing = false;
       }
     }
-
-    return Promise.reject(error);
   },
 );

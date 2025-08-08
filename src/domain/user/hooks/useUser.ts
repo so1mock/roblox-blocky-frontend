@@ -21,7 +21,6 @@ export const useUser = () => {
 
       api.defaults.headers.common["Authorization"] =
         `Bearer ${data.auth.accessToken}`;
-
       try {
         const user = await getUserInfo();
         setAuth(user);
@@ -49,7 +48,7 @@ export const useUser = () => {
   });
 
   return {
-    handleLogin: handleLogin,
-    handleLogout,
+    handleLogin: handleLogin.mutate,
+    handleLogout: handleLogout.mutate,
   };
 };
