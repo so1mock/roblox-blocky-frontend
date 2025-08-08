@@ -34,7 +34,7 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response.status == 401) {
+    if (error.response.status == 403) {
       if (originalRequest._retry) {
         // 이미 리프레시 토큰을 통한 재요청을 시도해본 경우 -> 리프레시 토큰이 만료됐다는 뜻
         // _retry는 원래는 존재하지 않고 우리가 추가한 프로퍼티 이다.
@@ -64,6 +64,7 @@ api.interceptors.response.use(
       isRefreshing = true;
       try {
         const reponse = await refreshToken();
+
         const newToken = reponse.auth.accessToken;
         api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
         // data에서 받아온 데이터로 유저 정보 다시 초기화 시키기
@@ -73,6 +74,7 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (error) {
         processQueue(error, null);
+        console.log("리프래쉬 에러");
         window.location.href = import.meta.env.VITE_FRONTEND_URL;
         return Promise.reject(error);
       } finally {
