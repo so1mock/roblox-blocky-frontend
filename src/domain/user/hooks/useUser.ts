@@ -49,7 +49,7 @@ export const useUser = () => {
   });
 
   return {
-    handleLogin: handleLogin.mutate,
+    handleLogin: handleLogin,
     handleLogout,
   };
 };
