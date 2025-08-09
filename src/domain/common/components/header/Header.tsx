@@ -2,6 +2,7 @@ import { LinkNavButton } from "./LinkNavButton";
 import { Link } from "@tanstack/react-router";
 import { SocialLoginButton } from "../../../user/components/SocialLoginButton";
 import { useAuthStore } from "../../../user/stores/authStore";
+import { ProfileButton } from "../../../user/components/ProfileButton";
 
 export function Header() {
   const { isLogin, userInfo } = useAuthStore();
@@ -18,9 +19,10 @@ export function Header() {
       </nav>
 
       {isLogin ? (
-        <span className="absolute right-5 text-white">
-          {userInfo?.nickname}님 환영합니다
-        </span>
+        <ProfileButton
+          className={"absolute right-5"}
+          nickname={userInfo?.nickname}
+        />
       ) : (
         <SocialLoginButton className={"absolute right-5"} />
       )}
