@@ -1,13 +1,9 @@
-import { useMutation } from "@tanstack/react-query";
-import { getToken, getUserInfo, logout } from "../apis/user.ts";
-import { api } from "../../common/apis/axios.ts";
 import { useNavigate } from "@tanstack/react-router";
-import { useAuthStore } from "../stores/authStore.ts";
+import { useAuthStore } from "@user/stores/authStore.ts";
+import { useMutation } from "@tanstack/react-query";
+import { getToken, getUserInfo, logout } from "@user/apis/user.ts";
+import { api } from "@common/apis/axios.ts";
 
-/*
-필요한 거)
-로그인 여부, 유저 데이터, 로그아웃 기능, 로그인 기능
-*/
 export const useUser = () => {
   const navigate = useNavigate();
 

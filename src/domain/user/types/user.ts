@@ -1,3 +1,7 @@
+export type Auth = {
+  accessToken: string;
+};
+
 export interface BaseUser {
   nickname: string;
   country: string;
@@ -9,7 +13,3 @@ export interface DetailedUser extends BaseUser {
   country: string;
   createTime: string;
 }
-
-export type Auth = {
-  accessToken: string;
-};

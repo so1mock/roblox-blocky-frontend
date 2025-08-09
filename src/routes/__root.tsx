@@ -1,9 +1,9 @@
-import { createRootRoute, Outlet, useNavigate } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createRootRoute, useNavigate, Outlet } from "@tanstack/react-router";
+import { useAuthStore } from "@user/stores/authStore";
 import { useEffect } from "react";
-import { getUserInfo } from "../domain/user/apis/user";
-import { useAuthStore } from "../domain/user/stores/authStore";
+import { getUserInfo } from "@user/apis/user";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 const queryClient = new QueryClient({
   defaultOptions: {

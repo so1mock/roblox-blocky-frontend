@@ -1,8 +1,8 @@
-import { LinkNavButton } from "./LinkNavButton";
+import { useAuthStore } from "@user/stores/authStore";
 import { Link } from "@tanstack/react-router";
-import { SocialLoginButton } from "../../../user/components/SocialLoginButton";
-import { useAuthStore } from "../../../user/stores/authStore";
-import { ProfileButton } from "../../../user/components/ProfileButton";
+import { LinkNavButton } from "./LinkNavButton";
+import { ProfileButton } from "@user/components/ProfileButton";
+import { SocialLoginButton } from "@user/components/SocialLoginButton";
 
 export function Header() {
   const { isLogin, userInfo } = useAuthStore();

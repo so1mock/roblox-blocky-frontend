@@ -1,10 +1,10 @@
 import {
   createFileRoute,
-  useNavigate,
   useSearch,
+  useNavigate,
 } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { useUser } from "../../../domain/user/hooks/useUser";
+import { useUser } from "@user/hooks/useUser";
 
 type SearchParams = {
   code?: string;

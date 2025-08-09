@@ -7,6 +7,7 @@ const searchParams = new URLSearchParams({
   state: "1234",
 });
 const robloxUrl = `${baseUrl}?${searchParams.toString()}`;
+
 export function SocialLoginButton({ className = "" }: { className: string }) {
   return (
     <a

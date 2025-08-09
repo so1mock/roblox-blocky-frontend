@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Header } from "../domain/common/components/header/Header";
+import { Header } from "@common/components/header/Header";
 
 export const Route = createFileRoute("/")({
   component: Index,

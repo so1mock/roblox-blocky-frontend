@@ -1,6 +1,6 @@
 import axios from "axios";
-import { refreshToken } from "../../user/apis/user.ts";
-import { useAuthStore } from "../../user/stores/authStore.ts";
+import { refreshToken } from "@user/apis/user.ts";
+import { useAuthStore } from "@user/stores/authStore.ts";
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASEURL,

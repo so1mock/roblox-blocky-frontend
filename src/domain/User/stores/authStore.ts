@@ -1,5 +1,5 @@
+import type { DetailedUser } from "@user/types/user";
 import { create } from "zustand";
-import type { DetailedUser } from "../types/user";
 
 interface AuthState {
   isLogin: boolean | null;
