@@ -73,9 +73,9 @@ api.interceptors.response.use(
       // 리프레시 요청이 진행 중이 아니라면 본격적으로 리프레시 요청 진행
       isRefreshing = true;
       try {
-        const reponse = await refreshToken();
+        const response = await refreshToken();
         console.log("성공");
-        const newToken = reponse.auth.accessToken;
+        const newToken = response.auth.accessToken;
         api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
         // data에서 받아온 데이터로 유저 정보 다시 초기화 시키기
         processQueue(null, newToken); // 전역에 토큰이 있는데 굳이 매개변수로 전달해야 할까에 대한 고민
