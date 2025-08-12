@@ -6,12 +6,14 @@ import type { WorkspaceData, WorkspaceObject } from "../types/workspace";
 interface WorkspaceExplorerProps {
   placeId: string;
   onSelectScript?: (script: WorkspaceObject) => void;
+  onToggleBlockScript?: (uuid: string, enabled: boolean) => void;
   className?: string;
 }
 
 export const WorkspaceExplorer: React.FC<WorkspaceExplorerProps> = ({
   placeId,
   onSelectScript,
+  onToggleBlockScript,
   className = "",
 }) => {
   const [workspaceData, setWorkspaceData] = useState<WorkspaceData | null>(null);
@@ -43,6 +45,35 @@ export const WorkspaceExplorer: React.FC<WorkspaceExplorerProps> = ({
     setSelectedScriptId(script.uuid);
     if (onSelectScript) {
       onSelectScript(script);
+    }
+  };
+
+  const handleToggleBlockScript = (uuid: string, enabled: boolean) => {
+    // 워크스페이스 데이터 업데이트
+    setWorkspaceData((prevData) => {
+      if (!prevData) return prevData;
+      
+      const updateObject = (obj: WorkspaceObject): WorkspaceObject => {
+        if (obj.uuid === uuid) {
+          return { ...obj, isBlockScriptEnabled: enabled };
+        }
+        if (obj.children) {
+          return {
+            ...obj,
+            children: obj.children.map(updateObject),
+          };
+        }
+        return obj;
+      };
+
+      return {
+        ...prevData,
+        objects: prevData.objects.map(updateObject),
+      };
+    });
+
+    if (onToggleBlockScript) {
+      onToggleBlockScript(uuid, enabled);
     }
   };
 
@@ -90,6 +121,7 @@ export const WorkspaceExplorer: React.FC<WorkspaceExplorerProps> = ({
             item={obj}
             onSelectScript={handleSelectScript}
             selectedItemId={selectedScriptId}
+            onToggleBlockScript={handleToggleBlockScript}
           />
         ))}
       </div>

@@ -27,6 +27,18 @@ function ProjectPage() {
     }
   };
 
+  const handleToggleBlockScript = (uuid: string, enabled: boolean) => {
+    console.log(`Block script ${enabled ? 'enabled' : 'disabled'} for script ${uuid}`);
+    
+    // 현재 선택된 스크립트가 업데이트된 스크립트인 경우 상태 업데이트
+    if (selectedScript && selectedScript.uuid === uuid) {
+      setSelectedScript({
+        ...selectedScript,
+        isBlockScriptEnabled: enabled,
+      });
+    }
+  };
+
   const handleSave = async () => {
     if (workspaceRef.current) {
       const state = Blockly.serialization.workspaces.save(workspaceRef.current);
@@ -40,19 +52,6 @@ function ProjectPage() {
       localStorage.setItem("workspace-state", fullStateJSON);
       console.log("Full Workspace saved (including variables):\n" + fullStateJSON);
       
-      // blocks만 따로 저장 (기존 호환성을 위해)
-      const blocksOnlyJSON = JSON.stringify(state.blocks, null, 2);
-      localStorage.setItem("workspace-blocks-only", blocksOnlyJSON);
-      console.log("Blocks only saved:\n" + blocksOnlyJSON);
-      
-      // 첫번째 blocks 내부의 요소들만 서버로 보내기
-      const blocksToSend = state.blocks.blocks;
-      try {
-        const response = await parseBlocks(blocksToSend);
-        console.log("Server parse response:\n" + response);
-      } catch (error) {
-        console.error("Failed to parse blocks:", error);
-      }
     } else {
       console.warn("Workspace is not ready.");
     }
@@ -65,6 +64,7 @@ function ProjectPage() {
         <WorkspaceExplorer 
           placeId={placeId}
           onSelectScript={handleSelectScript}
+          onToggleBlockScript={handleToggleBlockScript}
           className="flex-1"
         />
       </div>

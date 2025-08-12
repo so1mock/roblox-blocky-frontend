@@ -10,6 +10,7 @@ import { defineControlBlocks } from "../blocky/server/block/control/defineContro
 import { defineLoopBlocks } from "../blocky/server/block/loop/defineLoopBlocks";
 import { toolboxFromServer } from "../blocky/server/toolbox";
 import { defineLocalBlocks } from "../blocky/local/blocks/defineLocalBlocks";
+import { defineVariableBlocks } from "../blocky/local/blocks/variable/blocks";
 import toolbox from "../blocky/local/toolbox/toolbox";
 
 // 자료형 선택이 가능한 변수 생성 함수
@@ -74,6 +75,9 @@ export function useBlocklyUI(
         defineMathBlocks(blockListByCategory[1].blocks);
         defineLogicBlocks(blockListByCategory[2].blocks);
         defineLoopBlocks(blockListByCategory[3].blocks);
+        
+        // 변수 블록은 로컬에서 정의 (서버에서 제공하지 않음)
+        defineVariableBlocks();
 
         if (!blocklyDivRef.current) return;
 
