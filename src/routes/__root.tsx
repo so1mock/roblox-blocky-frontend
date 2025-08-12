@@ -19,21 +19,26 @@ export const Route = createRootRoute({
     const clearAuth = useAuthStore((state) => state.clearAuth);
     const navigate = useNavigate();
 
-    const { isLogin } = useAuthStore();
+    const { isLogin, accessToken } = useAuthStore();
 
-    // App 초기 진입 시
+    // App 초기 진입 시 - 토큰이 있을 때만 사용자 정보 가져오기
     useEffect(() => {
-      getUserInfo()
-        .then((user) => setAuth(user))
-        .catch(() => clearAuth());
+      if (accessToken) {
+        getUserInfo()
+          .then((user) => setAuth(user, { accessToken }))
+          .catch(() => clearAuth());
+      } else {
+        clearAuth();
+      }
     }, []);
 
     // App 초기 진입 시
     useEffect(() => {
-      if (!isLogin) {
+      if (isLogin === false) {
         navigate({ to: "/" });
       }
     }, [isLogin]);
+    
     return (
       <QueryClientProvider client={queryClient}>
         <div className="min-h-screen flex flex-col">

@@ -31,6 +31,12 @@ const processQueue = (error: unknown, token: string | null = null) => {
 };
 
 api.interceptors.request.use((config) => {
+  // authStore에서 토큰 가져와서 자동으로 헤더에 추가
+  const { accessToken } = useAuthStore.getState();
+  if (accessToken && !config.headers.Authorization) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+  
   console.log(
     "[API Request] ",
     config.method,
@@ -73,9 +79,13 @@ api.interceptors.response.use(
       // 리프레시 요청이 진행 중이 아니라면 본격적으로 리프레시 요청 진행
       isRefreshing = true;
       try {
-        const reponse = await refreshToken();
-        console.log("성공");
-        const newToken = reponse.auth.accessToken;
+        const response = await refreshToken();
+        console.log("토큰 리프레시 성공");
+        const newToken = response.auth.accessToken;
+        
+        // authStore에 새 토큰 저장
+        useAuthStore.getState().setToken(newToken);
+        
         api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
         // data에서 받아온 데이터로 유저 정보 다시 초기화 시키기
         processQueue(null, newToken); // 전역에 토큰이 있는데 굳이 매개변수로 전달해야 할까에 대한 고민
@@ -83,6 +93,7 @@ api.interceptors.response.use(
         originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
         return api(originalRequest);
       } catch (error) {
+        console.log("토큰 리프레시 실패");
         processQueue(error, null);
         useAuthStore.getState().clearAuth(); // 로그인 상태 false로 변경
         return Promise.reject(error);

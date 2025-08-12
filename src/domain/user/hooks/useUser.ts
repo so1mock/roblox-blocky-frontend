@@ -2,7 +2,6 @@ import { useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "@user/stores/authStore.ts";
 import { useMutation } from "@tanstack/react-query";
 import { getToken, getUserInfo, logout } from "@user/apis/user.ts";
-import { api } from "@common/apis/axios.ts";
 
 export const useUser = () => {
   const navigate = useNavigate();
@@ -15,11 +14,10 @@ export const useUser = () => {
     onSuccess: async (data) => {
       console.log("로그인 성공" + JSON.stringify(data));
 
-      api.defaults.headers.common["Authorization"] =
-        `Bearer ${data.auth.accessToken}`;
+      // authStore에 토큰 저장
       try {
         const user = await getUserInfo();
-        setAuth(user);
+        setAuth(user, data.auth); // 토큰 정보도 함께 저장
         navigate({ to: "/" });
       } catch (error) {
         clearAuth();
