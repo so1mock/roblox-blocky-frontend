@@ -5,6 +5,7 @@ import type { WorkspaceObject } from "./types/workspace";
 import * as Blockly from "blockly";
 import { parseBlocks } from "./apis/block";
 import { analyzeVariableUsage } from "../../utils/workspaceParser";
+import { saveBlockScript } from "./apis/blockScript";
 
 function ProjectPage() {
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
@@ -40,7 +41,17 @@ function ProjectPage() {
   };
 
   const handleSave = async () => {
-    if (workspaceRef.current) {
+    if (!workspaceRef.current) {
+      console.warn("Workspace is not ready.");
+      return;
+    }
+
+    if (!selectedScript) {
+      console.warn("No script selected.");
+      return;
+    }
+
+    try {
       const state = Blockly.serialization.workspaces.save(workspaceRef.current);
       
       // 변수 정보 확인
@@ -52,8 +63,12 @@ function ProjectPage() {
       localStorage.setItem("workspace-state", fullStateJSON);
       console.log("Full Workspace saved (including variables):\n" + fullStateJSON);
       
-    } else {
-      console.warn("Workspace is not ready.");
+      // 서버에 블록 스크립트 저장
+      await saveBlockScript(selectedScript.uuid, fullStateJSON);
+      console.log(`Block script saved to server for script ${selectedScript.uuid}`);
+      
+    } catch (error) {
+      console.error("Failed to save block script:", error);
     }
   };
 

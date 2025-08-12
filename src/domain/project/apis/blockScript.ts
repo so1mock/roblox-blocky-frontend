@@ -12,3 +12,10 @@ export const toggleBlockScriptStatus = async (
     blockScriptStatus: status,
   });
 };
+
+export const saveBlockScript = async (
+  uuid: string,
+  blockScript: string
+): Promise<void> => {
+  await api.put(`/block-script/${uuid}`, blockScript);
+};
