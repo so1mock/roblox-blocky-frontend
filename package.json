@@ -12,14 +12,15 @@
   },
   "dependencies": {
     "@blockly/continuous-toolbox": "^7.0.2",
-    "@blockly/create-package": "^3.0.2",
+    "@tanstack/react-query": "^5.85.0",
     "@tanstack/react-router": "^1.121.0",
     "@tanstack/react-router-devtools": "^1.121.27",
     "axios": "^1.10.0",
     "blockly": "^12.2.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-icons": "^5.5.0"
+    "react-icons": "^5.5.0",
+    "zustand": "^5.0.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
@@ -40,7 +41,8 @@
     "tailwindcss": "^4.1.10",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
-    "vite": "^6.3.5"
+    "vite": "^6.3.5",
+    "vite-tsconfig-paths": "^5.1.4"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

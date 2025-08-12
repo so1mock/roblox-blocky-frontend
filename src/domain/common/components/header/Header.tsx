@@ -1,8 +1,11 @@
-import { LinkNavButton } from "./LinkNavButton";
+import { useAuthStore } from "@user/stores/authStore";
 import { Link } from "@tanstack/react-router";
-import { SocialLoginButton } from "../../../User/components/SocialLoginButton";
+import { LinkNavButton } from "./LinkNavButton";
+import { ProfileButton } from "@user/components/ProfileButton";
+import { SocialLoginButton } from "@user/components/SocialLoginButton";
 
 export function Header() {
+  const { isLogin, userInfo } = useAuthStore();
   return (
     <header className="relative flex items-center bg-rbSurface p-2 pr-5 min-w-[800px] justify-center">
       <Link to="/" className="absolute left-2">
@@ -15,7 +18,14 @@ export function Header() {
         <LinkNavButton to="/about" title="소개" />
       </nav>
 
-      <SocialLoginButton className="absolute right-5" />
+      {isLogin ? (
+        <ProfileButton
+          className={"absolute right-5"}
+          nickname={userInfo?.nickname}
+        />
+      ) : (
+        <SocialLoginButton className={"absolute right-5"} />
+      )}
     </header>
   );
 }
