@@ -101,6 +101,15 @@ export const defineMathCategoryBlocks = () => {
     },
   };
 
+  Blockly.Blocks["math_number"] = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField(new Blockly.FieldNumber(0), "NUM");
+      this.setOutput(true, "Number");
+      this.setStyle("math_block");
+    },
+  };
+
   Blockly.Blocks["create_player_variable"] = {
     init: function () {
       this.appendDummyInput()

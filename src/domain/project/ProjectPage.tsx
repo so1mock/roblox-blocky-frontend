@@ -7,7 +7,7 @@ import { analyzeVariableUsage } from "../../utils/workspaceParser";
 function ProjectPage() {
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
   const workspaceRef = useBlocklyUI(blocklyDivRef, {
-    useServer: false,
+    useServer: true,
   });
 
   const handleSave = async () => {

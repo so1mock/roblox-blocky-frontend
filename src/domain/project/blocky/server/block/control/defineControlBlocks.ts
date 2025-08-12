@@ -47,6 +47,9 @@ export const defineControlBlocks = (blocks: BlockWithToolboxList) => {
               new Blockly.FieldDropdown(options),
               component.name,
             );
+          } else if (component.componentType === "StatementInput") {
+            const statement = this.appendStatementInput(component.name);
+            if (component.fieldText) statement.appendField(component.fieldText);
           } else if (component.componentType === "Component$StatementInput") {
             const statement = this.appendStatementInput(component.name);
             if (component.fieldText) statement.appendField(component.fieldText);

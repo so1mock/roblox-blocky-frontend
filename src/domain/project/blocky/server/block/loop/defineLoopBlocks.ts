@@ -19,6 +19,15 @@ export const defineLoopBlocks = (blocks: BlockWithToolboxList) => {
               new Blockly.FieldTextInput(component.fieldValue ?? ""),
               component.name,
             );
+          } else if (component.componentType === "FieldNumber") {
+            const dummy = this.appendDummyInput();
+            dummy.appendField(
+              new Blockly.FieldNumber(component.value ?? 0),
+              component.name,
+            );
+          } else if (component.componentType === "StatementInput") {
+            const statement = this.appendStatementInput(component.name);
+            if (component.fieldText) statement.appendField(component.fieldText);
           } else if (component.componentType === "FieldDropdown") {
             const dummy = this.appendDummyInput();
             const options = component.options.map(

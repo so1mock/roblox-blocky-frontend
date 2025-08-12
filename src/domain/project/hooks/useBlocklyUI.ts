@@ -50,7 +50,7 @@ const createTypedVariable = (workspace: Blockly.WorkspaceSvg) => {
     console.log(`변수 "${variableName}"이 ${selectedType} 타입으로 생성되었습니다.`);
     console.log("변수 ID:", variable.getId());
     console.log("변수 정보:", variable);
-    console.log("현재 워크스페이스의 모든 변수:", workspace.getAllVariables());
+    console.log("현재 워크스페이스의 모든 변수:", workspace.getVariableMap().getAllVariables());
   } else {
     console.error("변수 생성에 실패했습니다.");
   }
@@ -70,9 +70,9 @@ export function useBlocklyUI(
         blockListByCategory = await getBlockList();
 
         // 1. 블럭 등록
-        defineMathBlocks(blockListByCategory[0].blocks);
-        defineLogicBlocks(blockListByCategory[1].blocks);
-        defineControlBlocks(blockListByCategory[2].blocks);
+        defineControlBlocks(blockListByCategory[0].blocks);
+        defineMathBlocks(blockListByCategory[1].blocks);
+        defineLogicBlocks(blockListByCategory[2].blocks);
         defineLoopBlocks(blockListByCategory[3].blocks);
 
         if (!blocklyDivRef.current) return;

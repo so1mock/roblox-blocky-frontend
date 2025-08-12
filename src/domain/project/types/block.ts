@@ -15,6 +15,16 @@ export type BlockComponent =
       name: string;
     }
   | {
+      componentType: "FieldNumber";
+      value?: number;
+      name: string;
+    }
+  | {
+      componentType: "StatementInput";
+      name: string;
+      fieldText?: string;
+    }
+  | {
       componentType: "Component$StatementInput";
       name: string;
       fieldText?: string;
