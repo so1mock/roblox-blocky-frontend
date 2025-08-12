@@ -40,38 +40,45 @@ function ProjectPage() {
         
         let blockState;
         
-        // BlocklyJson(...) 형식인지 확인
-        if (script.blockScript.startsWith("BlocklyJson(")) {
-          // BlocklyJson(...) 형식에서 JSON 부분 추출
-          const jsonMatch = script.blockScript.match(/BlocklyJson\(blocks=BlockJson\(languageVersion=(\d+),\s*blocks=(\[.*?\])\),\s*variables=(\[.*?\])\)/);
-          
-          if (jsonMatch) {
-            const [, , blocksStr, variablesStr] = jsonMatch;
-            const blocks = JSON.parse(blocksStr);
-            const variables = JSON.parse(variablesStr);
+        // blockScript가 이미 객체인지 문자열인지 확인
+        if (typeof script.blockScript === 'string') {
+          // 문자열인 경우 - BlocklyJson(...) 형식인지 확인
+          if (script.blockScript.startsWith("BlocklyJson(")) {
+            // BlocklyJson(...) 형식에서 JSON 부분 추출
+            const jsonMatch = script.blockScript.match(/BlocklyJson\(blocks=BlockJson\(languageVersion=(\d+),\s*blocks=(\[.*?\])\),\s*variables=(\[.*?\])\)/);
             
-            console.log("Parsed blocks:", blocks);
-            console.log("Parsed variables:", variables);
-            
-            // Blockly serialization API에 맞는 형식
-            blockState = {
-              version: 1, // Blockly의 현재 serialization 버전
-              blocks: {
-                languageVersion: 0,
-                blocks: blocks
+            if (jsonMatch) {
+              const [, , blocksStr, variablesStr] = jsonMatch;
+              const blocks = JSON.parse(blocksStr);
+              const variables = JSON.parse(variablesStr);
+              
+              console.log("Parsed blocks:", blocks);
+              console.log("Parsed variables:", variables);
+              
+              // Blockly serialization API에 맞는 형식
+              blockState = {
+                version: 1, // Blockly의 현재 serialization 버전
+                blocks: {
+                  languageVersion: 0,
+                  blocks: blocks
+                }
+              } as any;
+              
+              // 변수가 있다면 추가
+              if (variables && variables.length > 0) {
+                (blockState as any).variables = variables;
               }
-            } as any;
-            
-            // 변수가 있다면 추가
-            if (variables && variables.length > 0) {
-              (blockState as any).variables = variables;
+            } else {
+              throw new Error("Invalid BlocklyJson format");
             }
           } else {
-            throw new Error("Invalid BlocklyJson format");
+            // 일반 JSON 문자열 형식
+            blockState = JSON.parse(script.blockScript);
           }
         } else {
-          // 일반 JSON 형식
-          blockState = JSON.parse(script.blockScript);
+          // 이미 객체인 경우 - 직접 사용
+          blockState = script.blockScript;
+          console.log("Block script is already an object:", blockState);
         }
         
         Blockly.serialization.workspaces.load(blockState, workspaceRef.current);
