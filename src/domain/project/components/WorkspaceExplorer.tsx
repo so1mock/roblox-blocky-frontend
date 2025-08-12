@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useImperativeHandle, forwardRef } from "react";
 import { WorkspaceTreeItem } from "./WorkspaceTreeItem";
 import { getWorkspaceData } from "../apis/workspace";
 import type { WorkspaceData, WorkspaceObject } from "../types/workspace";
@@ -7,15 +7,21 @@ interface WorkspaceExplorerProps {
   placeId: string;
   onSelectScript?: (script: WorkspaceObject) => void;
   onToggleBlockScript?: (uuid: string, enabled: boolean) => void;
+  onUpdateBlockScript?: (uuid: string, blockScript: string) => void;
   className?: string;
 }
 
-export const WorkspaceExplorer: React.FC<WorkspaceExplorerProps> = ({
+export interface WorkspaceExplorerRef {
+  updateBlockScript: (uuid: string, blockScript: string) => void;
+}
+
+export const WorkspaceExplorer = forwardRef<WorkspaceExplorerRef, WorkspaceExplorerProps>(({
   placeId,
   onSelectScript,
   onToggleBlockScript,
+  onUpdateBlockScript,
   className = "",
-}) => {
+}, ref) => {
   const [workspaceData, setWorkspaceData] = useState<WorkspaceData | null>(null);
   const [selectedScriptId, setSelectedScriptId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
@@ -77,6 +83,40 @@ export const WorkspaceExplorer: React.FC<WorkspaceExplorerProps> = ({
     }
   };
 
+  const updateBlockScript = (uuid: string, blockScript: string) => {
+    // 워크스페이스 데이터 업데이트
+    setWorkspaceData((prevData) => {
+      if (!prevData) return prevData;
+      
+      const updateObject = (obj: WorkspaceObject): WorkspaceObject => {
+        if (obj.uuid === uuid) {
+          return { ...obj, blockScript: blockScript };
+        }
+        if (obj.children) {
+          return {
+            ...obj,
+            children: obj.children.map(updateObject),
+          };
+        }
+        return obj;
+      };
+
+      return {
+        ...prevData,
+        objects: prevData.objects.map(updateObject),
+      };
+    });
+
+    if (onUpdateBlockScript) {
+      onUpdateBlockScript(uuid, blockScript);
+    }
+  };
+
+  // ref로 updateBlockScript 함수 노출
+  useImperativeHandle(ref, () => ({
+    updateBlockScript,
+  }));
+
   if (isLoading) {
     return (
       <div className={`flex items-center justify-center h-64 ${className}`}>
@@ -132,4 +172,4 @@ export const WorkspaceExplorer: React.FC<WorkspaceExplorerProps> = ({
       </div>
     </div>
   );
-};
+});

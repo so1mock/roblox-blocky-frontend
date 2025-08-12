@@ -16,6 +16,7 @@ export const toggleBlockScriptStatus = async (
 export const saveBlockScript = async (
   uuid: string,
   blockScript: string
-): Promise<void> => {
-  await api.put(`/block-script/${uuid}`, blockScript);
+): Promise<any> => {
+  const response = await api.put(`/block-script/${uuid}`, blockScript);
+  return response.data;
 };
