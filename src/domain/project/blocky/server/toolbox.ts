@@ -7,38 +7,45 @@ import { makeVariableContents } from "./toolbox/categories/variableContents";
 
 export const toolboxFromServer = (
   blockListByCategory: BlockListResponse[],
-) => ({
-  kind: "categoryToolbox",
-  contents: [
-    {
-      kind: "category",
-      name: "수식", // 또는 서버에 따라 카테고리별 분류 가능
-      categorystyle: "math_category",
-      contents: makeMathContens(blockListByCategory[0]),
-    },
-    {
-      kind: "category",
-      name: "논리", // 또는 서버에 따라 카테고리별 분류 가능
-      categorystyle: "logic_category",
-      contents: makeLogicContens(blockListByCategory[1]),
-    },
-    {
-      kind: "category",
-      name: "제어", // 또는 서버에 따라 카테고리별 분류 가능
-      categorystyle: "control_category",
-      contents: makeControlContents(blockListByCategory[2]),
-    },
-    {
-      kind: "category",
-      name: "반복", // 또는 서버에 따라 카테고리별 분류 가능
-      categorystyle: "loop_category",
-      contents: makeLoopContents(blockListByCategory[3]),
-    },
-    {
-      kind: "category",
-      name: "변수", // 변수 카테고리 추가
-      categorystyle: "variable_category",
-      contents: makeVariableContents(blockListByCategory[4] || { blocks: [] }),
-    },
-  ],
-});
+) => {
+  // categoryName으로 카테고리 찾기
+  const findCategory = (categoryName: string): BlockListResponse => 
+    blockListByCategory.find(category => category.categoryName === categoryName) || 
+    { categoryName, blocks: [] };
+
+  return {
+    kind: "categoryToolbox",
+    contents: [
+      {
+        kind: "category",
+        name: "수식",
+        categorystyle: "math_category",
+        contents: makeMathContens(findCategory("math_category")),
+      },
+      {
+        kind: "category",
+        name: "논리",
+        categorystyle: "logic_category",
+        contents: makeLogicContens(findCategory("logic_category")),
+      },
+      {
+        kind: "category",
+        name: "제어",
+        categorystyle: "control_category",
+        contents: makeControlContents(findCategory("control_category")),
+      },
+      {
+        kind: "category",
+        name: "반복",
+        categorystyle: "loop_category",
+        contents: makeLoopContents(findCategory("loop_category")),
+      },
+      {
+        kind: "category",
+        name: "변수",
+        categorystyle: "variable_category",
+        contents: makeVariableContents(findCategory("variable_category")),
+      },
+    ],
+  };
+};
