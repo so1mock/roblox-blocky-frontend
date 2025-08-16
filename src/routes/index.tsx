@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@common/components/header/Header";
+import { PlaceList } from "@place/components/PlaceList";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -7,10 +8,10 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <Header />
-      <main className="bg-rbBg flex-1 flex items-center justify-center">
-        메인페이지
+      <main className="flex-1 container mx-auto px-4 py-8">
+        <PlaceList />
       </main>
     </div>
   );

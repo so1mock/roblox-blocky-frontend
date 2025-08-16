@@ -1,10 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
-import ProjectPage from "../../domain/project/ProjectPage";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/project")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <ProjectPage />;
+  // 자식 라우트(ProjectPage)를 그대로 렌더
+  return <Outlet />;
 }

@@ -1,13 +1,14 @@
 import { useRef, useState } from "react";
+import { useParams } from "@tanstack/react-router";
 import { useBlocklyUI } from "./hooks/useBlocklyUI";
 import { WorkspaceExplorer, type WorkspaceExplorerRef } from "./components/WorkspaceExplorer";
 import type { WorkspaceObject } from "./types/workspace";
 import * as Blockly from "blockly";
-import { parseBlocks } from "./apis/block";
-import { analyzeVariableUsage } from "../../utils/workspaceParser";
 import { saveBlockScript } from "./apis/blockScript";
 
 function ProjectPage() {
+  // URL 파라미터에서 placeId 추출
+  const { placeId } = useParams({ from: "/project/$placeId" });
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
   const workspaceExplorerRef = useRef<WorkspaceExplorerRef | null>(null);
   const workspaceRef = useBlocklyUI(blocklyDivRef, {
@@ -17,8 +18,14 @@ function ProjectPage() {
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
   const [responseToast, setResponseToast] = useState<{content: string, show: boolean}>({content: '', show: false});
 
-  // 고정된 placeId - 실제로는 URL 파라미터나 props에서 받아올 수 있습니다
-  const placeId = "49fb1d76-042d-4c54-bc24-e2fa597e8572";
+  // placeId는 필수 파라미터
+  if (!placeId) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-gray-600">유효한 placeId가 필요합니다.</div>
+      </div>
+    );
+  }
   
   // 현재 선택된 항목이 스크립트인지 확인
   const isScriptSelected = selectedScript?.type === "Script";

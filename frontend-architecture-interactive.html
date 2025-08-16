@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Blocky Frontend - 인터랙티브 구조도</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 40px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        .diagram-container {
+            margin: 20px 0;
+            padding: 20px;
+            background: #fafafa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        .tabs {
+            display: flex;
+            background: #ecf0f1;
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+        }
+        .tab {
+            padding: 12px 24px;
+            background: #bdc3c7;
+            color: #2c3e50;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        .tab.active {
+            background: #3498db;
+            color: white;
+        }
+        .tab:hover {
+            background: #2980b9;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: white;
+            border-radius: 0 0 8px 8px;
+            border: 1px solid #bdc3c7;
+            border-top: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .info-box {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .feature-card h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        .highlight {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        .mermaid {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Roblox Blocky Frontend 아키텍처 구조도</h1>
+        
+        <div class="info-box">
+            <strong>📌 개요:</strong> 이 문서는 Roblox Blocky Frontend의 전체 아키텍처를 <code>useServer: true</code> 모드 기준으로 시각화한 보고서입니다.
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('overview')">전체 아키텍처</button>
+            <button class="tab" onclick="showTab('components')">컴포넌트 구조</button>
+            <button class="tab" onclick="showTab('dataflow')">데이터 플로우</button>
+            <button class="tab" onclick="showTab('blocks')">블록 시스템</button>
+            <button class="tab" onclick="showTab('api')">API 구조</button>
+        </div>
+
+        <div id="overview" class="tab-content active">
+            <h2>🏗️ 전체 시스템 아키텍처</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+                flowchart TB
+                    subgraph FE [Frontend Application]
+                        subgraph UI [UI Components]
+                            A[ProjectPage]
+                            B[WorkspaceExplorer]
+                            C[Toolbar]
+                        end
+                        
+                        subgraph BL [Business Logic]
+                            D[useBlocklyUI Hook]
+                            E[State Management]
+                        end
+                        
+                        subgraph API [API Integration]
+                            F[workspace.ts]
+                            G[block.ts]
+                            H[blockScript.ts]
+                        end
+                        
+                        subgraph BS [Blockly System]
+                            I[Server Blocks]
+                            J[Custom Toolbox]
+                            K[Workspace Manager]
+                        end
+                    end
+                    
+                    subgraph BE [Backend Services]
+                        L[Workspace API /place/placeId]
+                        M[Block API /test/block/list]
+                        N[Script API /block-script/uuid]
+                    end
+                    
+                    A --> D
+                    A --> B
+                    B --> F
+                    D --> G
+                    D --> I
+                    D --> J
+                    A --> H
+                    
+                    F --> L
+                    G --> M
+                    H --> N
+                    
+                    style A fill:#e3f2fd
+                    style D fill:#f3e5f5
+                    style I fill:#fff3e0
+                    style L fill:#e8f5e8
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <strong>🔑 핵심 특징:</strong>
+                <ul>
+                    <li><strong>서버 중심:</strong> 블록 정의를 서버에서 동적으로 받아와 구성</li>
+                    <li><strong>실시간 동기화:</strong> 블록 스크립트 변경사항을 즉시 서버에 저장</li>
+                    <li><strong>모듈화:</strong> 도메인별로 분리된 컴포넌트 및 API 구조</li>
+                    <li><strong>타입 안전성:</strong> TypeScript 기반 강타입 시스템</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="components" class="tab-content">
+            <h2>🧩 컴포넌트 계층 구조</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+                flowchart TD
+                    A[App.tsx] --> B[MainLayout]
+                    B --> C[ProjectPage.tsx]
+                    
+                    C --> D[WorkspaceExplorer]
+                    C --> E[Blockly Workspace]
+                    C --> F[Toolbar Controls]
+                    
+                    D --> G[WorkspaceTreeItem]
+                    G --> H[Script Toggle]
+                    G --> I[Block Script Status]
+                    
+                    E --> J[useBlocklyUI Hook]
+                    J --> K[Server Block Definitions]
+                    J --> L[Toolbox Configuration]
+                    J --> M[Theme Styling]
+                    
+                    F --> N[Save Button]
+                    F --> O[Status Indicator]
+                    F --> P[Response Toast]
+                    
+                    style C fill:#e3f2fd
+                    style D fill:#f1f8e9
+                    style E fill:#fff8e1
+                    style J fill:#fce4ec
+                </div>
+            </div>
+            
+            <h3>📋 주요 컴포넌트 역할</h3>
+            <table>
+                <tr>
+                    <th>컴포넌트</th>
+                    <th>역할</th>
+                    <th>주요 기능</th>
+                </tr>
+                <tr>
+                    <td>ProjectPage</td>
+                    <td>메인 페이지 컨테이너</td>
+                    <td>전체 상태 관리, 저장 로직, UI 통합</td>
+                </tr>
+                <tr>
+                    <td>WorkspaceExplorer</td>
+                    <td>프로젝트 구조 탐색</td>
+                    <td>스크립트 선택, 블록 스크립트 토글</td>
+                </tr>
+                <tr>
+                    <td>useBlocklyUI</td>
+                    <td>Blockly 통합 훅</td>
+                    <td>워크스페이스 초기화, 블록 정의, 서버 연동</td>
+                </tr>
+                <tr>
+                    <td>WorkspaceTreeItem</td>
+                    <td>트리 아이템 렌더링</td>
+                    <td>개별 스크립트/폴더 표시, 상태 관리</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="dataflow" class="tab-content">
+            <h2>🔄 데이터 플로우 (useServer: true)</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+                sequenceDiagram
+                    participant U as 사용자
+                    participant PP as ProjectPage
+                    participant WE as WorkspaceExplorer
+                    participant UB as useBlocklyUI
+                    participant API as Backend API
+                    participant BS as Blockly System
+                    
+                    Note over U,BS: 초기 로딩 플로우
+                    U->>PP: 페이지 접근
+                    PP->>WE: placeId 전달
+                    WE->>API: getWorkspaceData(placeId)
+                    API-->>WE: workspace 데이터 반환
+                    
+                    PP->>UB: useServer true로 초기화
+                    UB->>API: getBlockList() 호출
+                    API-->>UB: 서버 블록 리스트 반환
+                    UB->>UB: 서버 블록들 정의
+                    UB->>BS: Blockly 워크스페이스 생성
+                    
+                    Note over U,BS: 스크립트 편집 플로우
+                    U->>WE: 스크립트 선택
+                    WE->>PP: handleSelectScript 호출
+                    PP->>BS: 기존 블록 스크립트 로드
+                    U->>BS: 블록 편집 작업
+                    
+                    Note over U,BS: 저장 플로우
+                    U->>PP: 저장 버튼 클릭
+                    PP->>BS: 워크스페이스 상태 직렬화
+                    PP->>API: saveBlockScript() 호출
+                    API-->>PP: 저장 결과 반환
+                    PP->>WE: 블록 스크립트 상태 업데이트
+                    PP->>U: 성공/실패 피드백 표시
+                </div>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🔄 상태 동기화</h3>
+                    <p>프론트엔드와 백엔드 간의 실시간 상태 동기화를 통해 일관성 있는 데이터 관리</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⚡ 비동기 처리</h3>
+                    <p>API 호출 시 로딩 상태 관리와 에러 핸들링을 통한 안정적인 사용자 경험</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🎯 선택적 로딩</h3>
+                    <p>사용자가 선택한 스크립트만 로드하여 성능 최적화 및 메모리 효율성 확보</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="blocks" class="tab-content">
+            <h2>🧱 블록 시스템 아키텍처</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+                flowchart TB
+                    subgraph SBP [Server Block Pipeline]
+                        A[getBlockList API] --> B[BlockListResponse]
+                        B --> C[Category Separation]
+                        
+                        C --> D[defineControlBlocks]
+                        C --> E[defineMathBlocks]
+                        C --> F[defineLogicBlocks]
+                        C --> G[defineLoopBlocks]
+                    end
+                    
+                    subgraph LBI [Local Block Integration]
+                        H[defineVariableBlocks] --> I[Variable Blocks]
+                    end
+                    
+                    subgraph TG [Toolbox Generation]
+                        D --> J[Control Category]
+                        E --> K[Math Category]
+                        F --> L[Logic Category]
+                        G --> M[Loop Category]
+                        I --> N[Variable Category]
+                        
+                        J --> O[toolboxFromServer]
+                        K --> O
+                        L --> O
+                        M --> O
+                        N --> O
+                    end
+                    
+                    subgraph BW [Blockly Workspace]
+                        O --> P[Blockly.inject]
+                        P --> Q[Interactive Editor]
+                        Q --> R[Block Serialization]
+                    end
+                    
+                    style A fill:#fff3e0
+                    style O fill:#f3e5f5
+                    style Q fill:#e8f5e8
+                </div>
+            </div>
+            
+            <h3>🎨 블록 카테고리별 구성</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🧮 수식 (Math)</h3>
+                    <p>서버에서 정의된 수학 연산 블록들</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔀 논리 (Logic)</h3>
+                    <p>조건문, 비교 연산 등 논리 블록들</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🎛️ 제어 (Control)</h3>
+                    <p>프로그램 흐름 제어 블록들</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔄 반복 (Loop)</h3>
+                    <p>반복문 및 이터레이션 블록들</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📦 변수 (Variable)</h3>
+                    <p>로컬에서 정의된 변수 관리 블록들</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="api" class="tab-content">
+            <h2>🌐 API 통신 구조</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+                flowchart LR
+                    subgraph FA [Frontend API Layer]
+                        A[workspace.ts]
+                        B[block.ts]
+                        C[blockScript.ts]
+                        D[user.ts]
+                    end
+                    
+                    subgraph HM [HTTP Methods]
+                        E[GET Request]
+                        F[PUT Request]
+                        G[POST Request]
+                    end
+                    
+                    subgraph BE [Backend Endpoints]
+                        H[GET /place/placeId]
+                        I[GET /test/block/list]
+                        J[PUT /block-script/uuid]
+                        K[PUT /block-script/activation/uuid]
+                        L[POST /test/block/parse]
+                    end
+                    
+                    A --> E
+                    B --> E
+                    B --> G
+                    C --> F
+                    
+                    E --> H
+                    E --> I
+                    F --> J
+                    F --> K
+                    G --> L
+                    
+                    style A fill:#e3f2fd
+                    style H fill:#e8f5e8
+                </div>
+            </div>
+            
+            <h3>📊 API 엔드포인트 상세</h3>
+            <table>
+                <tr>
+                    <th>API 함수</th>
+                    <th>HTTP 메서드</th>
+                    <th>엔드포인트</th>
+                    <th>설명</th>
+                </tr>
+                <tr>
+                    <td>getWorkspaceData</td>
+                    <td>GET</td>
+                    <td>/place/{placeId}</td>
+                    <td>워크스페이스 구조 데이터 조회</td>
+                </tr>
+                <tr>
+                    <td>getBlockList</td>
+                    <td>GET</td>
+                    <td>/test/block/list</td>
+                    <td>서버 정의 블록 리스트 조회</td>
+                </tr>
+                <tr>
+                    <td>saveBlockScript</td>
+                    <td>PUT</td>
+                    <td>/block-script/{uuid}</td>
+                    <td>블록 스크립트 저장</td>
+                </tr>
+                <tr>
+                    <td>toggleBlockScriptStatus</td>
+                    <td>PUT</td>
+                    <td>/block-script/activation/{uuid}</td>
+                    <td>블록 스크립트 활성화/비활성화</td>
+                </tr>
+                <tr>
+                    <td>parseBlocks</td>
+                    <td>POST</td>
+                    <td>/test/block/parse</td>
+                    <td>블록 구조 파싱</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'neutral',
+            themeVariables: {
+                primaryColor: '#3498db',
+                primaryTextColor: '#2c3e50',
+                primaryBorderColor: '#2980b9',
+                lineColor: '#7f8c8d',
+                secondaryColor: '#ecf0f1',
+                tertiaryColor: '#f8f9fa'
+            },
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: false
+            },
+            sequence: {
+                useMaxWidth: true
+            }
+        });
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

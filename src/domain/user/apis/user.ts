@@ -1,6 +1,5 @@
 import { type BaseUser, type Auth, type DetailedUser } from "../types/user.ts";
 import { api } from "../../common/apis/axios.ts";
-import axios from "axios";
 
 export type GetTokenResponse = {
   info: BaseUser;
@@ -33,18 +32,8 @@ export const logout = async (): Promise<void> => {
   await api.post("/member/logout");
 };
 
-// refreshApi.ts
-const refreshApi = axios.create({
-  baseURL: import.meta.env.VITE_API_BASEURL,
-  withCredentials: true,
-  timeout: 10000,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
 export const refreshToken = async () => {
-  const response = await refreshApi.post("/member/refresh");
+  const response = await api.post("/member/refresh");
   console.log("refreshToken response:", response.data); // 디버깅용
   const { token, info } = response.data;
   return {

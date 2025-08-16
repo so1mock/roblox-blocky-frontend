@@ -5,7 +5,8 @@
     "paths": {
       "@common/*": ["src/domain/common/*"],
       "@page/*": ["src/domain/pages/*"],
-      "@user/*": ["src/domain/User/*"]
+      "@user/*": ["src/domain/User/*"],
+      "@place/*": ["src/domain/place/*"]
     },
 
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",

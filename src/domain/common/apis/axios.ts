@@ -3,7 +3,7 @@ import { refreshToken } from "@user/apis/user.ts";
 import { useAuthStore } from "@user/stores/authStore.ts";
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASEURL,
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   withCredentials: true,
   timeout: 10000,
   headers: {
