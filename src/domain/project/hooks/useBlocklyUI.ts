@@ -70,11 +70,33 @@ export function useBlocklyUI(
         // 0. 서버로부터 데이터 받아오기
         blockListByCategory = await getBlockList();
 
-        // 1. 블럭 등록
-        defineControlBlocks(blockListByCategory[0].blocks);
-        defineMathBlocks(blockListByCategory[1].blocks);
-        defineLogicBlocks(blockListByCategory[2].blocks);
-        defineLoopBlocks(blockListByCategory[3].blocks);
+        // 카테고리 이름으로 찾는 헬퍼 함수
+        const findCategoryByName = (categoryName: string) => 
+          blockListByCategory.find(category => category.categoryName === categoryName);
+
+        // 1. 블럭 등록 (카테고리 이름으로 찾기)
+        const controlCategory = findCategoryByName("control_category");
+        const mathCategory = findCategoryByName("math_category");
+        const logicCategory = findCategoryByName("logic_category");
+        const loopCategory = findCategoryByName("loop_category");
+
+        console.log("Found categories:", {
+          control: controlCategory?.blocks?.length,
+          math: mathCategory?.blocks?.length,
+          logic: logicCategory?.blocks?.length,
+          loop: loopCategory?.blocks?.length
+        });
+
+        if (mathCategory) {
+          console.log("Math blocks being defined:", mathCategory.blocks.map(b => b.type));
+          defineMathBlocks(mathCategory.blocks);
+        }
+        if (logicCategory) {
+          console.log("Logic blocks being defined:", logicCategory.blocks.map(b => b.type));
+          defineLogicBlocks(logicCategory.blocks);
+        }
+        if (controlCategory) defineControlBlocks(controlCategory.blocks);
+        if (loopCategory) defineLoopBlocks(loopCategory.blocks);
         
         // 변수 블록은 로컬에서 정의 (서버에서 제공하지 않음)
         defineVariableBlocks();
