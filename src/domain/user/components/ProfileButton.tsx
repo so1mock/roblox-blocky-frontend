@@ -10,7 +10,7 @@ export function ProfileButton({
   const { handleLogout } = useUser();
   return (
     <button
-      className={`flex items-center whitespace-nowrap gap-2 h-10 bg-rbLogin min-w-fit p-2 rounded-lg ${className}`}
+      className={`flex items-center whitespace-nowrap gap-2 h-10 bg-rbLogin min-w-fit p-2 rounded-lg cursor-pointer ${className}`}
       onClick={() => {
         handleLogout();
       }}
