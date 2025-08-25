@@ -67,7 +67,7 @@ api.interceptors.response.use(
           // processQueue 에서 매개변수로 쓰는 토큰
           originalRequest.headers["Authorization"] = `Bearer ${token}`; // 이미 요청된 요청이기 때문에 토큰을 직접 수정해 줘야 함
           return api(originalRequest);
-        });
+        }).catch((error) => Promise.reject(error))
       }
 
       // 리프레시 요청이 진행 중이 아니라면 본격적으로 리프레시 요청 진행
@@ -81,6 +81,7 @@ api.interceptors.response.use(
         processQueue(null, newToken); // 전역에 토큰이 있는데 굳이 매개변수로 전달해야 할까에 대한 고민
 
         originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+        originalRequest.headers["Authorization"] = `Bearer ${newToken}`; // 이미 요청된 요청이기 때문에 토큰을 직접 수정해 줘야 함
         return api(originalRequest);
       } catch (error) {
         processQueue(error, null);
