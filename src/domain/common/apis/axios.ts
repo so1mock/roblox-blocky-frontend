@@ -80,7 +80,6 @@ api.interceptors.response.use(
         // data에서 받아온 데이터로 유저 정보 다시 초기화 시키기
         processQueue(null, newToken); // 전역에 토큰이 있는데 굳이 매개변수로 전달해야 할까에 대한 고민
 
-        originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
         originalRequest.headers["Authorization"] = `Bearer ${newToken}`; // 이미 요청된 요청이기 때문에 토큰을 직접 수정해 줘야 함
         return api(originalRequest);
       } catch (error) {
