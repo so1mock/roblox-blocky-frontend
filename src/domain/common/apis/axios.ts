@@ -49,7 +49,8 @@ api.interceptors.response.use(
         // 이미 리프레시 토큰을 통한 재요청을 시도해본 경우 -> 리프레시 토큰이 만료됐다는 뜻
         // _retry는 원래는 존재하지 않고 우리가 추가한 프로퍼티 이다.
         console.log("리프레시 토큰이 만료되어 메인 페이지로 이동");
-        window.location.href = "/";
+        // window.location.href = "/";
+        useAuthStore.getState().clearAuth(); // 로그인 상태 false로 변경
         return Promise.reject(error);
       }
 
@@ -63,11 +64,13 @@ api.interceptors.response.use(
         // 지연된 요청들은 처음부터 큐에 이런 방식으로 호출된다.
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
-        }).then((token) => {
-          // processQueue 에서 매개변수로 쓰는 토큰
-          originalRequest.headers["Authorization"] = `Bearer ${token}`; // 이미 요청된 요청이기 때문에 토큰을 직접 수정해 줘야 함
-          return api(originalRequest);
-        }).catch((error) => Promise.reject(error))
+        })
+          .then((token) => {
+            // processQueue 에서 매개변수로 쓰는 토큰
+            originalRequest.headers["Authorization"] = `Bearer ${token}`; // 이미 요청된 요청이기 때문에 토큰을 직접 수정해 줘야 함
+            return api(originalRequest);
+          })
+          .catch((error) => Promise.reject(error));
       }
 
       // 리프레시 요청이 진행 중이 아니라면 본격적으로 리프레시 요청 진행

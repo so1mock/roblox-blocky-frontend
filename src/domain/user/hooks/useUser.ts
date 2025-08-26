@@ -5,7 +5,7 @@ import { getToken, getUserInfo, logout } from "@user/apis/user.ts";
 import { api } from "@common/apis/axios.ts";
 
 export const useUser = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const setAuth = useAuthStore((state) => state.setAuth);
   const clearAuth = useAuthStore((state) => state.clearAuth);
@@ -20,10 +20,10 @@ export const useUser = () => {
       try {
         const user = await getUserInfo();
         setAuth(user);
-        navigate({ to: "/" });
+        // navigate({ to: "/" });
       } catch (error) {
         clearAuth();
-        navigate({ to: "/" });
+        // navigate({ to: "/" });
       }
     },
     onError: (error) => {
