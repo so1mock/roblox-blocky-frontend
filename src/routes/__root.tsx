@@ -1,17 +1,46 @@
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createRootRoute, useNavigate, Outlet } from "@tanstack/react-router";
+import { useAuthStore } from "@user/stores/authStore";
+import { useEffect } from "react";
+import { getUserInfo } from "@user/apis/user";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { Header } from "../domain/common/components/header/Header";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 3, // 실패 시 3번 재시도 (기본값)
+    },
+  },
+});
 
 export const Route = createRootRoute({
-  component: () => (
-    <>
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <main className="bg-rbBg flex-1 flex items-center justify-center">
+  component: () => {
+    const setAuth = useAuthStore((state) => state.setAuth);
+    const clearAuth = useAuthStore((state) => state.clearAuth);
+    const navigate = useNavigate();
+
+    const { isLogin } = useAuthStore();
+
+    // App 초기 진입 시
+    useEffect(() => {
+      getUserInfo()
+        .then((user) => setAuth(user))
+        .catch(() => clearAuth());
+    }, []);
+
+    // App 초기 진입 시
+    useEffect(() => {
+      if (!isLogin) {
+        navigate({ to: "/" });
+      }
+    }, [isLogin]);
+    return (
+      <QueryClientProvider client={queryClient}>
+        <div className="min-h-screen flex flex-col">
           <Outlet />
-        </main>
-        <TanStackRouterDevtools />
-      </div>
-    </>
-  ),
+          <TanStackRouterDevtools />
+        </div>
+      </QueryClientProvider>
+    );
+  },
 });
