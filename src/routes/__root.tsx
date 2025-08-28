@@ -28,12 +28,6 @@ export const Route = createRootRoute({
         .catch(() => clearAuth());
     }, []);
 
-    // App 초기 진입 시
-    useEffect(() => {
-      if (!isLogin) {
-        navigate({ to: "/" });
-      }
-    }, [isLogin]);
     return (
       <QueryClientProvider client={queryClient}>
         <div className="min-h-screen flex flex-col">

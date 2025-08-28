@@ -1,8 +1,8 @@
 import { useRef } from "react";
 
-function BlockCodingPage() {
+function BlockCodingPage({ id }: { id: string }) {
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
-
+  console.log(id);
   return (
     <div
       id="blocklyDiv"
