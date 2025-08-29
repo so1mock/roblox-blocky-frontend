@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { WorkspaceObject } from "../blockly/types/workspace";
+import { getIcon } from "../utils/getIcon";
 
 function WorkspaceTreeItem({
   object,
@@ -13,24 +14,22 @@ function WorkspaceTreeItem({
   const hasChildren = object.children && object.children.length > 0;
   const isScript = object.type === "Script";
   const paddingLeft = level * 20 + 8;
+  const iconType =
+    object.type === "Script"
+      ? "script"
+      : object.type === "Part"
+        ? "part"
+        : object.type === "Workspace"
+          ? "workspace"
+          : hasChildren
+            ? isExpanded
+              ? "openFolder"
+              : "closedFolder"
+            : "script"; // fallback
 
   const handleToggle = () => {
     if (hasChildren) {
       setIsExpanded(!isExpanded);
-    }
-  };
-
-  const getIcon = () => {
-    if (object.type === "Script") {
-      return "📄";
-    } else if (object.type === "Part") {
-      return "🧱";
-    } else if (object.type === "Workspace") {
-      return "🏠";
-    } else if (hasChildren) {
-      return isExpanded ? "📂" : "📁";
-    } else {
-      return "📄";
     }
   };
 
@@ -57,7 +56,7 @@ function WorkspaceTreeItem({
           </span>
         )}
         {!hasChildren && <span className="mr-1 w-3"></span>}
-        <span className="mr-2">{getIcon()}</span>
+        <span className="mr-2">{getIcon(iconType)}</span>
         <span
           className={`
         truncate
