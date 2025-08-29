@@ -1,14 +1,24 @@
 import { useEffect, useState } from "react";
-import type { WorkspaceData } from "../blockly/types/workspace";
+import type {
+  WorkspaceData,
+  WorkspaceObject,
+} from "../blockly/types/workspace";
 import { getWorkspaceDataByPlaceId } from "../apis/workspace";
 import WorkspaceTreeItem from "./WorkspaceTreeItem";
 
-function WorkspaceExploerer({ placeId }: { placeId: string }) {
+function WorkspaceExploerer({
+  placeId,
+  selectedScript,
+  setSelectedScript,
+}: {
+  placeId: string;
+  selectedScript: undefined | WorkspaceObject;
+  setSelectedScript: React.Dispatch<
+    React.SetStateAction<undefined | WorkspaceObject>
+  >;
+}) {
   const [workspaceData, setWorkspaceData] = useState<WorkspaceData | null>(
     null,
-  );
-  const [selectedScriptId, setSelectedScriptId] = useState<string | undefined>(
-    undefined,
   );
 
   useEffect(() => {
@@ -26,10 +36,6 @@ function WorkspaceExploerer({ placeId }: { placeId: string }) {
     }
   }, [placeId]);
 
-  useEffect(() => {
-    if (selectedScriptId === undefined) return;
-  }, [selectedScriptId]);
-
   if (!workspaceData) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -37,7 +43,7 @@ function WorkspaceExploerer({ placeId }: { placeId: string }) {
       </div>
     );
   }
-  console.log(workspaceData);
+
   return (
     <div className="bg-white border border-gray-200">
       {/* 헤더 */}
@@ -58,8 +64,8 @@ function WorkspaceExploerer({ placeId }: { placeId: string }) {
             placeId={placeId}
             object={object}
             level={0}
-            selectedScriptId={selectedScriptId}
-            setSelectedScriptId={setSelectedScriptId}
+            selectedScript={selectedScript}
+            setSelectedScript={setSelectedScript}
             setWorkspaceData={setWorkspaceData}
           />
         ))}

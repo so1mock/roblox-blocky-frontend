@@ -12,7 +12,17 @@ export interface WorkspaceObject {
   type: string;
   children: WorkspaceObject[];
   isBlockScriptEnabled?: boolean;
-  blockScript?: string;
+  blockScript?: {
+    blocks: {
+      languageVersion: number;
+      blocks: Array<Record<string, any>>; // 블록 내용이 자유로운 경우
+    };
+    variables: Array<{
+      name: string;
+      id: string;
+      type: string;
+    }>;
+  };
 }
 
 export interface WorkspaceData {

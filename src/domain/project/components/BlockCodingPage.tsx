@@ -1,7 +1,9 @@
-import { useRef } from "react";
+import * as Blockly from "blockly";
+import { useEffect, useRef, useState } from "react";
 import { useBlocklyUI } from "../hooks/useBlocklyUi";
 import { addHitCategory } from "../blockly/utils/handleDynamicCategory";
 import WorkspaceExploerer from "./WorkspaceExploerer";
+import type { WorkspaceObject } from "../blockly/types/workspace";
 
 function BlockCodingPage({ id: placeId }: { id: string }) {
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
@@ -9,11 +11,41 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
     useServer: true,
   });
 
+  const [selectedScript, setSelectedScript] = useState<
+    WorkspaceObject | undefined
+  >(undefined);
+
+  useEffect(() => {
+    if (selectedScript === undefined) return;
+
+    if (!workspaceRef.current) return;
+    workspaceRef.current.clear();
+    let blockState;
+    if (selectedScript.blockScript) {
+      blockState = selectedScript.blockScript;
+      Blockly.serialization.workspaces.load(blockState, workspaceRef.current);
+    } else {
+      // 블록 스크립트가 존재하지 않으면 기본 상태로 렌더링한다
+      blockState = {
+        version: 1, // Blockly의 현재 serialization 버전
+        blocks: {
+          languageVersion: 0,
+          blocks: [],
+        },
+      };
+    }
+    Blockly.serialization.workspaces.load(blockState, workspaceRef.current);
+  }, [selectedScript]);
+
   return (
     <div className="flex bg-gray-100 h-screen">
       {/* 왼쪽 사이드바 - 워크스페이스 탐색기 */}
       <aside className="w-80 bg-white border-r border-gray-200">
-        <WorkspaceExploerer placeId={placeId} />
+        <WorkspaceExploerer
+          placeId={placeId}
+          selectedScript={selectedScript}
+          setSelectedScript={setSelectedScript}
+        />
       </aside>
       {/* 메인 영역 */}
       <div className="flex-1 flex flex-col">

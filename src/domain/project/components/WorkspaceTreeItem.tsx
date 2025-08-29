@@ -13,22 +13,24 @@ function WorkspaceTreeItem({
   placeId,
   object,
   level = 0,
-  selectedScriptId,
-  setSelectedScriptId,
+  selectedScript,
+  setSelectedScript,
   setWorkspaceData,
 }: {
   placeId: string;
   object: WorkspaceObject;
   level: number;
-  selectedScriptId: undefined | string;
-  setSelectedScriptId: React.Dispatch<React.SetStateAction<undefined | string>>;
+  selectedScript: undefined | WorkspaceObject;
+  setSelectedScript: React.Dispatch<
+    React.SetStateAction<undefined | WorkspaceObject>
+  >;
   setWorkspaceData: React.Dispatch<React.SetStateAction<WorkspaceData | null>>;
 }) {
   const [isExpanded, setIsExpanded] = useState(level < 2);
 
   const hasChildren = object.children && object.children.length > 0;
   const isScript = object.type === "Script";
-  const isSelected = selectedScriptId === object.uuid;
+  const isSelected = selectedScript?.uuid === object.uuid;
   const paddingLeft = level * 20 + 8;
   const iconType =
     object.type === "Script"
@@ -52,7 +54,7 @@ function WorkspaceTreeItem({
 
   const handleSelect = () => {
     if (object.type !== "Script") return;
-    setSelectedScriptId(object.uuid);
+    setSelectedScript(object);
   };
 
   const handleToggleBlockScriptStatus = async (event: React.MouseEvent) => {
@@ -137,8 +139,8 @@ function WorkspaceTreeItem({
               placeId={placeId}
               object={childObject}
               level={level + 1}
-              selectedScriptId={selectedScriptId}
-              setSelectedScriptId={setSelectedScriptId}
+              selectedScript={selectedScript}
+              setSelectedScript={setSelectedScript}
               setWorkspaceData={setWorkspaceData}
             />
           ))}
