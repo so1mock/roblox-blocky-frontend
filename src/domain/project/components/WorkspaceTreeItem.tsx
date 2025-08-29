@@ -54,7 +54,8 @@ function WorkspaceTreeItem({
 
   const handleSelect = () => {
     if (object.type !== "Script") return;
-    setSelectedScript(object);
+    if (selectedScript === object) setSelectedScript(undefined);
+    else setSelectedScript(object);
   };
 
   const handleToggleBlockScriptStatus = async (event: React.MouseEvent) => {
