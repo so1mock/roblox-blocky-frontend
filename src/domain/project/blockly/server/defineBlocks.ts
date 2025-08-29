@@ -4,7 +4,6 @@ import type { BlockWithToolboxList } from "../types/block";
 export const defineServerBlocks = (blocks: BlockWithToolboxList) => {
   // 1. 등록
   blocks.forEach((block) => {
-    if (block.type === "math_number") return; // 내장 블록이므로 무시
     Blockly.Blocks[block.type] = {
       init: function () {
         block.definition.components.forEach((component) => {
@@ -20,6 +19,15 @@ export const defineServerBlocks = (blocks: BlockWithToolboxList) => {
               new Blockly.FieldTextInput(component.fieldValue ?? ""),
               component.name,
             );
+          } else if (component.componentType === "FieldNumber") {
+            const dummy = this.appendDummyInput();
+            dummy.appendField(
+              new Blockly.FieldNumber(component.value ?? 0),
+              component.name,
+            );
+          } else if (component.componentType === "StatementInput") {
+            const input = this.appendStatementInput(component.name);
+            if (component.fieldText) input.appendField(component.fieldText);
           } else if (component.componentType === "FieldDropdown") {
             const dummy = this.appendDummyInput();
             const options = component.options.map(
@@ -34,6 +42,12 @@ export const defineServerBlocks = (blocks: BlockWithToolboxList) => {
 
         if (block.definition.output) {
           this.setOutput(true, block.definition.output);
+        }
+        if (block.definition.previousStatement) {
+          this.setPreviousStatement(true, null);
+        }
+        if (block.definition.nextStatement) {
+          this.setNextStatement(true, null);
         }
         if (block.definition.inputsInline !== undefined) {
           this.setInputsInline(block.definition.inputsInline);

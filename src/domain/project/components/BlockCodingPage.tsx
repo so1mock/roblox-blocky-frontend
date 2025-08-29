@@ -5,7 +5,7 @@ import { addHitCategory } from "../blockly/utils/handleDynamicCategory";
 function BlockCodingPage({ id }: { id: string }) {
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
   const { workspaceRef, loading, error } = useBlocklyUI(blocklyDivRef, {
-    useServer: false,
+    useServer: true,
   });
 
   return (
