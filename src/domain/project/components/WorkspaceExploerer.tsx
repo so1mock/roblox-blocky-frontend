@@ -7,6 +7,9 @@ function WorkspaceExploerer({ placeId }: { placeId: string }) {
   const [workspaceData, setWorkspaceData] = useState<WorkspaceData | null>(
     null,
   );
+  const [selectedScriptId, setSelectedScriptId] = useState<string | undefined>(
+    undefined,
+  );
 
   useEffect(() => {
     const fetchWorkspaceData = async () => {
@@ -22,6 +25,10 @@ function WorkspaceExploerer({ placeId }: { placeId: string }) {
       fetchWorkspaceData();
     }
   }, [placeId]);
+
+  useEffect(() => {
+    if (selectedScriptId === undefined) return;
+  }, [selectedScriptId]);
 
   if (!workspaceData) {
     return (
@@ -46,7 +53,15 @@ function WorkspaceExploerer({ placeId }: { placeId: string }) {
       {/* 트리 */}
       <div className="overflow-auto">
         {workspaceData.objects.map((object) => (
-          <WorkspaceTreeItem key={object.uuid} object={object} />
+          <WorkspaceTreeItem
+            key={object.uuid}
+            placeId={placeId}
+            object={object}
+            level={0}
+            selectedScriptId={selectedScriptId}
+            setSelectedScriptId={setSelectedScriptId}
+            setWorkspaceData={setWorkspaceData}
+          />
         ))}
       </div>
 

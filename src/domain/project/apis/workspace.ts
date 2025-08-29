@@ -15,3 +15,19 @@ export const getWorkspaceDataByPlaceId = async (
     throw e;
   }
 };
+
+export const toggleBlockScriptStatus = async (
+  uuid: string,
+  status: "ENABLED" | "DISABLED",
+): Promise<void> => {
+  try {
+    await api.put(`/block-script/activation/${uuid}`, {
+      blockScriptStatus: status,
+    });
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw e.message;
+    }
+    throw e;
+  }
+};

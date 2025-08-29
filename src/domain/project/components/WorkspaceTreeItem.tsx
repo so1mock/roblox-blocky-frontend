@@ -1,18 +1,34 @@
 import { useState } from "react";
-import type { WorkspaceObject } from "../blockly/types/workspace";
+import type {
+  WorkspaceData,
+  WorkspaceObject,
+} from "../blockly/types/workspace";
 import { getIcon } from "../utils/getIcon";
+import {
+  getWorkspaceDataByPlaceId,
+  toggleBlockScriptStatus,
+} from "../apis/workspace";
 
 function WorkspaceTreeItem({
+  placeId,
   object,
   level = 0,
+  selectedScriptId,
+  setSelectedScriptId,
+  setWorkspaceData,
 }: {
+  placeId: string;
   object: WorkspaceObject;
   level: number;
+  selectedScriptId: undefined | string;
+  setSelectedScriptId: React.Dispatch<React.SetStateAction<undefined | string>>;
+  setWorkspaceData: React.Dispatch<React.SetStateAction<WorkspaceData | null>>;
 }) {
   const [isExpanded, setIsExpanded] = useState(level < 2);
 
   const hasChildren = object.children && object.children.length > 0;
   const isScript = object.type === "Script";
+  const isSelected = selectedScriptId === object.uuid;
   const paddingLeft = level * 20 + 8;
   const iconType =
     object.type === "Script"
@@ -29,29 +45,47 @@ function WorkspaceTreeItem({
 
   const handleToggle = () => {
     if (hasChildren) {
-      setIsExpanded(!isExpanded);
+      setIsExpanded((prev) => !prev);
+    }
+  };
+
+  const handleSelect = () => {
+    if (object.type !== "Script") return;
+    setSelectedScriptId(object.uuid);
+  };
+
+  const handleToggleBlockScriptStatus = async (event: React.MouseEvent) => {
+    event.stopPropagation();
+    if (!isScript) return;
+
+    try {
+      const newStatus = object.isBlockScriptEnabled ? false : true;
+      await toggleBlockScriptStatus(
+        object.uuid,
+        newStatus ? "ENABLED" : "DISABLED",
+      );
+
+      const data = await getWorkspaceDataByPlaceId(placeId);
+      setWorkspaceData(data);
+    } catch (error) {
+      console.error("Failed to toggle block script status:", error);
     }
   };
 
   return (
     <div>
-      <button
+      <div
+        role="button"
         className={`w-full cursor-pointer
       flex items-center py-1 px-2 hover:bg-gray-100 text-sm
+       ${isSelected ? "bg-blue-100 border-r-2 border-blue-500" : ""}
       ${isScript ? "cursor-pointer" : ""}
     `}
         style={{ paddingLeft: `${paddingLeft}px` }}
-        onClick={() => {
-          handleToggle();
-        }}
+        onClick={handleSelect}
       >
         {hasChildren && (
-          <span
-            className="mr-1 text-xs select-none"
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
+          <span onClick={handleToggle} className="mr-1 text-xs select-none">
             {isExpanded ? "▼" : "▶"}
           </span>
         )}
@@ -59,8 +93,9 @@ function WorkspaceTreeItem({
         <span className="mr-2">{getIcon(iconType)}</span>
         <span
           className={`
-        truncate
+        flex-1 text-left truncate
         ${isScript ? "text-blue-600 hover:text-blue-800" : "text-gray-700"}
+         ${isSelected ? "font-medium" : ""}
       `}
           title={object.name}
         >
@@ -76,8 +111,9 @@ function WorkspaceTreeItem({
               </span>
             )}
             <button
-              className={`
-            relative inline-flex h-4 w-7 items-center rounded-full transition-colors
+              onClick={handleToggleBlockScriptStatus}
+              className={`cursor-pointer
+             inline-flex h-4 w-7 items-center rounded-full transition-colors
             ${object.isBlockScriptEnabled ? "bg-blue-600" : "bg-gray-300"}
           `}
               title={`블록 스크립트 ${object.isBlockScriptEnabled ? "비활성화" : "활성화"}`}
@@ -91,15 +127,19 @@ function WorkspaceTreeItem({
             </button>
           </div>
         )}
-      </button>
+      </div>
 
       {hasChildren && isExpanded && (
         <div>
-          {object.children.map((child) => (
+          {object.children.map((childObject) => (
             <WorkspaceTreeItem
-              key={child.uuid}
-              object={child}
+              key={object.uuid}
+              placeId={placeId}
+              object={childObject}
               level={level + 1}
+              selectedScriptId={selectedScriptId}
+              setSelectedScriptId={setSelectedScriptId}
+              setWorkspaceData={setWorkspaceData}
             />
           ))}
         </div>
