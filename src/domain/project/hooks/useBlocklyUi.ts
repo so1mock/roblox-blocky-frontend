@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
 import { defineCustomBlocks } from "../blockly/blocks/defineBlocks";
 import toolblox from "../blockly/toolbox/toolblox";
 import { customTheme } from "../blockly/theme/customTheme";
+import { registerVariableCallbacks } from "../blockly/utils/variableUtils";
 
 export function useBlocklyUI(
   blocklyDivRef: React.RefObject<HTMLDivElement | null>,
@@ -27,6 +28,9 @@ export function useBlocklyUI(
       },
       theme: customTheme,
     });
+
+    // ✅ 변수 관련 콜백 등록
+    registerVariableCallbacks(workspaceSvg);
 
     workspaceRef.current = workspaceSvg;
   }, [blocklyDivRef]);
