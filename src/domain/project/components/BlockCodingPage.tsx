@@ -4,6 +4,7 @@ import { useBlocklyUI } from "../hooks/useBlocklyUi";
 import { addHitCategory } from "../blockly/utils/handleDynamicCategory";
 import WorkspaceExploerer from "./WorkspaceExploerer";
 import type { WorkspaceObject } from "../blockly/types/workspace";
+import BlockCodingHeader from "./BlockCodingHeader";
 
 function BlockCodingPage({ id: placeId }: { id: string }) {
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
@@ -50,17 +51,9 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
       {/* 메인 영역 */}
       <div className="flex-1 flex flex-col">
         {/* 헤더 */}
-        <header className="flex gap-2 bg-white py-4 px-4">
-          <button
-            type="button"
-            onClick={() => {
-              addHitCategory(workspaceRef.current);
-            }}
-            className="px-4 py-2 bg-blue-400 text-black font-semibold rounded hover:bg-blue-700 transition-colors"
-          >
-            hit 카테고리 추가
-          </button>
-        </header>
+
+        <BlockCodingHeader selectedScript={selectedScript} />
+
         {/* 블록 조립 */}
         <div className="flex-1 p-4 relative">
           {!selectedScript && (
