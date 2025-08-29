@@ -1,6 +1,6 @@
 import * as Blockly from "blockly";
 import { registerContinuousToolbox } from "@blockly/continuous-toolbox";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { defineCustomBlocks } from "../blockly/blocks/defineBlocks";
 import toolbox from "../blockly/toolbox/toolbox";
 import { customTheme } from "../blockly/theme/customTheme";
@@ -16,48 +16,19 @@ export function useBlocklyUI(
   options: { useServer?: boolean } = { useServer: false },
 ) {
   const workspaceRef = useRef<Blockly.WorkspaceSvg | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!blocklyDivRef.current) return;
-    registerContinuousToolbox(); // 플러그인 적용
-    if (options.useServer) {
-      // 서버 데이터로 로딩
-      getBlockList()
-        .then((blockListByCategory) => {
-          // TODO: blockListByCategory 활용
-          for (const blockList of blockListByCategory) {
-            defineServerBlocks(blockList.blocks);
-          }
-          defineVariableBlocks(); // 변수 블록은 로컬에서 정의하기로
 
-          const workspaceSvg = Blockly.inject(blocklyDivRef.current!, {
-            toolbox: toolboxFromServer(blockListByCategory),
-            plugins: {
-              flyoutsVerticalToolbox: "ContinuousFlyout",
-              metricsManager: "ContinuousMetrics",
-              toolbox: "ContinuousToolbox",
-            },
-            theme: customTheme,
-          });
+    registerContinuousToolbox();
+    setLoading(true);
+    setError(null);
 
-          workspaceRef.current = workspaceSvg;
-
-          // ✅ 변수 관련 콜백 등록
-          registerVariableCallbacks(workspaceSvg);
-          // ✅ 블록 초기 값 블록 생성 이벤트 등록
-          setupBlockInputInitializer(workspaceSvg);
-        })
-        .catch((e) => {
-          if (e) {
-            console.log(e);
-          }
-        });
-    } else {
-      // 로컬 데이터로 로딩
-      defineCustomBlocks();
-
-      const workspaceSvg = Blockly.inject(blocklyDivRef.current, {
-        toolbox: toolbox,
+    const initWorkspace = (toolboxConfig: any) => {
+      const workspaceSvg = Blockly.inject(blocklyDivRef.current!, {
+        toolbox: toolboxConfig,
         plugins: {
           flyoutsVerticalToolbox: "ContinuousFlyout",
           metricsManager: "ContinuousMetrics",
@@ -66,12 +37,29 @@ export function useBlocklyUI(
         theme: customTheme,
       });
       workspaceRef.current = workspaceSvg;
-      // ✅ 변수 관련 콜백 등록
       registerVariableCallbacks(workspaceSvg);
-      // ✅ 블록 초기 값 블록 생성 이벤트 등록
       setupBlockInputInitializer(workspaceSvg);
+      setLoading(false);
+    };
+
+    if (options.useServer) {
+      getBlockList()
+        .then((blockListByCategory) => {
+          for (const blockList of blockListByCategory) {
+            defineServerBlocks(blockList.blocks);
+          }
+          defineVariableBlocks(); // 변수 블록은 로컬에서 정의
+          initWorkspace(toolboxFromServer(blockListByCategory));
+        })
+        .catch((e) => {
+          console.error("서버 블록 로딩 실패:", e);
+          setError("서버 블록 로딩 실패.");
+        });
+    } else {
+      defineCustomBlocks();
+      initWorkspace(toolbox);
     }
   }, [blocklyDivRef]);
 
-  return workspaceRef;
+  return { workspaceRef, loading, error };
 }

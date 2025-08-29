@@ -4,10 +4,14 @@ import { addHitCategory } from "../blockly/utils/handleDynamicCategory";
 
 function BlockCodingPage({ id }: { id: string }) {
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
-  const workspaceRef = useBlocklyUI(blocklyDivRef, { useServer: true });
+  const { workspaceRef, loading, error } = useBlocklyUI(blocklyDivRef, {
+    useServer: false,
+  });
 
   return (
     <div>
+      {loading && <div className="text-gray-500 mb-2">블록 로딩 중...</div>}
+      {error && <div className="text-red-500 mb-2">{error}</div>}
       <div
         id="blocklyDiv"
         ref={blocklyDivRef}
