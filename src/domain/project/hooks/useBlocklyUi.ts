@@ -8,6 +8,7 @@ import { defineCustomBlocks } from "../blockly/blocks/defineBlocks";
 import toolblox from "../blockly/toolbox/toolblox";
 import { customTheme } from "../blockly/theme/customTheme";
 import { registerVariableCallbacks } from "../blockly/utils/variableUtils";
+import { setupBlockInputInitializer } from "../blockly/utils/blockInputInitializer";
 
 export function useBlocklyUI(
   blocklyDivRef: React.RefObject<HTMLDivElement | null>,
@@ -31,6 +32,8 @@ export function useBlocklyUI(
 
     // ✅ 변수 관련 콜백 등록
     registerVariableCallbacks(workspaceSvg);
+    // ✅ 블록 초기 값 블록 생성 이벤트 등록
+    setupBlockInputInitializer(workspaceSvg);
 
     workspaceRef.current = workspaceSvg;
   }, [blocklyDivRef]);
