@@ -1,3 +1,4 @@
+import { variableContents } from "../toolbox/categories/variableContents";
 import type { BlockListByCategoryResponse } from "../types/block";
 import { makeServerCategoryContents } from "./defineCategories";
 
@@ -29,6 +30,19 @@ export const toolboxFromServer = (
       name: "반복",
       categorystyle: "loop_category",
       contents: makeServerCategoryContents(blockListByCategory[3]),
+    },
+    {
+      kind: "category",
+      name: "변수",
+      categorystyle: "variable_category",
+      contents: [
+        {
+          kind: "button",
+          text: "새 변수 만들기",
+          callbackKey: "CREATE_VARIABLE",
+        },
+        ...variableContents,
+      ],
     },
   ],
 });

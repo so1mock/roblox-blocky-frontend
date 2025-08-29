@@ -9,6 +9,7 @@ import { setupBlockInputInitializer } from "../blockly/utils/blockInputInitializ
 import { getBlockList } from "../apis/block";
 import { defineServerBlocks } from "../blockly/server/defineBlocks";
 import { toolboxFromServer } from "../blockly/server/serverToolbox";
+import { defineVariableBlocks } from "../blockly/blocks/blockDefinitions/variableBlockDefinitions";
 
 export function useBlocklyUI(
   blocklyDivRef: React.RefObject<HTMLDivElement | null>,
@@ -27,6 +28,7 @@ export function useBlocklyUI(
           for (const blockList of blockListByCategory) {
             defineServerBlocks(blockList.blocks);
           }
+          defineVariableBlocks(); // 변수 블록은 로컬에서 정의하기로
 
           const workspaceSvg = Blockly.inject(blocklyDivRef.current!, {
             toolbox: toolboxFromServer(blockListByCategory),
@@ -38,8 +40,12 @@ export function useBlocklyUI(
             theme: customTheme,
           });
 
-          console.log(toolboxFromServer(blockListByCategory));
           workspaceRef.current = workspaceSvg;
+
+          // ✅ 변수 관련 콜백 등록
+          registerVariableCallbacks(workspaceSvg);
+          // ✅ 블록 초기 값 블록 생성 이벤트 등록
+          setupBlockInputInitializer(workspaceSvg);
         })
         .catch((e) => {
           if (e) {
@@ -59,13 +65,11 @@ export function useBlocklyUI(
         },
         theme: customTheme,
       });
-
+      workspaceRef.current = workspaceSvg;
       // ✅ 변수 관련 콜백 등록
       registerVariableCallbacks(workspaceSvg);
       // ✅ 블록 초기 값 블록 생성 이벤트 등록
       setupBlockInputInitializer(workspaceSvg);
-
-      workspaceRef.current = workspaceSvg;
     }
   }, [blocklyDivRef]);
 
