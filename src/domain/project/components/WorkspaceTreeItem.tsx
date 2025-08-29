@@ -9,9 +9,16 @@ function WorkspaceTreeItem({
   level: number;
 }) {
   const [isExpanded, setIsExpanded] = useState(level < 2);
+
   const hasChildren = object.children && object.children.length > 0;
   const isScript = object.type === "Script";
   const paddingLeft = level * 20 + 8;
+
+  const handleToggle = () => {
+    if (hasChildren) {
+      setIsExpanded(!isExpanded);
+    }
+  };
 
   const getIcon = () => {
     if (object.type === "Script") {
@@ -29,12 +36,15 @@ function WorkspaceTreeItem({
 
   return (
     <div>
-      <div
-        className={`
+      <button
+        className={`w-full cursor-pointer
       flex items-center py-1 px-2 hover:bg-gray-100 text-sm
       ${isScript ? "cursor-pointer" : ""}
     `}
         style={{ paddingLeft: `${paddingLeft}px` }}
+        onClick={() => {
+          handleToggle();
+        }}
       >
         {hasChildren && (
           <span
@@ -50,7 +60,7 @@ function WorkspaceTreeItem({
         <span className="mr-2">{getIcon()}</span>
         <span
           className={`
-        truncate flex-1
+        truncate
         ${isScript ? "text-blue-600 hover:text-blue-800" : "text-gray-700"}
       `}
           title={object.name}
@@ -70,8 +80,6 @@ function WorkspaceTreeItem({
               className={`
             relative inline-flex h-4 w-7 items-center rounded-full transition-colors
             ${object.isBlockScriptEnabled ? "bg-blue-600" : "bg-gray-300"}
-          
-            hover:bg-opacity-80
           `}
               title={`블록 스크립트 ${object.isBlockScriptEnabled ? "비활성화" : "활성화"}`}
             >
@@ -84,7 +92,7 @@ function WorkspaceTreeItem({
             </button>
           </div>
         )}
-      </div>
+      </button>
 
       {hasChildren && isExpanded && (
         <div>
