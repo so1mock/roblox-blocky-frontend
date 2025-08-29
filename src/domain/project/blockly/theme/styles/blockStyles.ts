@@ -20,4 +20,7 @@ export const blockStyles = {
   variable_block: {
     colourPrimary: "#FFA500",
   },
+  hit_block: {
+    colourPrimary: "#AFBE7C",
+  },
 };

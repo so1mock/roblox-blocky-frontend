@@ -1,11 +1,8 @@
 import * as Blockly from "blockly";
-import {
-  ContinuousFlyout,
-  registerContinuousToolbox,
-} from "@blockly/continuous-toolbox";
+import { registerContinuousToolbox } from "@blockly/continuous-toolbox";
 import { useEffect, useRef } from "react";
 import { defineCustomBlocks } from "../blockly/blocks/defineBlocks";
-import toolblox from "../blockly/toolbox/toolblox";
+import toolbox from "../blockly/toolbox/toolbox";
 import { customTheme } from "../blockly/theme/customTheme";
 import { registerVariableCallbacks } from "../blockly/utils/variableUtils";
 import { setupBlockInputInitializer } from "../blockly/utils/blockInputInitializer";
@@ -21,7 +18,7 @@ export function useBlocklyUI(
     registerContinuousToolbox();
 
     const workspaceSvg = Blockly.inject(blocklyDivRef.current, {
-      toolbox: toolblox,
+      toolbox: toolbox,
       plugins: {
         flyoutsVerticalToolbox: "ContinuousFlyout",
         metricsManager: "ContinuousMetrics",

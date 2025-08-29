@@ -18,6 +18,20 @@ function attachPlayerConstantBlock(workspace: Blockly.WorkspaceSvg) {
   });
 }
 
+function attachCharacterConstantBlock(workspace: Blockly.WorkspaceSvg) {
+  workspace.getAllBlocks().forEach((block) => {
+    if (block.type === "get_character_from_hit") {
+      const input = block.getInput("CHARACTER");
+      if (input && input.connection && !input.connection.isConnected()) {
+        const playerConstBlock = workspace.newBlock("character_constant");
+        playerConstBlock.initSvg();
+        playerConstBlock.render();
+        input.connection.connect(playerConstBlock.outputConnection);
+      }
+    }
+  });
+}
+
 function attachPartConstantBlock(workspace: Blockly.WorkspaceSvg) {
   workspace.getAllBlocks().forEach((block) => {
     if (block.type === "touched_block") {
@@ -55,6 +69,7 @@ export function setupBlockInputInitializer(workspace: Blockly.WorkspaceSvg) {
       attachPlayerConstantBlock(workspace);
       attachPartConstantBlock(workspace);
       attachKeyConstantBlock(workspace);
+      attachCharacterConstantBlock(workspace);
     }
   });
 }
