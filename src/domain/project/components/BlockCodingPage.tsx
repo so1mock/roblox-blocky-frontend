@@ -62,15 +62,28 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
           </button>
         </header>
         {/* 블록 조립 */}
-        <div className="flex-1 p-4">
-          {loading && <div className="text-gray-500 mb-2">블록 로딩 중...</div>}
-          {error && <div className="text-red-500 mb-2">{error}</div>}
-          <div
-            id="blocklyDiv"
-            ref={blocklyDivRef}
-            className="w-full h-full rounded-xl border border-gray-200 shadow-sm"
-          />
-        </div>
+        {selectedScript ? (
+          <div className="flex-1 p-4">
+            {loading && (
+              <div className="text-gray-500 mb-2">블록 로딩 중...</div>
+            )}
+            {error && <div className="text-red-500 mb-2">{error}</div>}
+            <div
+              id="blocklyDiv"
+              ref={blocklyDivRef}
+              className="w-full h-full rounded-xl border border-gray-200 shadow-sm"
+            />
+          </div>
+        ) : (
+          <div className="flex-1 flex flex-col items-center justify-center">
+            <span className="text-gray-500 text-lg mb-2">
+              스크립트를 선택해주세요
+            </span>
+            <span className="text-gray-400 text-sm">
+              블록 편집을 하려면 Script 타입의 항목을 선택하세요
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );
