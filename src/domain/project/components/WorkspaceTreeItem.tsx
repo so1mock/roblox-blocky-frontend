@@ -43,7 +43,8 @@ function WorkspaceTreeItem({
               : "closedFolder"
             : "script"; // fallback
 
-  const handleToggle = () => {
+  const handleToggle = (event: React.MouseEvent) => {
+    event.stopPropagation();
     if (hasChildren) {
       setIsExpanded((prev) => !prev);
     }
@@ -77,9 +78,8 @@ function WorkspaceTreeItem({
       <div
         role="button"
         className={`w-full cursor-pointer
-      flex items-center py-1 px-2 hover:bg-gray-100 text-sm
-       ${isSelected ? "bg-blue-100 border-r-2 border-blue-500" : ""}
-      ${isScript ? "cursor-pointer" : ""}
+      flex items-center py-1 px-2 text-sm
+       ${isSelected ? "bg-blue-100 border-r-2 border-blue-500" : "hover:bg-gray-100"}
     `}
         style={{ paddingLeft: `${paddingLeft}px` }}
         onClick={handleSelect}
