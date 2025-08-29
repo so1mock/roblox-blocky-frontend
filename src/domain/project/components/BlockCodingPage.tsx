@@ -13,7 +13,7 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
     <div className="flex bg-gray-100 h-screen">
       {/* 왼쪽 사이드바 - 워크스페이스 탐색기 */}
       <aside className="w-80 bg-white border-r border-gray-200">
-        <WorkspaceExploerer />
+        <WorkspaceExploerer placeId={placeId} />
       </aside>
       {/* 메인 영역 */}
       <div className="flex-1 flex flex-col">
