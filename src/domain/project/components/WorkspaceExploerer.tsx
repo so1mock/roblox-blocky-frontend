@@ -1,41 +1,24 @@
-import { useEffect, useState } from "react";
 import type {
   WorkspaceData,
   WorkspaceObject,
 } from "../blockly/types/workspace";
-import { getWorkspaceDataByPlaceId } from "../apis/workspace";
 import WorkspaceTreeItem from "./WorkspaceTreeItem";
 
 function WorkspaceExploerer({
   placeId,
+  workspaceData,
+  setWorkspaceData,
   selectedScript,
   setSelectedScript,
 }: {
   placeId: string;
+  workspaceData: WorkspaceData | null;
+  setWorkspaceData: React.Dispatch<React.SetStateAction<WorkspaceData | null>>;
   selectedScript: undefined | WorkspaceObject;
   setSelectedScript: React.Dispatch<
     React.SetStateAction<undefined | WorkspaceObject>
   >;
 }) {
-  const [workspaceData, setWorkspaceData] = useState<WorkspaceData | null>(
-    null,
-  );
-
-  useEffect(() => {
-    const fetchWorkspaceData = async () => {
-      try {
-        const data = await getWorkspaceDataByPlaceId(placeId);
-        setWorkspaceData(data);
-      } catch (err) {
-        console.error("Failed to fetch workspace data:", err);
-      }
-    };
-
-    if (placeId) {
-      fetchWorkspaceData();
-    }
-  }, [placeId]);
-
   if (!workspaceData) {
     return (
       <div className="flex items-center justify-center h-64">

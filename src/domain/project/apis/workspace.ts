@@ -1,5 +1,5 @@
 import { api } from "@common/apis/axios";
-import type { WorkspaceData } from "../blockly/types/workspace";
+import type { BlockScript, WorkspaceData } from "../blockly/types/workspace";
 import { AxiosError } from "axios";
 
 export const getWorkspaceDataByPlaceId = async (
@@ -24,6 +24,21 @@ export const toggleBlockScriptStatus = async (
     await api.put(`/block-script/activation/${uuid}`, {
       blockScriptStatus: status,
     });
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw e.message;
+    }
+    throw e;
+  }
+};
+
+export const saveBlockScript = async (
+  uuid: string,
+  blockScript: BlockScript,
+): Promise<any> => {
+  try {
+    const response = await api.put(`/block-script/${uuid}`, blockScript);
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw e.message;

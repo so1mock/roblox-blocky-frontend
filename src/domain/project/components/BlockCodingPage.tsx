@@ -1,10 +1,13 @@
 import * as Blockly from "blockly";
 import { useEffect, useRef, useState } from "react";
 import { useBlocklyUI } from "../hooks/useBlocklyUi";
-import { addHitCategory } from "../blockly/utils/handleDynamicCategory";
 import WorkspaceExploerer from "./WorkspaceExploerer";
-import type { WorkspaceObject } from "../blockly/types/workspace";
+import type {
+  WorkspaceData,
+  WorkspaceObject,
+} from "../blockly/types/workspace";
 import BlockCodingHeader from "./BlockCodingHeader";
+import { getWorkspaceDataByPlaceId } from "../apis/workspace";
 
 function BlockCodingPage({ id: placeId }: { id: string }) {
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
@@ -12,6 +15,9 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
     useServer: true,
   });
 
+  const [workspaceData, setWorkspaceData] = useState<WorkspaceData | null>(
+    null,
+  );
   const [selectedScript, setSelectedScript] = useState<
     WorkspaceObject | undefined
   >(undefined);
@@ -38,12 +44,29 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
     Blockly.serialization.workspaces.load(blockState, workspaceRef.current);
   }, [selectedScript]);
 
+  useEffect(() => {
+    const fetchWorkspaceData = async () => {
+      try {
+        const data = await getWorkspaceDataByPlaceId(placeId);
+        setWorkspaceData(data);
+      } catch (err) {
+        console.error("Failed to fetch workspace data:", err);
+      }
+    };
+
+    if (placeId) {
+      fetchWorkspaceData();
+    }
+  }, [placeId]);
+
   return (
     <div className="flex bg-gray-100 h-screen">
       {/* 왼쪽 사이드바 - 워크스페이스 탐색기 */}
       <aside className="w-80 bg-white border-r border-gray-200">
         <WorkspaceExploerer
           placeId={placeId}
+          workspaceData={workspaceData}
+          setWorkspaceData={setWorkspaceData}
           selectedScript={selectedScript}
           setSelectedScript={setSelectedScript}
         />
@@ -52,7 +75,12 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
       <div className="flex-1 flex flex-col">
         {/* 헤더 */}
 
-        <BlockCodingHeader selectedScript={selectedScript} />
+        <BlockCodingHeader
+          placeId={placeId}
+          setWorkspaceData={setWorkspaceData}
+          selectedScript={selectedScript}
+          workspaceRef={workspaceRef}
+        />
 
         {/* 블록 조립 */}
         <div className="flex-1 p-4 relative">
