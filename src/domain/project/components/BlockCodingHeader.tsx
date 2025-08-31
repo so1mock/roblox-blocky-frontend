@@ -5,6 +5,7 @@ import type {
   WorkspaceObject,
 } from "../blockly/types/workspace";
 import { getWorkspaceDataByPlaceId, saveBlockScript } from "../apis/workspace";
+import { useState } from "react";
 
 function BlockCodingHeader({
   placeId,
@@ -17,6 +18,7 @@ function BlockCodingHeader({
   selectedScript: WorkspaceObject | undefined;
   workspaceRef: React.RefObject<Blockly.Workspace | null>;
 }) {
+  const [convertedScript, setConvertedScript] = useState<string | null>(null);
   const handleSave = async () => {
     if (!selectedScript) {
       alert("편집중인 블록 스크립트가 없습니다.");
@@ -27,14 +29,20 @@ function BlockCodingHeader({
     }
     try {
       const state = Blockly.serialization.workspaces.save(workspaceRef.current);
-      const response = await saveBlockScript(
+      const convertedScriptResponse = await saveBlockScript(
         selectedScript.uuid,
         state as BlockScript,
       );
 
       const data = await getWorkspaceDataByPlaceId(placeId);
       setWorkspaceData(data);
+
+      setConvertedScript(convertedScriptResponse.content);
+      setTimeout(() => {
+        setConvertedScript(null);
+      }, 2000);
     } catch (e) {
+      alert("블록스크립트 저장에 실패하였습니다.");
       console.log(e);
     }
   };
@@ -48,14 +56,23 @@ function BlockCodingHeader({
           </span>
         )}
       </div>
-      <div className="flex items-center gap-2">
+      <div className="relative ">
         <button
           type="button"
           onClick={handleSave}
-          className="px-4 py-2 font-semibold rounded transition-colors bg-blue-600 text-white hover:bg-blue-700 cursor-pointer"
+          className="relative px-4 py-2 font-semibold rounded transition-colors bg-blue-600 text-white hover:bg-blue-700 cursor-pointer"
         >
-          저장
+          <span>저장</span>
         </button>
+        {convertedScript && (
+          <div className="absolute top-8 right-8 z-100">
+            <div className="w-48 bg-gray-800 text-white text-left px-4 py-2 rounded-lg shadow-lg animate-fade-in-down">
+              <pre className="text-sm whitespace-pre-wrap">
+                {convertedScript}
+              </pre>
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );

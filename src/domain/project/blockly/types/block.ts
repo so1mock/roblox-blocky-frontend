@@ -75,3 +75,7 @@ export type BlockListByCategoryResponse = {
   categoryName: string;
   blocks: BlockWithToolboxList;
 };
+
+export type ConvertedScript = {
+  content: string;
+};
