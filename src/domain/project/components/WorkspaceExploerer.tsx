@@ -2,7 +2,7 @@ import { useWorkspaceDataStore } from "../stores/useWorkspaceDataStore";
 import WorkspaceTreeItem from "./WorkspaceTreeItem";
 
 function WorkspaceExploerer({ placeId }: { placeId: string }) {
-  const { workspaceData, selectedScript } = useWorkspaceDataStore();
+  const { workspaceData } = useWorkspaceDataStore();
   if (!workspaceData) {
     return (
       <div className="flex items-center justify-center h-64">

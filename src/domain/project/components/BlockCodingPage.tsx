@@ -11,8 +11,7 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
   const { workspaceRef, loading, error } = useBlocklyUI(blocklyDivRef, {
     useServer: true,
   });
-  const { setWorkspaceData, selectedScript, setSelectedScript } =
-    useWorkspaceDataStore();
+  const { setWorkspaceData, selectedScript } = useWorkspaceDataStore();
 
   useEffect(() => {
     if (selectedScript === undefined) return;
