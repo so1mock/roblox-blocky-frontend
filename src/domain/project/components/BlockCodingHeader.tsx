@@ -6,6 +6,7 @@ import type {
 } from "../blockly/types/workspace";
 import { getWorkspaceDataByPlaceId, saveBlockScript } from "../apis/workspace";
 import { useState } from "react";
+import BlockScriptToast from "./BlockScriptToast";
 
 function BlockCodingHeader({
   placeId,
@@ -64,15 +65,7 @@ function BlockCodingHeader({
         >
           <span>저장</span>
         </button>
-        {convertedScript && (
-          <div className="absolute top-8 right-8 z-100">
-            <div className="w-48 bg-gray-800 text-white text-left px-4 py-2 rounded-lg shadow-lg animate-fade-in-down">
-              <pre className="text-sm whitespace-pre-wrap">
-                {convertedScript}
-              </pre>
-            </div>
-          </div>
-        )}
+        <BlockScriptToast convertedScript={convertedScript} />
       </div>
     </header>
   );
