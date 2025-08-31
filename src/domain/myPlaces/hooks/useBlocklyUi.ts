@@ -1,15 +1,15 @@
 import * as Blockly from "blockly";
 import { registerContinuousToolbox } from "@blockly/continuous-toolbox";
 import { useEffect, useRef, useState } from "react";
-import { defineCustomBlocks } from "../blockly/blocks/defineBlocks";
-import toolbox from "../blockly/toolbox/toolbox";
-import { customTheme } from "../blockly/theme/customTheme";
-import { registerVariableCallbacks } from "../blockly/utils/variableUtils";
-import { setupBlockInputInitializer } from "../blockly/utils/blockInputInitializer";
+import { defineCustomBlocks } from "src/domain/blockly/blocks/defineBlocks";
+import toolbox from "src/domain/blockly/toolbox/toolbox";
+import { customTheme } from "src/domain/blockly/theme/customTheme";
+import { registerVariableCallbacks } from "src/domain/blockly/utils/variableUtils";
+import { setupBlockInputInitializer } from "src/domain/blockly/utils/blockInputInitializer";
 import { getBlockList } from "../apis/block";
-import { defineServerBlocks } from "../blockly/server/defineBlocks";
-import { toolboxFromServer } from "../blockly/server/serverToolbox";
-import { defineVariableBlocks } from "../blockly/blocks/blockDefinitions/variableBlockDefinitions";
+import { defineServerBlocks } from "src/domain/blockly/server/defineBlocks";
+import { toolboxFromServer } from "src/domain/blockly/server/serverToolbox";
+import { defineVariableBlocks } from "src/domain/blockly/blocks/blockDefinitions/variableBlockDefinitions";
 
 export function useBlocklyUI(
   blocklyDivRef: React.RefObject<HTMLDivElement | null>,

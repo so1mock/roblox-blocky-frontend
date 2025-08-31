@@ -13,7 +13,7 @@ export function Header() {
       </Link>
 
       <nav className="flex gap-12 justify-center">
-        <LinkNavButton to="/projects" title="만들기" />
+        <LinkNavButton to="/my-places" title="내 플레이스로" />
         <LinkNavButton to="/tutorial" title="튜토리얼" />
         <LinkNavButton to="/about" title="소개" />
       </nav>
