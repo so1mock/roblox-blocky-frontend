@@ -11,18 +11,13 @@ function WorkspaceTreeItem({
   placeId,
   object,
   level = 0,
-  selectedScript,
-  setSelectedScript,
 }: {
   placeId: string;
   object: WorkspaceObject;
   level: number;
-  selectedScript: undefined | WorkspaceObject;
-  setSelectedScript: React.Dispatch<
-    React.SetStateAction<undefined | WorkspaceObject>
-  >;
 }) {
-  const { setWorkspaceData } = useWorkspaceDataStore();
+  const { setWorkspaceData, selectedScript, setSelectedScript } =
+    useWorkspaceDataStore();
   const [isExpanded, setIsExpanded] = useState(level < 2);
 
   const hasChildren = object.children && object.children.length > 0;
@@ -137,8 +132,6 @@ function WorkspaceTreeItem({
               placeId={placeId}
               object={childObject}
               level={level + 1}
-              selectedScript={selectedScript}
-              setSelectedScript={setSelectedScript}
             />
           ))}
         </div>

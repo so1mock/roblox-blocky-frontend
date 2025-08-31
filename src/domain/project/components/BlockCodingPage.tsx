@@ -1,8 +1,7 @@
 import * as Blockly from "blockly";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useBlocklyUI } from "../hooks/useBlocklyUi";
 import WorkspaceExploerer from "./WorkspaceExploerer";
-import type { WorkspaceObject } from "../types/workspace";
 import BlockCodingHeader from "./BlockCodingHeader";
 import { getWorkspaceDataByPlaceId } from "../apis/workspace";
 import { useWorkspaceDataStore } from "../stores/useWorkspaceDataStore";
@@ -12,10 +11,8 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
   const { workspaceRef, loading, error } = useBlocklyUI(blocklyDivRef, {
     useServer: true,
   });
-  const { setWorkspaceData } = useWorkspaceDataStore();
-  const [selectedScript, setSelectedScript] = useState<
-    WorkspaceObject | undefined
-  >(undefined);
+  const { setWorkspaceData, selectedScript, setSelectedScript } =
+    useWorkspaceDataStore();
 
   useEffect(() => {
     if (selectedScript === undefined) return;
@@ -58,11 +55,7 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
     <div className="flex bg-gray-100 h-screen">
       {/* 왼쪽 사이드바 - 워크스페이스 탐색기 */}
       <aside className="w-80 bg-white border-r border-gray-200">
-        <WorkspaceExploerer
-          placeId={placeId}
-          selectedScript={selectedScript}
-          setSelectedScript={setSelectedScript}
-        />
+        <WorkspaceExploerer placeId={placeId} />
       </aside>
       {/* 메인 영역 */}
       <div className="flex-1 flex flex-col">

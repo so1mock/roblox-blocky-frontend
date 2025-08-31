@@ -1,19 +1,8 @@
 import { useWorkspaceDataStore } from "../stores/useWorkspaceDataStore";
-import type { WorkspaceObject } from "../types/workspace";
 import WorkspaceTreeItem from "./WorkspaceTreeItem";
 
-function WorkspaceExploerer({
-  placeId,
-  selectedScript,
-  setSelectedScript,
-}: {
-  placeId: string;
-  selectedScript: undefined | WorkspaceObject;
-  setSelectedScript: React.Dispatch<
-    React.SetStateAction<undefined | WorkspaceObject>
-  >;
-}) {
-  const { workspaceData } = useWorkspaceDataStore();
+function WorkspaceExploerer({ placeId }: { placeId: string }) {
+  const { workspaceData, selectedScript } = useWorkspaceDataStore();
   if (!workspaceData) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -42,8 +31,6 @@ function WorkspaceExploerer({
             placeId={placeId}
             object={object}
             level={0}
-            selectedScript={selectedScript}
-            setSelectedScript={setSelectedScript}
           />
         ))}
       </div>
