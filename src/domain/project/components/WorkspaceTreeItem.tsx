@@ -1,13 +1,11 @@
 import { useState } from "react";
-import type {
-  WorkspaceData,
-  WorkspaceObject,
-} from "../blockly/types/workspace";
+import type { WorkspaceObject } from "../types/workspace";
 import { getIcon } from "../utils/getIcon";
 import {
   getWorkspaceDataByPlaceId,
   toggleBlockScriptStatus,
 } from "../apis/workspace";
+import { useWorkspaceDataStore } from "../stores/useWorkspaceDataStore";
 
 function WorkspaceTreeItem({
   placeId,
@@ -15,7 +13,6 @@ function WorkspaceTreeItem({
   level = 0,
   selectedScript,
   setSelectedScript,
-  setWorkspaceData,
 }: {
   placeId: string;
   object: WorkspaceObject;
@@ -24,8 +21,8 @@ function WorkspaceTreeItem({
   setSelectedScript: React.Dispatch<
     React.SetStateAction<undefined | WorkspaceObject>
   >;
-  setWorkspaceData: React.Dispatch<React.SetStateAction<WorkspaceData | null>>;
 }) {
+  const { setWorkspaceData } = useWorkspaceDataStore();
   const [isExpanded, setIsExpanded] = useState(level < 2);
 
   const hasChildren = object.children && object.children.length > 0;
@@ -142,7 +139,6 @@ function WorkspaceTreeItem({
               level={level + 1}
               selectedScript={selectedScript}
               setSelectedScript={setSelectedScript}
-              setWorkspaceData={setWorkspaceData}
             />
           ))}
         </div>

@@ -1,24 +1,20 @@
 import * as Blockly from "blockly";
-import type {
-  BlockScript,
-  WorkspaceData,
-  WorkspaceObject,
-} from "../blockly/types/workspace";
+import type { BlockScript, WorkspaceObject } from "../types/workspace";
 import { getWorkspaceDataByPlaceId, saveBlockScript } from "../apis/workspace";
 import { useState } from "react";
 import BlockScriptToast from "./BlockScriptToast";
+import { useWorkspaceDataStore } from "../stores/useWorkspaceDataStore";
 
 function BlockCodingHeader({
   placeId,
-  setWorkspaceData,
   selectedScript,
   workspaceRef,
 }: {
   placeId: string;
-  setWorkspaceData: React.Dispatch<React.SetStateAction<WorkspaceData | null>>;
   selectedScript: WorkspaceObject | undefined;
   workspaceRef: React.RefObject<Blockly.Workspace | null>;
 }) {
+  const { setWorkspaceData } = useWorkspaceDataStore();
   const [convertedScript, setConvertedScript] = useState<string | null>(null);
   const handleSave = async () => {
     if (!selectedScript) {

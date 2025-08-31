@@ -1,24 +1,19 @@
-import type {
-  WorkspaceData,
-  WorkspaceObject,
-} from "../blockly/types/workspace";
+import { useWorkspaceDataStore } from "../stores/useWorkspaceDataStore";
+import type { WorkspaceObject } from "../types/workspace";
 import WorkspaceTreeItem from "./WorkspaceTreeItem";
 
 function WorkspaceExploerer({
   placeId,
-  workspaceData,
-  setWorkspaceData,
   selectedScript,
   setSelectedScript,
 }: {
   placeId: string;
-  workspaceData: WorkspaceData | null;
-  setWorkspaceData: React.Dispatch<React.SetStateAction<WorkspaceData | null>>;
   selectedScript: undefined | WorkspaceObject;
   setSelectedScript: React.Dispatch<
     React.SetStateAction<undefined | WorkspaceObject>
   >;
 }) {
+  const { workspaceData } = useWorkspaceDataStore();
   if (!workspaceData) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -49,7 +44,6 @@ function WorkspaceExploerer({
             level={0}
             selectedScript={selectedScript}
             setSelectedScript={setSelectedScript}
-            setWorkspaceData={setWorkspaceData}
           />
         ))}
       </div>

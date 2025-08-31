@@ -2,22 +2,17 @@ import * as Blockly from "blockly";
 import { useEffect, useRef, useState } from "react";
 import { useBlocklyUI } from "../hooks/useBlocklyUi";
 import WorkspaceExploerer from "./WorkspaceExploerer";
-import type {
-  WorkspaceData,
-  WorkspaceObject,
-} from "../blockly/types/workspace";
+import type { WorkspaceObject } from "../types/workspace";
 import BlockCodingHeader from "./BlockCodingHeader";
 import { getWorkspaceDataByPlaceId } from "../apis/workspace";
+import { useWorkspaceDataStore } from "../stores/useWorkspaceDataStore";
 
 function BlockCodingPage({ id: placeId }: { id: string }) {
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
   const { workspaceRef, loading, error } = useBlocklyUI(blocklyDivRef, {
     useServer: true,
   });
-
-  const [workspaceData, setWorkspaceData] = useState<WorkspaceData | null>(
-    null,
-  );
+  const { setWorkspaceData } = useWorkspaceDataStore();
   const [selectedScript, setSelectedScript] = useState<
     WorkspaceObject | undefined
   >(undefined);
@@ -65,8 +60,6 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
       <aside className="w-80 bg-white border-r border-gray-200">
         <WorkspaceExploerer
           placeId={placeId}
-          workspaceData={workspaceData}
-          setWorkspaceData={setWorkspaceData}
           selectedScript={selectedScript}
           setSelectedScript={setSelectedScript}
         />
@@ -77,7 +70,6 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
 
         <BlockCodingHeader
           placeId={placeId}
-          setWorkspaceData={setWorkspaceData}
           selectedScript={selectedScript}
           workspaceRef={workspaceRef}
         />

@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { api } from "../../common/apis/axios";
-import type { BlockListByCategoryResponse } from "../blockly/types/block";
+import type { BlockListByCategoryResponse } from "../types/block";
 
 export const getBlockList = async (): Promise<
   BlockListByCategoryResponse[]

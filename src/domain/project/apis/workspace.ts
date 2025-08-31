@@ -1,7 +1,7 @@
 import { api } from "@common/apis/axios";
-import type { BlockScript, WorkspaceData } from "../blockly/types/workspace";
+import type { BlockScript, WorkspaceData } from "../types/workspace";
 import { AxiosError } from "axios";
-import type { ConvertedScript } from "../blockly/types/block";
+import type { ConvertedScript } from "../types/block";
 
 export const getWorkspaceDataByPlaceId = async (
   placeId: string,
