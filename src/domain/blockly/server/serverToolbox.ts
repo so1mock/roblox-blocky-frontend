@@ -1,5 +1,5 @@
 import { variableContents } from "../toolbox/categories/variableContents";
-import type { BlockListByCategoryResponse } from "../../types/block";
+import type { BlockListByCategoryResponse } from "src/domain/myPlaces/types/block";
 import { makeServerCategoryContents } from "./defineCategories";
 
 export const toolboxFromServer = (

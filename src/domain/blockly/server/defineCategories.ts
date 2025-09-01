@@ -1,4 +1,4 @@
-import type { BlockListByCategoryResponse } from "../../types/block";
+import type { BlockListByCategoryResponse } from "src/domain/myPlaces/types/block";
 
 export const makeServerCategoryContents = (
   blockListByCategory: BlockListByCategoryResponse,

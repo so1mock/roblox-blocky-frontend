@@ -1,5 +1,5 @@
 import * as Blockly from "blockly";
-import type { BlockWithToolboxList } from "../../types/block";
+import type { BlockWithToolboxList } from "src/domain/myPlaces/types/block";
 
 export const defineServerBlocks = (blocks: BlockWithToolboxList) => {
   // 1. 등록

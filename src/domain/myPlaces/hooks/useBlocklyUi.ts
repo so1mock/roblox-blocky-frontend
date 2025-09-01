@@ -7,8 +7,8 @@ import { customTheme } from "src/domain/blockly/theme/customTheme";
 import { registerVariableCallbacks } from "src/domain/blockly/utils/variableUtils";
 import { setupBlockInputInitializer } from "src/domain/blockly/utils/blockInputInitializer";
 import { getBlockList } from "../apis/block";
-import { defineServerBlocks } from "src/domain/blockly/server/defineBlocks";
-import { toolboxFromServer } from "src/domain/blockly/server/serverToolbox";
+import { defineServerBlocks } from "src/domain/blockly/serverBlockly/defineBlocks";
+import { toolboxFromServer } from "src/domain/blockly/serverBlockly/serverToolbox";
 import { defineVariableBlocks } from "src/domain/blockly/blocks/blockDefinitions/variableBlockDefinitions";
 
 export function useBlocklyUI(
