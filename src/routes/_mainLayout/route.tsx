@@ -1,7 +1,11 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { Header } from "@common/components/header/Header";
+import { requireAuth } from "@user/guards/requireAuth";
 
 export const Route = createFileRoute("/_mainLayout")({
+  beforeLoad: async () => {
+    await requireAuth({ timeoutMs: 3000 });
+  },
   component: RouteComponent,
 });
 
