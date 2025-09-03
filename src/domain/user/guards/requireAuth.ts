@@ -1,46 +1,44 @@
 import { redirect } from "@tanstack/react-router";
 import { useAuthStore } from "@user/stores/authStore";
 
-// selector 구독 기반 대기: true면 resolve, false면 reject, timeout시 reject
-const waitForAuthBySubscribe = (timeoutMs = 3000) =>
-  new Promise<void>((resolve, reject) => {
-    let done = false;
-    const timer = setTimeout(() => {
+export const requireAuth = async ({
+  timeoutMs = 3000,
+}: { timeoutMs?: number } = {}) => {
+  // 초기 상태 검사
+  const first = useAuthStore.getState().isLogin;
+  if (first === true) return;
+  if (first === false) {
+    throw redirect({ to: "/", search: { redirect: window.location.pathname } });
+  }
+
+  await new Promise<void>((resolve, reject) => {
+    let done = false; // 이미 처리 했는지 여부, 중복 실행 방지를 위한 플래그
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
+    // 로그인 상태 구독
+    const unsub = useAuthStore.subscribe(
+      (state) => state.isLogin,
+      // 콜백 함수를 통해 타이머 종료
+      (cur) => {
+        if (done || cur === null) return; // 이미 처리 했거나 로그인 상태가 없으면 종료
+        done = true;
+
+        // 타이머 종료, 구독 해제, Resolve or Reject 처리
+        if (timer) clearTimeout(timer);
+        unsub();
+        if (cur === true) resolve();
+        else reject(new Error("unauth"));
+      },
+    );
+
+    timer = setTimeout(() => {
+      // timeoutMs 안에 처리되지 못한 경우 timeout 에러
       if (done) return;
       done = true;
       unsub();
-      alert("timeout");
       reject(new Error("timeout"));
     }, timeoutMs);
-
-    const unsub = useAuthStore.subscribe(
-      (s) => s.isLogin,
-      (cur) => {
-        if (done) return;
-        if (cur === true) {
-          done = true;
-          clearTimeout(timer);
-          unsub();
-          resolve();
-        } else if (cur === false) {
-          done = true;
-          clearTimeout(timer);
-          unsub();
-          alert("unauth");
-          reject(new Error("unauth"));
-        }
-      },
-      { fireImmediately: true }, // 현재 상태도 즉시 평가
-    );
-  });
-
-export const requireAuth = async () => {
-  try {
-    await waitForAuthBySubscribe(3000);
-    // 통과(로그인 확정)
-    return;
-  } catch {
-    // 비인증/타임아웃 → 원하는 목적지로 리다이렉트
+  }).catch(() => {
     throw redirect({ to: "/", search: { redirect: window.location.pathname } });
-  }
+  });
 };
