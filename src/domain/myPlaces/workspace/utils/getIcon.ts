@@ -1,18 +1,20 @@
-import type { IconType } from "../types/icon";
+import type { ObjectType } from "../types/object";
 
-export const getIcon = (type: IconType): string => {
+export const getIcon = (type: ObjectType): string => {
   switch (type) {
-    case "script":
+    case "Script":
       return "📄";
-    case "part":
+    case "LocalScript":
+      return "📑";
+    case "Part":
       return "🧱";
-    case "workspace":
+    case "Workspace":
       return "🏠";
-    case "openFolder":
-      return "📂";
-    case "closedFolder":
+    case "Model":
+      return "🧩";
+    case "Folder":
       return "📁";
     default:
-      return "📄";
+      return "❓";
   }
 };

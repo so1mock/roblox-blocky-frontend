@@ -1,3 +1,5 @@
+import type { ObjectType } from "./object";
+
 export interface PlaceSummary {
   uuid: string;
   name: string;
@@ -21,7 +23,7 @@ export type BlockScript = {
 export interface WorkspaceObject {
   uuid: string;
   name: string;
-  type: string;
+  type: ObjectType;
   children: WorkspaceObject[];
   isBlockScriptEnabled?: boolean;
   blockScript?: BlockScript;

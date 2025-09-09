@@ -24,18 +24,6 @@ function WorkspaceTreeItem({
   const isScript = object.type === "Script";
   const isSelected = selectedScript?.uuid === object.uuid;
   const paddingLeft = level * 20 + 8;
-  const iconType =
-    object.type === "Script"
-      ? "script"
-      : object.type === "Part"
-        ? "part"
-        : object.type === "Workspace"
-          ? "workspace"
-          : hasChildren
-            ? isExpanded
-              ? "openFolder"
-              : "closedFolder"
-            : "script"; // fallback
 
   const handleToggle = (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -85,7 +73,7 @@ function WorkspaceTreeItem({
           </span>
         )}
         {!hasChildren && <span className="mr-1 w-3"></span>}
-        <span className="mr-2">{getIcon(iconType)}</span>
+        <span className="mr-2">{getIcon(object.type)}</span>
         <span
           className={`
         flex-1 text-left truncate
