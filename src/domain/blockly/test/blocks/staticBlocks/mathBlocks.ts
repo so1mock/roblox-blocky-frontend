@@ -6,7 +6,7 @@ export const defineMathCategoryBlocks = () => {
       this.appendValueInput("A").setCheck(["Number"]); // 첫 번째 피연산자
       this.appendDummyInput().appendField("+");
       this.appendValueInput("B").setCheck("Number"); // 두 번째 피연산자
-      this.setOutput(true, "sumber");
+      this.setOutput(true, "number");
       this.setStyle("math_block");
     },
   };
