@@ -9,7 +9,7 @@ import { initCategories } from "./categories";
  * @param categoryName - 찾고자 하는 카테고리 이름
  * @returns 해당 카테고리의 블록 리스트, 없으면 빈 배열
  */
-const findBlockList = (
+const findBlockListByCategoryName = (
   blockListByCategory: BlockListByCategoryResponse[],
   categoryName: string,
 ): BlockListByCategoryResponse => {
@@ -25,13 +25,22 @@ const findBlockList = (
 export const initToolbox = (
   blockListByCategory: BlockListByCategoryResponse[],
 ) => {
-  const mathCategory = findBlockList(blockListByCategory, "math_category");
-  const logicCategory = findBlockList(blockListByCategory, "logic_category");
-  const controlCategory = findBlockList(
+  const mathCategory = findBlockListByCategoryName(
+    blockListByCategory,
+    "math_category",
+  );
+  const logicCategory = findBlockListByCategoryName(
+    blockListByCategory,
+    "logic_category",
+  );
+  const controlCategory = findBlockListByCategoryName(
     blockListByCategory,
     "control_category",
   );
-  const loopCategory = findBlockList(blockListByCategory, "loop_category");
+  const loopCategory = findBlockListByCategoryName(
+    blockListByCategory,
+    "loop_category",
+  );
 
   return {
     kind: "categoryToolbox",
