@@ -13,7 +13,7 @@ import { defineVariableBlocks } from "src/domain/blockly/blocks/blockDefinitions
 
 export function useBlocklyUI(
   blocklyDivRef: React.RefObject<HTMLDivElement | null>,
-  options: { useServer?: boolean } = { useServer: false },
+  options: { useServer?: boolean } = { useServer: true },
 ) {
   const workspaceRef = useRef<Blockly.WorkspaceSvg | null>(null);
   const [loading, setLoading] = useState(true);
