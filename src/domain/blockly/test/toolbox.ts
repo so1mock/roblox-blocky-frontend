@@ -1,10 +1,10 @@
-import { controlContents } from "./categories/controlContents";
-import { eventContents } from "./categories/eventContents";
-import { logicContents } from "./categories/logicContents";
-import { loopContents } from "./categories/loopContents";
-import { mathContents } from "./categories/mathContents";
-import { serviceContents } from "./categories/serviceContents";
-import { variableContents } from "./categories/variableContents";
+import { controlContents } from "./categories/staticCategories/controlContents";
+import { eventContents } from "./categories/staticCategories/eventContents";
+import { logicContents } from "./categories/staticCategories/logicContents";
+import { loopContents } from "./categories/staticCategories/loopContents";
+import { mathContents } from "./categories/staticCategories/mathContents";
+import { serviceContents } from "./categories/staticCategories/serviceContents";
+import { variableContents } from "../common/categories";
 
 export default {
   kind: "categoryToolbox",

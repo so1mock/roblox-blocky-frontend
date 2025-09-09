@@ -1,8 +1,8 @@
-import { variableContents } from "../toolbox/categories/variableContents";
+import { variableContents } from "./common/categories";
 import type { BlockListByCategoryResponse } from "src/domain/myPlaces/types/block";
-import { makeServerCategoryContents } from "./defineCategories";
+import { initCategories } from "./categories";
 
-export const toolboxFromServer = (
+export const initToolbox = (
   blockListByCategory: BlockListByCategoryResponse[],
 ) => ({
   kind: "categoryToolbox",
@@ -11,25 +11,25 @@ export const toolboxFromServer = (
       kind: "category",
       name: "수식",
       categorystyle: "math_category",
-      contents: makeServerCategoryContents(blockListByCategory[1]),
+      contents: initCategories(blockListByCategory[1]),
     },
     {
       kind: "category",
       name: "논리",
       categorystyle: "logic_category",
-      contents: makeServerCategoryContents(blockListByCategory[0]),
+      contents: initCategories(blockListByCategory[0]),
     },
     {
       kind: "category",
       name: "제어",
       categorystyle: "control_category",
-      contents: makeServerCategoryContents(blockListByCategory[2]),
+      contents: initCategories(blockListByCategory[2]),
     },
     {
       kind: "category",
       name: "반복",
       categorystyle: "loop_category",
-      contents: makeServerCategoryContents(blockListByCategory[3]),
+      contents: initCategories(blockListByCategory[3]),
     },
     {
       kind: "category",

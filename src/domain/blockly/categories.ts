@@ -1,6 +1,6 @@
 import type { BlockListByCategoryResponse } from "src/domain/myPlaces/types/block";
 
-export const makeServerCategoryContents = (
+export const initCategories = (
   blockListByCategory: BlockListByCategoryResponse,
 ) =>
   blockListByCategory.blocks.map((block) => ({

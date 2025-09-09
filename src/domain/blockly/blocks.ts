@@ -1,7 +1,7 @@
 import * as Blockly from "blockly";
 import type { BlockWithToolboxList } from "src/domain/myPlaces/types/block";
 
-export const defineServerBlocks = (blocks: BlockWithToolboxList) => {
+export const initBlocks = (blocks: BlockWithToolboxList) => {
   // 1. 등록
   blocks.forEach((block) => {
     Blockly.Blocks[block.type] = {
