@@ -1,9 +1,15 @@
 import * as Blockly from "blockly";
-import type { BlockScript, WorkspaceObject } from "../types/workspace";
-import { getWorkspaceDataByPlaceId, saveBlockScript } from "../apis/workspace";
+import type {
+  BlockScript,
+  WorkspaceObject,
+} from "../workspace/types/workspace";
+import {
+  getWorkspaceDataByPlaceId,
+  saveBlockScript,
+} from "../workspace/apis/workspace";
 import { useState } from "react";
 import BlockScriptToast from "./BlockScriptToast";
-import { useWorkspaceDataStore } from "../stores/useWorkspaceDataStore";
+import { useWorkspaceDataStore } from "../workspace/stores/useWorkspaceDataStore";
 
 function BlockCodingHeader({
   placeId,

@@ -1,10 +1,10 @@
 import * as Blockly from "blockly";
 import { useEffect, useRef } from "react";
 import { useBlocklyUI } from "../hooks/useBlocklyUi";
-import WorkspaceExploerer from "./WorkspaceExplorer";
+import WorkspaceExploerer from "../workspace/components/WorkspaceExplorer";
 import BlockCodingHeader from "./BlockCodingHeader";
-import { getWorkspaceDataByPlaceId } from "../apis/workspace";
-import { useWorkspaceDataStore } from "../stores/useWorkspaceDataStore";
+import { getWorkspaceDataByPlaceId } from "../workspace/apis/workspace";
+import { useWorkspaceDataStore } from "../workspace/stores/useWorkspaceDataStore";
 
 function BlockCodingPage({ id: placeId }: { id: string }) {
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
