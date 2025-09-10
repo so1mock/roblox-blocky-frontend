@@ -1,5 +1,5 @@
 import * as Blockly from "blockly";
-
+// to do: 로직 재작성 및 타입 선택 UI 수정
 const handleCreateVariableButton = (workspace: Blockly.WorkspaceSvg) => {
   const variableName = window.prompt("변수 이름을 입력하세요:");
   if (!variableName) return;

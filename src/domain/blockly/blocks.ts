@@ -130,3 +130,5 @@ export const initBlocks = (blocks: BlockWithToolboxList) => {
     };
   });
 };
+
+// to do: Blockly타입과 계층 구조 맞추기, 파일 분리를 통해 유지보수에 용이한 구조로 고치기
