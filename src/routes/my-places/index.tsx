@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/project")({
+export const Route = createFileRoute("/my-places/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <div className="text-rbText">Project Page</div>;
+  return <div>My Place List 페이지</div>;
 }

@@ -63,11 +63,13 @@ api.interceptors.response.use(
         // 지연된 요청들은 처음부터 큐에 이런 방식으로 호출된다.
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
-        }).then((token) => {
-          // processQueue 에서 매개변수로 쓰는 토큰
-          originalRequest.headers["Authorization"] = `Bearer ${token}`; // 이미 요청된 요청이기 때문에 토큰을 직접 수정해 줘야 함
-          return api(originalRequest);
-        }).catch((error) => Promise.reject(error))
+        })
+          .then((token) => {
+            // processQueue 에서 매개변수로 쓰는 토큰
+            originalRequest.headers["Authorization"] = `Bearer ${token}`; // 이미 요청된 요청이기 때문에 토큰을 직접 수정해 줘야 함
+            return api(originalRequest);
+          })
+          .catch((error) => Promise.reject(error));
       }
 
       // 리프레시 요청이 진행 중이 아니라면 본격적으로 리프레시 요청 진행
