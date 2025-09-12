@@ -8,6 +8,7 @@ export const requireAuth = async ({
   const first = useAuthStore.getState().isLogin;
   if (first === true) return;
   if (first === false) {
+    alert("로그인이 필요합니다");
     throw redirect({ to: "/", search: { redirect: window.location.pathname } });
   }
 
@@ -27,7 +28,10 @@ export const requireAuth = async ({
         if (timer) clearTimeout(timer);
         unsub();
         if (cur === true) resolve();
-        else reject(new Error("unauth"));
+        else {
+          alert("로그인이 필요합니다");
+          reject(new Error("unauth"));
+        }
       },
     );
 
@@ -36,6 +40,7 @@ export const requireAuth = async ({
       if (done) return;
       done = true;
       unsub();
+      alert("로그인 시간이 초과되었습니다.");
       reject(new Error("timeout"));
     }, timeoutMs);
   }).catch(() => {
