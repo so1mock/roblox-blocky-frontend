@@ -21,7 +21,7 @@ export const verifyAuth = async ({
       (state) => state.isLogin,
       // 콜백 함수를 통해 타이머 종료
       (currentLoginstate) => {
-        if (isDone || currentLoginstate === null) return; // 이미 처리 했거나 로그인 상태가 없으면 종료
+        if (isDone) return; // 이미 처리 했거나 로그인 상태가 없으면 종료
         isDone = true;
 
         // 타이머 종료, 구독 해제, Resolve or Reject 처리
