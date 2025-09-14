@@ -18,13 +18,14 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies and build
-        run: |
-          corepack enable
-          corepack prepare pnpm@10.13.1 --activate
-          pnpm install
-          pnpm dlx tanstack router generate
-          pnpm build
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Generate TanStack router
+        run: pnpm dlx tanstack router generate
+
+      - name: Build
+        run: pnpm tsc -b && vite build
 
       - name: Upload to S3
         run: |
