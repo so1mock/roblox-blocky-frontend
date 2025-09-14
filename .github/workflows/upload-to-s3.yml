@@ -23,6 +23,7 @@ jobs:
           corepack enable
           corepack prepare pnpm@10.13.1 --activate
           pnpm install
+          pnpm dlx tanstack router generate
           pnpm build
 
       - name: Upload to S3
