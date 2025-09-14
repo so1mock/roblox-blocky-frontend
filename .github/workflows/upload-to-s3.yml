@@ -18,6 +18,12 @@ jobs:
         with:
           node-version: 20
 
+      - name: Enable Corepack and pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.13.1 --activate
+          pnpm -v
+
       - name: Install dependencies
         run: pnpm install
 
