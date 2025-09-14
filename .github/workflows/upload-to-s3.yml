@@ -20,8 +20,10 @@ jobs:
 
       - name: Install dependencies and build
         run: |
-          yarn install
-          yarn build
+          corepack enable
+          corepack prepare pnpm@10.13.1 --activate
+          pnpm install
+          pnpm build
 
       - name: Upload to S3
         run: |
