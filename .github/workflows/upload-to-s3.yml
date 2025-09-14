@@ -28,7 +28,7 @@ jobs:
         run: pnpm install
 
       - name: Generate TanStack router
-        run: pnpm dlx tanstack router generate
+        run: pnpm dlx @tanstack/router-cli generate --out=src/routeTree.gen.ts
 
       - name: Build
         run: pnpm tsc -b && vite build
