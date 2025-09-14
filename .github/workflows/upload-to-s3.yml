@@ -31,7 +31,7 @@ jobs:
         run: pnpm dlx @tanstack/router-cli generate --out=src/routeTree.gen.ts
 
       - name: Build
-        run: pnpm tsc -b && vite build
+        run: pnpm tsc -b && pnpm vite build
 
       - name: Upload to S3
         run: |
