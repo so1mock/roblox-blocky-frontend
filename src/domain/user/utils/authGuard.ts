@@ -1,7 +1,7 @@
 import { redirect } from "@tanstack/react-router";
 import { useAuthStore } from "@user/stores/authStore";
 
-export const requireAuth = async ({
+export const verifyAuth = async ({
   timeoutMs = 3000,
 }: { timeoutMs?: number } = {}) => {
   // 초기 상태 검사
