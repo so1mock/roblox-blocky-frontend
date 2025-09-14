@@ -8,8 +8,8 @@ importers:
   .:
     dependencies:
       "@blockly/continuous-toolbox":
-        specifier: ^7.0.0
-        version: 7.0.2(blockly@12.3.0)
+        specifier: 7.0.0
+        version: 7.0.0(blockly@12.3.0)
       "@tanstack/react-query":
         specifier: ^5.83.0
         version: 5.87.4(react@19.1.1)
@@ -337,10 +337,10 @@ packages:
       }
     engines: { node: ">=6.9.0" }
 
-  "@blockly/continuous-toolbox@7.0.2":
+  "@blockly/continuous-toolbox@7.0.0":
     resolution:
       {
-        integrity: sha512-xx65PX+hqynNxqHonFfd1taRkCEGDJYS66oUDbBkwL9lmHI/sXcPCy7E8NhKnYweYOISc0NO2p8G732U8uI0kw==,
+        integrity: sha512-v0FOwJLtolkGHECZntjZwud1eUjTUaMC4VrVJkPFH3CphKPADlNW6+vmOj8pMKEStcF4KNJ4HpPg+wfVzShW8g==,
       }
     engines: { node: ">=8.17.0" }
     peerDependencies:
@@ -4244,7 +4244,7 @@ snapshots:
       "@babel/helper-string-parser": 7.27.1
       "@babel/helper-validator-identifier": 7.27.1
 
-  "@blockly/continuous-toolbox@7.0.2(blockly@12.3.0)":
+  "@blockly/continuous-toolbox@7.0.0(blockly@12.3.0)":
     dependencies:
       blockly: 12.3.0
 
