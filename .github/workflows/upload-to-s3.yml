@@ -30,6 +30,14 @@ jobs:
       - name: Generate TanStack router
         run: pnpm dlx @tanstack/router-cli generate --out=src/routeTree.gen.ts
 
+      - name: Patch Continuous Toolbox
+        run: |
+          sed -i "s/, LabelFlyoutItem//" node_modules/@blockly/continuous-toolbox/src/index.ts
+          sed -i "s/LabelFlyoutItem,//" node_modules/@blockly/continuous-toolbox/src/index.ts
+
+      - name: Check patched file
+        run: cat node_modules/@blockly/continuous-toolbox/src/index.ts
+
       - name: Build
         run: pnpm tsc -b && pnpm vite build
 
