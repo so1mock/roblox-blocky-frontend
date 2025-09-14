@@ -23,7 +23,7 @@ export default defineConfig({
         target: "https://api.coblocks.net/api/v1",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
-        configure: (proxy, options) => {
+        configure: (proxy) => {
           proxy.on("proxyRes", (proxyRes, req, res) => {
             // 1. 기존 응답 헤더를 가져옵니다.
             const originalHeaders = proxyRes.headers;

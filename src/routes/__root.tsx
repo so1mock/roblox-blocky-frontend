@@ -17,9 +17,6 @@ export const Route = createRootRoute({
   component: () => {
     const setAuth = useAuthStore((state) => state.setAuth);
     const clearAuth = useAuthStore((state) => state.clearAuth);
-    const navigate = useNavigate();
-
-    const { isLogin } = useAuthStore();
 
     // App 초기 진입 시
     useEffect(() => {
