@@ -30,15 +30,15 @@ const processQueue = (error: unknown, token: string | null = null) => {
   failedQueue = [];
 };
 
-api.interceptors.request.use((config) => {
-  console.log(
-    "[API Request] ",
-    config.method,
-    config.url,
-    config.headers.Authorization,
-  );
-  return config;
-});
+// api.interceptors.request.use((config) => {
+//   console.log(
+//     "[API Request] ",
+//     config.method,
+//     config.url,
+//     config.headers.Authorization,
+//   );
+//   return config;
+// });
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -80,6 +80,7 @@ api.interceptors.response.use(
         const newToken = response.auth.accessToken;
         api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
         // data에서 받아온 데이터로 유저 정보 다시 초기화 시키기
+        useAuthStore.getState().setAuth(response.info);
         processQueue(null, newToken); // 전역에 토큰이 있는데 굳이 매개변수로 전달해야 할까에 대한 고민
 
         originalRequest.headers["Authorization"] = `Bearer ${newToken}`; // 이미 요청된 요청이기 때문에 토큰을 직접 수정해 줘야 함
