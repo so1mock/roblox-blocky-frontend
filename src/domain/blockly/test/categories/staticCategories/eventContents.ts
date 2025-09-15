@@ -1,4 +1,6 @@
-export const eventContents = [
+import type { BlockCategory } from "src/domain/myPlaces/types/block";
+
+export const eventContents: BlockCategory[] = [
   {
     type: "touched_block",
     kind: "block",

@@ -1,4 +1,6 @@
-export const controlContents = [
+import type { BlockCategory } from "src/domain/myPlaces/types/block";
+
+export const controlContents: BlockCategory[] = [
   {
     type: "if_block",
     kind: "block",

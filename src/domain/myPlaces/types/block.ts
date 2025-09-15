@@ -72,10 +72,42 @@ export type BlockWithToolbox = {
 export type BlockWithToolboxList = BlockWithToolbox[];
 
 export type BlockListByCategoryResponse = {
-  categoryName: string;
+  categoryName:
+    | "logic_category"
+    | "math_category"
+    | "control_category"
+    | "control_category"
+    | "variable_category";
   blocks: BlockWithToolboxList;
 };
 
 export type ConvertedScript = {
   content: string;
+};
+
+export type Toolbox = {
+  kind: string;
+  contents: ToolboxContent[];
+};
+
+export type ToolboxContent = {
+  kind: "category" | "sep";
+  name?: "수식" | "논리" | "제어" | "반복" | "변수" | "이벤트" | "서비스";
+  categorystyle?:
+    | "logic_category"
+    | "math_category"
+    | "control_category"
+    | "loop_category"
+    | "variable_category"
+    | "event_category"
+    | "service_category";
+  contents?: BlockCategory[];
+};
+
+export type BlockCategory = {
+  kind: "block" | "button" | "sep";
+  callbackKey?: string;
+  text?: string;
+  type?: string;
+  inputs?: ToolboxInputs;
 };

@@ -31,6 +31,7 @@ const handleCreateVariableButton = (workspace: Blockly.WorkspaceSvg) => {
 
   if (variable) {
     // 생성된 변수의 타입 정보를 저장 (커스텀 속성)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (variable as any).blocklyType = selectedType;
 
     // 툴박스 새로고침

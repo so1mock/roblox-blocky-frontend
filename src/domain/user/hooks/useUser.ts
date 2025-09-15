@@ -18,6 +18,7 @@ export const useUser = () => {
         const user = await getUserInfo();
         setAuth(user);
       } catch (error) {
+        console.log(error);
         clearAuth();
       }
     },

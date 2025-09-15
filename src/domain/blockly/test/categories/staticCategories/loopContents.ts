@@ -1,4 +1,6 @@
-export const loopContents = [
+import type { BlockCategory } from "src/domain/myPlaces/types/block";
+
+export const loopContents: BlockCategory[] = [
   {
     type: "wait_block",
     kind: "block",
