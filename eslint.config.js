@@ -3,7 +3,7 @@ import globals from "globals";
 import reactPlugin from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
-import tsParser from "@typescript-eslint/parser";
+
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 
@@ -24,12 +24,6 @@ export default defineConfig(
   {
     files: ["**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx}"],
     languageOptions: {
-      parser: tsParser, // 👈 parser는 객체를 넣어야 함
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        ecmaFeatures: { jsx: true },
-      },
       globals: { ...globals.browser },
     },
     rules: {

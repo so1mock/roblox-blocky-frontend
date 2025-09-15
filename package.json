@@ -28,7 +28,6 @@
     "@tanstack/router-plugin": "^1.121.29",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
-    "@typescript-eslint/parser": "^8.43.0",
     "@vitejs/plugin-react": "^4.4.1",
     "eslint": "^9.25.0",
     "eslint-config-prettier": "^10.1.5",
