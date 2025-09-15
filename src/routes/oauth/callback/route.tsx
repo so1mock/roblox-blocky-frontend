@@ -32,10 +32,10 @@ export function RouteComponent() {
   useEffect(() => {
     if (error) {
       alert("로블록스 로그인에서 에러 발생: " + error.message);
-      navigate({ to: "/" });
     } else if (code) {
       handleLogin(code);
     }
+    navigate({ to: "/" });
   }, [code, error]);
   return <div> Redirecting...</div>;
 }

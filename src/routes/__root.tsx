@@ -2,8 +2,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { useAuthStore } from "@user/stores/authStore";
 import { useEffect } from "react";
-import { getUserInfo } from "@user/apis/user";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { refreshToken } from "@user/apis/user";
+import { api } from "@common/apis/axios";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,16 +15,29 @@ const queryClient = new QueryClient({
 });
 
 export const Route = createRootRoute({
-  component: () => {
-    const setAuth = useAuthStore((state) => state.setAuth);
-    const clearAuth = useAuthStore((state) => state.clearAuth);
+  beforeLoad: async () => {
+    const { isLogin, setAuth, clearAuth } = useAuthStore.getState();
+    if (isLogin !== null) return;
 
-    // App 초기 진입 시
+    try {
+      const response = await refreshToken();
+      api.defaults.headers.common["Authorization"] =
+        `Bearer ${response.auth.accessToken}`;
+      setAuth(response.info);
+    } catch (error) {
+      clearAuth();
+    }
+  },
+  component: () => {
+
+    const isLogin = useAuthStore((state) => state.isLogin);
+    const navigate = useNavigate();
+
     useEffect(() => {
-      getUserInfo()
-        .then((user) => setAuth(user))
-        .catch(() => clearAuth());
-    }, []);
+      if (isLogin === false) {
+        navigate({ to: "/" });
+      }
+    }, [isLogin]);
 
     return (
       <QueryClientProvider client={queryClient}>

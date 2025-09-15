@@ -1,6 +1,6 @@
 import axios from "axios";
 import { refreshToken } from "@user/apis/user.ts";
-import { useAuthStore } from "@user/stores/authStore.ts";
+import { useAuthStore } from "@user/stores/authStore";
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASEURL,
@@ -30,15 +30,15 @@ const processQueue = (error: unknown, token: string | null = null) => {
   failedQueue = [];
 };
 
-api.interceptors.request.use((config) => {
-  console.log(
-    "[API Request] ",
-    config.method,
-    config.url,
-    config.headers.Authorization,
-  );
-  return config;
-});
+// api.interceptors.request.use((config) => {
+//   console.log(
+//     "[API Request] ",
+//     config.method,
+//     config.url,
+//     config.headers.Authorization,
+//   );
+//   return config;
+// });
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -49,7 +49,7 @@ api.interceptors.response.use(
         // 이미 리프레시 토큰을 통한 재요청을 시도해본 경우 -> 리프레시 토큰이 만료됐다는 뜻
         // _retry는 원래는 존재하지 않고 우리가 추가한 프로퍼티 이다.
         console.log("리프레시 토큰이 만료되어 메인 페이지로 이동");
-        window.location.href = "/";
+        useAuthStore.getState().clearAuth(); // 로그인 상태 false로 변경
         return Promise.reject(error);
       }
 
@@ -80,6 +80,7 @@ api.interceptors.response.use(
         const newToken = response.auth.accessToken;
         api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
         // data에서 받아온 데이터로 유저 정보 다시 초기화 시키기
+        useAuthStore.getState().setAuth(response.info);
         processQueue(null, newToken); // 전역에 토큰이 있는데 굳이 매개변수로 전달해야 할까에 대한 고민
 
         originalRequest.headers["Authorization"] = `Bearer ${newToken}`; // 이미 요청된 요청이기 때문에 토큰을 직접 수정해 줘야 함
