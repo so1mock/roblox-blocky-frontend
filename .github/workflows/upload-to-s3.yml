@@ -18,10 +18,33 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies and build
+      - name: Enable Corepack and pnpm
         run: |
-          yarn install
-          yarn build
+          corepack enable
+          corepack prepare pnpm@10.13.1 --activate
+          pnpm -v
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Generate TanStack router
+        run: pnpm dlx @tanstack/router-cli generate --out=src/routeTree.gen.ts
+
+      - name: Patch Continuous Toolbox
+        run: |
+          sed -i "s/, LabelFlyoutItem//" node_modules/@blockly/continuous-toolbox/src/index.ts
+          sed -i "s/LabelFlyoutItem,//" node_modules/@blockly/continuous-toolbox/src/index.ts
+
+      - name: Check patched file
+        run: cat node_modules/@blockly/continuous-toolbox/src/index.ts
+
+      - name: Build
+        env:
+          VITE_CLIENT_ID: ${{ secrets.VITE_CLIENT_ID }}
+          VITE_AUTHORIZATION_URL: ${{ secrets.VITE_AUTHORIZATION_URL }}
+          VITE_API_BASEURL: ${{ secrets.VITE_API_BASEURL }}
+          VITE_FRONTEND_URL: ${{ secrets.VITE_FRONTEND_URL }}
+        run: pnpm tsc -b && pnpm vite build
 
       - name: Upload to S3
         run: |
