@@ -1,4 +1,6 @@
-export const variableContents = [
+import type { BlockCategory } from "src/domain/myPlaces/types/block";
+
+export const variableContents: BlockCategory[] = [
   {
     kind: "block",
     type: "variables_set",

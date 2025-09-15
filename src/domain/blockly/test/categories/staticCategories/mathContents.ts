@@ -1,4 +1,6 @@
-export const mathContents = [
+import type { BlockCategory } from "src/domain/myPlaces/types/block";
+
+export const mathContents: BlockCategory[] = [
   {
     type: "math_number",
     kind: "block",

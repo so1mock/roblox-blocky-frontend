@@ -1,5 +1,8 @@
 import { variableContents } from "./common/categories";
-import type { BlockListByCategoryResponse } from "src/domain/myPlaces/types/block";
+import type {
+  BlockListByCategoryResponse,
+  Toolbox,
+} from "src/domain/myPlaces/types/block";
 import { initCategories } from "./categories";
 
 /**
@@ -24,7 +27,7 @@ const findBlockListByCategoryName = (
 
 export const initToolbox = (
   blockListByCategory: BlockListByCategoryResponse[],
-) => {
+): Toolbox => {
   const mathCategory = findBlockListByCategoryName(
     blockListByCategory,
     "math_category",

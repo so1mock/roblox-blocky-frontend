@@ -1,4 +1,6 @@
-export const logicContents = [
+import type { BlockCategory } from "src/domain/myPlaces/types/block";
+
+export const logicContents: BlockCategory[] = [
   {
     type: "less_than_block",
     kind: "block",

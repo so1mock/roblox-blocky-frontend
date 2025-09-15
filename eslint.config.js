@@ -4,8 +4,10 @@ import reactPlugin from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 import tsParser from "@typescript-eslint/parser";
+import eslint from "@eslint/js";
+import tseslint from "typescript-eslint";
 
-export default defineConfig([
+export default defineConfig(
   {
     ignores: ["src/routes/**", "src/routeTree.gen.ts"], // 무시할 경로
   },
@@ -43,4 +45,6 @@ export default defineConfig([
     files: ["**/*.{ts,tsx,js,jsx}"],
     ...eslintConfigPrettier,
   },
-]);
+  eslint.configs.recommended,
+  tseslint.configs.recommended,
+);

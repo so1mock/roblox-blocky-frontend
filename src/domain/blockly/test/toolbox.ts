@@ -5,8 +5,9 @@ import { loopContents } from "./categories/staticCategories/loopContents";
 import { mathContents } from "./categories/staticCategories/mathContents";
 import { serviceContents } from "./categories/staticCategories/serviceContents";
 import { variableContents } from "../common/categories";
+import type { Toolbox } from "src/domain/myPlaces/types/block";
 
-export default {
+export const toolbox: Toolbox = {
   kind: "categoryToolbox",
   contents: [
     {
@@ -23,7 +24,7 @@ export default {
     },
     {
       kind: "category",
-      name: "흐름",
+      name: "반복",
       categorystyle: "loop_category",
       contents: loopContents,
     },

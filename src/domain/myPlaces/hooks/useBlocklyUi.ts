@@ -2,7 +2,7 @@ import * as Blockly from "blockly";
 import { registerContinuousToolbox } from "@blockly/continuous-toolbox";
 import { useEffect, useRef, useState } from "react";
 import { initTestBlocks } from "src/domain/blockly/test/blocks/blocks";
-import toolbox from "src/domain/blockly/test/toolbox";
+import { toolbox } from "src/domain/blockly/test/toolbox";
 import { customTheme } from "src/domain/blockly/theme/customTheme";
 import { registerVariableCallbacks } from "src/domain/blockly/utils/variableUtils";
 import { setupBlockInputInitializer } from "src/domain/blockly/utils/blockInputInitializer";
@@ -10,6 +10,7 @@ import { getBlockList } from "../apis/block";
 import { initBlocks } from "src/domain/blockly/blocks";
 import { initToolbox } from "src/domain/blockly/toolbox";
 import { defineVariableBlocks } from "src/domain/blockly/common/blocks";
+import type { Toolbox } from "../types/block";
 
 export function useBlocklyUI(
   blocklyDivRef: React.RefObject<HTMLDivElement | null>,
@@ -26,7 +27,7 @@ export function useBlocklyUI(
     setLoading(true);
     setError(null);
 
-    const initWorkspace = (toolboxConfig: any) => {
+    const initWorkspace = (toolboxConfig: Toolbox) => {
       const workspaceSvg = Blockly.inject(blocklyDivRef.current!, {
         toolbox: toolboxConfig,
         plugins: {
