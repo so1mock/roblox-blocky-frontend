@@ -8,4 +8,4 @@ export interface BaseUser {
   createTime: string;
 }
 
-export interface DetailedUser extends BaseUser {}
+export type DetailedUser = BaseUser;

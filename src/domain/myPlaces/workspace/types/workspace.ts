@@ -11,7 +11,7 @@ export interface PlaceSummary {
 export type BlockScript = {
   blocks: {
     languageVersion: number;
-    blocks: Array<Record<string, any>>; // 블록 내용이 자유로운 경우
+    blocks: Array<Record<string, unknown>>; // 블록 내용이 자유로운 경우
   };
   variables?: Array<{
     name: string;

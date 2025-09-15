@@ -22,6 +22,7 @@ export const useUser = () => {
         setAuth(user);
         navigate({ to: "/" });
       } catch (error) {
+        console.log(error);
         clearAuth();
         navigate({ to: "/" });
       }
