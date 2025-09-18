@@ -1,6 +1,6 @@
-import type { BlockCategory } from "src/domain/myPlaces/types/block";
+import type { DefinitionForToolbox } from "src/domain/myPlaces/types/block";
 
-export const logicContents: BlockCategory[] = [
+export const logicContents: DefinitionForToolbox[] = [
   {
     type: "less_than_block",
     kind: "block",

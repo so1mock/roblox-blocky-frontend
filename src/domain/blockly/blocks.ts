@@ -1,5 +1,5 @@
 import * as Blockly from "blockly";
-import type { BlockWithToolboxList } from "src/domain/myPlaces/types/block";
+import type { Block } from "src/domain/myPlaces/types/block";
 
 // ValueInput: 블록이 다른 블록으로부터 값을 입력받을 수 있는 입력 슬롯
 // DummyInput: 다른 블록과 연결되지 않는 입력 공간 (단순한 레이블이나 UI 요소)
@@ -34,12 +34,14 @@ import type { BlockWithToolboxList } from "src/domain/myPlaces/types/block";
  *   }
  * ]);
  */
-export const initBlocks = (blocks: BlockWithToolboxList) => {
+export const initBlocks = (blocks: Block[]) => {
   // 1. 등록
+  console.log(blocks);
   blocks.forEach((block) => {
+    console.log(block);
     Blockly.Blocks[block.type] = {
       init: function () {
-        block.definition.components.forEach((component) => {
+        block.blockdefinition.components.forEach((component) => {
           /**
            * ValueInput:
            * - 다른 블록으로부터 값을 입력받을 수 있는 슬롯을 생성합니다.
@@ -106,25 +108,25 @@ export const initBlocks = (blocks: BlockWithToolboxList) => {
         /**
          * 블록 공통 속성 설정
          */
-        if (block.definition.output) {
+        if (block.blockdefinition.output) {
           // 블록이 타입을 반환하도록 설정 (Expression 블록)
-          this.setOutput(true, block.definition.output);
+          this.setOutput(true, block.blockdefinition.output);
         }
-        if (block.definition.previousStatement) {
+        if (block.blockdefinition.previousStatement) {
           // 이전 블록과 연결 가능
           this.setPreviousStatement(true, null);
         }
-        if (block.definition.nextStatement) {
+        if (block.blockdefinition.nextStatement) {
           // 다음 블록과 연결 가능
           this.setNextStatement(true, null);
         }
-        if (block.definition.inputsInline !== undefined) {
+        if (block.blockdefinition.inputsInline !== undefined) {
           // 입력 필드들을 한 줄에 표시할지 여부
-          this.setInputsInline(block.definition.inputsInline);
+          this.setInputsInline(block.blockdefinition.inputsInline);
         }
-        if (block.definition.style) {
+        if (block.blockdefinition.style) {
           // 블록의 스타일 지정 (색상, 카테고리 등)
-          this.setStyle(block.definition.style);
+          this.setStyle(block.blockdefinition.style);
         }
       },
     };
