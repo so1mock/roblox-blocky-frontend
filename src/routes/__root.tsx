@@ -1,4 +1,8 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useNavigate,
+} from "@tanstack/react-query";
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { useAuthStore } from "@user/stores/authStore";
 import { useEffect } from "react";
@@ -29,7 +33,6 @@ export const Route = createRootRoute({
     }
   },
   component: () => {
-
     const isLogin = useAuthStore((state) => state.isLogin);
     const navigate = useNavigate();
 
