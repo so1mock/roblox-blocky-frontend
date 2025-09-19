@@ -41,7 +41,7 @@ export const initBlocks = (blocks: Block[]) => {
     console.log(block);
     Blockly.Blocks[block.type] = {
       init: function () {
-        block.blockdefinition.components.forEach((component) => {
+        block.blockDefinition.components.forEach((component) => {
           /**
            * ValueInput:
            * - 다른 블록으로부터 값을 입력받을 수 있는 슬롯을 생성합니다.
@@ -108,25 +108,25 @@ export const initBlocks = (blocks: Block[]) => {
         /**
          * 블록 공통 속성 설정
          */
-        if (block.blockdefinition.output) {
+        if (block.blockDefinition.output) {
           // 블록이 타입을 반환하도록 설정 (Expression 블록)
-          this.setOutput(true, block.blockdefinition.output);
+          this.setOutput(true, block.blockDefinition.output);
         }
-        if (block.blockdefinition.previousStatement) {
+        if (block.blockDefinition.previousStatement) {
           // 이전 블록과 연결 가능
           this.setPreviousStatement(true, null);
         }
-        if (block.blockdefinition.nextStatement) {
+        if (block.blockDefinition.nextStatement) {
           // 다음 블록과 연결 가능
           this.setNextStatement(true, null);
         }
-        if (block.blockdefinition.inputsInline !== undefined) {
+        if (block.blockDefinition.inputsInline !== undefined) {
           // 입력 필드들을 한 줄에 표시할지 여부
-          this.setInputsInline(block.blockdefinition.inputsInline);
+          this.setInputsInline(block.blockDefinition.inputsInline);
         }
-        if (block.blockdefinition.style) {
+        if (block.blockDefinition.style) {
           // 블록의 스타일 지정 (색상, 카테고리 등)
-          this.setStyle(block.blockdefinition.style);
+          this.setStyle(block.blockDefinition.style);
         }
       },
     };

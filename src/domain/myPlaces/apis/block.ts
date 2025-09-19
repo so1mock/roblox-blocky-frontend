@@ -51,7 +51,7 @@ export const getBlockList = async (): Promise<BlockListByCategory[]> => {
           type: block.type, // 👈 Blockly에서 요구하므로 추가
           // callbackKey: "" 추구 추가될 수 있는 속성
         },
-        blockdefinition: {
+        blockDefinition: {
           style: block.definition?.style ?? "",
           output: block.definition?.output ?? "",
           inputsInline: block.definition?.inputsInline ?? true,
