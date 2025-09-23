@@ -20,7 +20,7 @@ export type ServerBlock = {
     nextStatement?: boolean;
     components?: BlockComponent[];
   };
-  toolBoxDefinition: {
+  toolboxDefinition: {
     kind: "block" | "sep" | "button" | "label";
     toolboxInputs?: {
       [inputName: string]: {
@@ -45,9 +45,9 @@ export const getBlockList = async (): Promise<BlockListByCategory[]> => {
       categoryName: category.categoryName,
       blocks: category.blocks.map((block) => ({
         type: block.type,
-        toolBoxDefinition: {
-          kind: block.toolBoxDefinition.kind,
-          inputs: block.toolBoxDefinition.toolboxInputs,
+        toolboxDefinition: {
+          kind: block.toolboxDefinition.kind,
+          inputs: block.toolboxDefinition.toolboxInputs,
           type: block.type, // 👈 Blockly에서 요구하므로 추가
           // callbackKey: "" 추구 추가될 수 있는 속성
         },

@@ -61,7 +61,7 @@ export type BlockListByCategory = {
 export type Block = {
   type: string;
   blockDefinition: BlockDefinition;
-  toolBoxDefinition: DefinitionForToolbox;
+  toolboxDefinition: DefinitionForToolbox;
 };
 
 export type BlockDefinition = {

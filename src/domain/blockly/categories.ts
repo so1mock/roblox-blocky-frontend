@@ -7,7 +7,7 @@ export const getBlocksByCategory = (
   blockListByCategory: BlockListByCategory,
 ): DefinitionForToolbox[] =>
   blockListByCategory.blocks.map((block) => ({
-    kind: block.toolBoxDefinition.kind,
+    kind: block.toolboxDefinition.kind,
     type: block.type,
-    inputs: block.toolBoxDefinition.inputs,
+    inputs: block.toolboxDefinition.inputs,
   }));
