@@ -1,5 +1,5 @@
 import * as Blockly from "blockly";
-import toolbox from "../test/toolbox";
+import { toolbox } from "../test/toolbox";
 import { hitContents } from "../test/categories/dynamicCategories/hitContents";
 
 /**

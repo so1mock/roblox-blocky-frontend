@@ -45,12 +45,12 @@ export function useBlocklyUI(
 
     if (options.useServer) {
       getBlockList()
-        .then((blockListByCategory) => {
-          for (const blockList of blockListByCategory) {
-            initBlocks(blockList.blocks);
+        .then((blockListsByCategory) => {
+          for (const blockListByCategory of blockListsByCategory) {
+            initBlocks(blockListByCategory.blocks);
           }
           defineVariableBlocks(); // 변수 블록은 로컬에서 정의
-          initWorkspace(initToolbox(blockListByCategory));
+          initWorkspace(initToolbox(blockListsByCategory));
         })
         .catch((e) => {
           console.error("서버 블록 로딩 실패:", e);

@@ -1,6 +1,6 @@
-import type { BlockCategory } from "src/domain/myPlaces/types/block";
+import type { DefinitionForToolbox } from "src/domain/myPlaces/types/block";
 
-export const loopContents: BlockCategory[] = [
+export const loopContents: DefinitionForToolbox[] = [
   {
     type: "wait_block",
     kind: "block",

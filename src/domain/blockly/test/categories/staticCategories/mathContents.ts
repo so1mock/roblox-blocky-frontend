@@ -1,6 +1,6 @@
-import type { BlockCategory } from "src/domain/myPlaces/types/block";
+import type { DefinitionForToolbox } from "src/domain/myPlaces/types/block";
 
-export const mathContents: BlockCategory[] = [
+export const mathContents: DefinitionForToolbox[] = [
   {
     type: "math_number",
     kind: "block",

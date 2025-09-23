@@ -1,10 +1,13 @@
-import type { BlockListByCategoryResponse } from "src/domain/myPlaces/types/block";
+import type {
+  BlockListByCategory,
+  DefinitionForToolbox,
+} from "src/domain/myPlaces/types/block";
 
-export const initCategories = (
-  blockListByCategory: BlockListByCategoryResponse,
-) =>
+export const getBlocksByCategory = (
+  blockListByCategory: BlockListByCategory,
+): DefinitionForToolbox[] =>
   blockListByCategory.blocks.map((block) => ({
-    kind: block.toolBoxDefinition.kind,
+    kind: block.toolboxDefinition.kind,
     type: block.type,
-    inputs: block.toolBoxDefinition.toolboxInputs,
+    inputs: block.toolboxDefinition.inputs,
   }));

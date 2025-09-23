@@ -1,9 +1,9 @@
 import { variableContents } from "./common/categories";
 import type {
-  BlockListByCategoryResponse,
+  BlockListByCategory,
   Toolbox,
 } from "src/domain/myPlaces/types/block";
-import { initCategories } from "./categories";
+import { getBlocksByCategory } from "./categories";
 
 /**
  * 주어진 categoryName에 해당하는 블록 리스트를 찾아 반환합니다.
@@ -13,10 +13,10 @@ import { initCategories } from "./categories";
  * @returns 해당 카테고리의 블록 리스트, 없으면 빈 배열
  */
 const findBlockListByCategoryName = (
-  blockListByCategory: BlockListByCategoryResponse[],
+  blockListsByCategory: BlockListByCategory[],
   categoryName: string,
-): BlockListByCategoryResponse => {
-  const found = blockListByCategory.find(
+): BlockListByCategory => {
+  const found = blockListsByCategory.find(
     (item) => item.categoryName === categoryName,
   );
   if (!found) {
@@ -26,22 +26,22 @@ const findBlockListByCategoryName = (
 };
 
 export const initToolbox = (
-  blockListByCategory: BlockListByCategoryResponse[],
+  blockListsByCategory: BlockListByCategory[],
 ): Toolbox => {
   const mathCategory = findBlockListByCategoryName(
-    blockListByCategory,
+    blockListsByCategory,
     "math_category",
   );
   const logicCategory = findBlockListByCategoryName(
-    blockListByCategory,
+    blockListsByCategory,
     "logic_category",
   );
   const controlCategory = findBlockListByCategoryName(
-    blockListByCategory,
+    blockListsByCategory,
     "control_category",
   );
   const loopCategory = findBlockListByCategoryName(
-    blockListByCategory,
+    blockListsByCategory,
     "loop_category",
   );
 
@@ -52,25 +52,25 @@ export const initToolbox = (
         kind: "category",
         name: "수식",
         categorystyle: mathCategory.categoryName,
-        contents: initCategories(mathCategory),
+        contents: getBlocksByCategory(mathCategory),
       },
       {
         kind: "category",
         name: "논리",
         categorystyle: logicCategory.categoryName,
-        contents: initCategories(logicCategory),
+        contents: getBlocksByCategory(logicCategory),
       },
       {
         kind: "category",
         name: "제어",
         categorystyle: controlCategory.categoryName,
-        contents: initCategories(controlCategory),
+        contents: getBlocksByCategory(controlCategory),
       },
       {
         kind: "category",
         name: "반복",
         categorystyle: loopCategory.categoryName,
-        contents: initCategories(loopCategory),
+        contents: getBlocksByCategory(loopCategory),
       },
       {
         kind: "category",

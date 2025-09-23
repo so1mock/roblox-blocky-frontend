@@ -1,6 +1,6 @@
-import type { BlockCategory } from "src/domain/myPlaces/types/block";
+import type { DefinitionForToolbox } from "src/domain/myPlaces/types/block";
 
-export const eventContents: BlockCategory[] = [
+export const eventContents: DefinitionForToolbox[] = [
   {
     type: "touched_block",
     kind: "block",
