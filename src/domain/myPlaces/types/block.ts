@@ -75,7 +75,7 @@ export type BlockDefinition = {
 
 export type DefinitionForToolbox = {
   kind: BlockKind;
-  type: string;
+  type?: string;
   inputs?: {
     [inputName: string]: {
       shadow: ShadowValue;
