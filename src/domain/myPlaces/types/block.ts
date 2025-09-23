@@ -81,6 +81,7 @@ export type DefinitionForToolbox = {
       shadow: ShadowValue;
     };
   };
+  text?: string;
   callbackKey?: string;
 };
 
