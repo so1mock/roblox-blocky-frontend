@@ -1,6 +1,6 @@
-import type { BlockCategory } from "src/domain/myPlaces/types/block";
+import type { DefinitionForToolbox } from "src/domain/myPlaces/types/block";
 
-export const variableContents: BlockCategory[] = [
+export const variableContents: DefinitionForToolbox[] = [
   {
     kind: "block",
     type: "variables_set",
