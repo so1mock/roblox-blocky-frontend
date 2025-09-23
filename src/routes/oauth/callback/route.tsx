@@ -14,7 +14,7 @@ type SearchParams = {
 
 export const Route = createFileRoute("/oauth/callback")({
   component: RouteComponent,
-  validateSearch: (search): SearchParams => {
+  validateSearch: (search: SearchParams): SearchParams => {
     return {
       code: search.code as string,
       state: search.state as string,
