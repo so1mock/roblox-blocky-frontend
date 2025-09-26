@@ -1,3 +1,4 @@
+import Footer from "@common/components/Footer";
 import { TeacherHeader } from "@common/components/header/TeacherHeader";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -10,7 +11,7 @@ function RouteComponent() {
     <div className="min-h-screen flex flex-col justify-between bg-[url(/mainBackground.png)] bg-center bg-cover">
       <TeacherHeader />
       <main>메인페이지</main>
-      {/* 푸터 */}
+      <Footer />
     </div>
   );
 }
