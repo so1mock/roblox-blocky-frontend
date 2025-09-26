@@ -50,3 +50,19 @@
 .animate-fade-in-down {
   animation: fade-in-down 0.3s ease-out forwards;
 }
+
+/* 마퀴 (오른쪽 → 왼쪽 무한 반복) */
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 13s linear infinite;
+}
