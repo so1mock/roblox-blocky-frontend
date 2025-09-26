@@ -1,14 +1,14 @@
+import { StudentHeader } from "@common/components/header/StudentHeader";
 import { createFileRoute } from "@tanstack/react-router";
-import { Header } from "@common/components/header/Header";
 
-export const Route = createFileRoute("/")({
-  component: Index,
+export const Route = createFileRoute("/student/")({
+  component: RouteComponent,
 });
 
-function Index() {
+function RouteComponent() {
   return (
     <div className="min-h-screen flex flex-col justify-between bg-[url(/mainBackground.png)] bg-center bg-cover">
-      <Header />
+      <StudentHeader />
       <main>메인페이지</main>
       {/* 푸터 */}
     </div>
