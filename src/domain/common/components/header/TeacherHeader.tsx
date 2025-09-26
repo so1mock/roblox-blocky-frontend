@@ -1,8 +1,7 @@
 import { useAuthStore } from "@user/stores/authStore";
 import { Link } from "@tanstack/react-router";
 import { LinkNavButton } from "./LinkNavButton";
-import { ProfileButton } from "@user/components/ProfileButton";
-import { SocialLoginButton } from "@user/components/SocialLoginButton";
+import Button from "../Button";
 
 export function TeacherHeader() {
   const { isLogin, userInfo } = useAuthStore();
@@ -21,12 +20,24 @@ export function TeacherHeader() {
       </nav>
 
       {isLogin ? (
-        <ProfileButton
-          className={"absolute right-5"}
-          nickname={userInfo?.nickname}
-        />
+        <span className="absolute right-5 flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-400 to-green-500 text-white font-semibold shadow-md transition-transform duration-200 hover:scale-105">
+          {userInfo?.nickname}님 반갑습니다 🎉
+        </span>
       ) : (
-        <SocialLoginButton className={"absolute right-5"} />
+        <div className="absolute right-5">
+          <Button
+            text="로그인"
+            handleButtonClick={() => {
+              console.log("로그인");
+            }}
+          />
+          <Button
+            text="회원가입"
+            handleButtonClick={() => {
+              console.log("회원가입");
+            }}
+          />
+        </div>
       )}
     </header>
   );

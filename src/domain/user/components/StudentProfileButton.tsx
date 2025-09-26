@@ -1,6 +1,6 @@
 import { useUser } from "@user/hooks/useUser";
 
-export function ProfileButton({
+export function StudentProfileButton({
   className = "",
   nickname = "",
 }: {

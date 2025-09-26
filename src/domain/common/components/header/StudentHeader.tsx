@@ -1,7 +1,7 @@
 import { useAuthStore } from "@user/stores/authStore";
 import { Link } from "@tanstack/react-router";
 import { LinkNavButton } from "./LinkNavButton";
-import { ProfileButton } from "@user/components/ProfileButton";
+import { StudentProfileButton } from "@user/components/StudentProfileButton";
 import { SocialLoginButton } from "@user/components/SocialLoginButton";
 
 export function StudentHeader() {
@@ -18,7 +18,7 @@ export function StudentHeader() {
       </nav>
 
       {isLogin ? (
-        <ProfileButton
+        <StudentProfileButton
           className={"absolute right-5"}
           nickname={userInfo?.nickname}
         />

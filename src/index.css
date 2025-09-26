@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @theme {
+  --color-rbTextPadding: #e63c7a;
   --color-rbLeftNav: #e6cdfd;
   --color-rbBg: #ffffff;
   --color-rbSurface: #9d7cde;
