@@ -1,4 +1,10 @@
-import { createFileRoute, useSearch, redirect } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  useSearch,
+  redirect,
+  useNavigate,
+} from "@tanstack/react-router";
+import { getPluginAuth } from "@user/apis/auth";
 import { verifyAuth } from "@user/utils/authGuard";
 import { useEffect } from "react";
 
@@ -10,14 +16,10 @@ export const Route = createFileRoute("/plugin/auth")({
   beforeLoad: async ({ search }: { search: SearchParams }) => {
     await verifyAuth({ timeoutMs: 3000 });
 
-    const user_code =
-      typeof search.user_code === "string" && search.user_code.length > 0
-        ? search.user_code
-        : undefined;
     // 쿼리 파라미터 유효성 검사
-    if (user_code) {
+    if (!search.user_code) {
       // 근데 어떻게 처리하지?
-      alert("유효한 url이 아닙니다.");
+      alert("유효한 url이 아닙니다."); // user_code가 없는 경우
       throw redirect({ to: "/", search: { next: "/plugin/auth" } });
     }
   },
@@ -27,12 +29,23 @@ export const Route = createFileRoute("/plugin/auth")({
 
 function RouteComponent() {
   // verifyAuth를 거쳤기 때문에 로그인된 상태라 가정
-  const { user_code } = useSearch({ from: "/plugin/auth" });
+  const { user_code: userCode = "" } = useSearch({
+    from: "/plugin/auth",
+  }) as SearchParams;
+  const navigate = useNavigate();
 
   useEffect(() => {
-    try {
-      //
-    } catch (error) {}
-  }, [user_code]);
-  return <div>Hello "플러그인과 인증을 진행 중이에요~"</div>;
+    const fetchPluginAuth = async () => {
+      try {
+        // const response = await getPluginAuth(String(userCode));
+        // alert("인증에 성공했어요~" + JSON.stringify(response));
+        await getPluginAuth(String(userCode));
+        navigate({ to: "/my-places" });
+      } catch (error: any) {
+        alert("api 요청 실패" + error.message);
+      }
+    };
+    fetchPluginAuth();
+  }, [userCode]);
+  return <div>"플러그인과 인증을 진행 중이에요~"</div>;
 }
