@@ -29,14 +29,14 @@ export const Route = createRootRoute({
     }
   },
   component: () => {
-    const isLogin = useAuthStore((state) => state.isLogin);
-    const navigate = useNavigate();
+    // const isLogin = useAuthStore((state) => state.isLogin);
+    // const navigate = useNavigate();
 
-    useEffect(() => {
-      if (isLogin === false) {
-        navigate({ to: "/" });
-      }
-    }, [isLogin]);
+    // useEffect(() => {
+    //   if (isLogin === false) {
+    //     navigate({ to: "/" });
+    //   }
+    // }, [isLogin]);
 
     return (
       <QueryClientProvider client={queryClient}>
