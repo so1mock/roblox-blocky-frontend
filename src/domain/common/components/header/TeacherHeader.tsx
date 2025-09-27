@@ -6,7 +6,7 @@ import Button from "../Button";
 export function TeacherHeader() {
   const { isLogin, userInfo } = useAuthStore();
   return (
-    <header className="relative flex items-center bg-rbBackground p-2 pr-5 min-w-[800px] justify-center m-4 rounded-xl">
+    <header className="relative flex items-center bg-rbBackground p-2 pr-5 justify-center m-4 rounded-xl">
       <Link to="/teacher" className="absolute left-2">
         <img src="/coblocksLogo.png" />
       </Link>

@@ -7,7 +7,7 @@ import { SocialLoginButton } from "@user/components/SocialLoginButton";
 export function StudentHeader() {
   const { isLogin, userInfo } = useAuthStore();
   return (
-    <header className="relative flex items-center bg-rbBackground p-2 pr-5 min-w-[800px] justify-center m-4 rounded-xl">
+    <header className="relative flex items-center bg-rbBackground p-2 pr-5  justify-center m-4 rounded-xl">
       <Link to="/student" className="absolute left-2">
         <img src="/coblocksLogo.png" />
       </Link>

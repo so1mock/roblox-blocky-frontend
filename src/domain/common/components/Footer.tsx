@@ -6,7 +6,7 @@ const email = "contact@samplecorp.com";
 
 function Footer() {
   return (
-    <footer className="bg-rbBackground py-8 relative min-w-[800px] flex justify-center text-rbGrayText">
+    <footer className="bg-rbBackground py-8 relative  flex justify-center text-rbGrayText">
       <div className="relative">
         {/* 로고 */}
         <div className="absolute left-[-200px] top-2">

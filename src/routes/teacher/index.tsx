@@ -8,10 +8,10 @@ export const Route = createFileRoute("/teacher/")({
 
 function RouteComponent() {
   return (
-    <div className="relative min-h-screen flex flex-col justify-between bg-[url(/mainBackground.png)] bg-center bg-cover">
+    <div className="relative min-h-screen flex flex-col justify-between bg-[url(/mainBackground.png)] bg-center bg-cover min-w-[1400px]">
       <TeacherHeader />
 
-      <main className="flex justify-center items-center gap-20 min-w-[1400px]">
+      <main className="flex justify-center items-center gap-20">
         {/* 텍스트 영역 */}
         <div className="flex flex-col text-4xl">
           <span className="mb-2">CoBlocks와 함께, 복잡한 코딩 수업도</span>

@@ -8,7 +8,7 @@ export const Route = createFileRoute("/student/")({
 
 function RouteComponent() {
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-[url(/mainBackground.png)] bg-center bg-cover">
+    <div className="min-h-screen flex flex-col justify-between bg-[url(/mainBackground.png)] bg-center bg-cover min-w-[1400px]">
       <StudentHeader />
       <main>메인페이지</main>
       <Footer />
