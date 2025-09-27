@@ -1,39 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  --color-rbTextPadding: #e63c7a;
-  --color-rbLeftNav: #e6cdfd;
-  --color-rbBg: #ffffff;
-  --color-rbSurface: #9d7cde;
-  --color-rbSurfaceDeep: #855cd6;
-  --color-rbPromo: #797979;
-  --color-rbButton: #3795ed;
-  --color-rbButtonText: #ffffff;
-  --color-rbBorderEmpty: #ffbc05;
-  --color-rbText: #454545;
-  --color-rbDanger: #ff7b7b;
-  --color-rbLogin: #335fff;
-  --color-navItem: #454545;
-  --color-navItemHover: #9d7cde;
+  --color-rbBackground: #fff;
+  --color-rbText: #000;
+  --color-rbHoverText: #fff;
+  --color-rbBlueText: #68a0e9;
+  --color-rbGrayText: #666;
+  --color-rbDeepGrayText: #333;
+  --color-rbPointColor: #e63c7a;
+  --color-rbBorder: #000;
 }
 
 /* 다크모드 색상 정의 */
 [data-theme="dark"] {
-  --color-rbLeftNav: #2d1b4e;
-  --color-rbBg: #1a1a1a;
-  --color-rbSurface: #4a3f5a;
-  --color-rbSurfaceDeep: #3d2f4a;
-  --color-rbPromo: #b0b0b0;
-  --color-rbButton: #5ba3f0;
-  --color-rbButtonText: #ffffff;
-  --color-rbBorderEmpty: #ffd700;
-  --color-rbText: #e0e0e0;
-  --color-rbDanger: #ff9999;
-  --color-rbLogin: #335fff;
-
-  /* 다크모드 nav-item 색상 */
-  --color-navItem: #e0e0e0;
-  --color-navItemHover: #7a5fb3;
 }
 
 @keyframes fade-in-down {

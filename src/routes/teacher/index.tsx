@@ -22,12 +22,12 @@ function RouteComponent() {
 
         {/* 영상 영역 */}
         <section className="flex flex-col items-center gap-4">
-          <span className="bg-rbBg text-blue-400 px-8 py-2 rounded-3xl font-bold">
+          <span className="bg-rbBackground text-rbBlueText px-8 py-2 rounded-3xl font-bold">
             튜토리얼
           </span>
 
           <video
-            className="rounded-xl shadow-lg w-[640px] border-solid border-8 border-black"
+            className="rounded-xl shadow-lg w-[640px] border-solid border-8 border-rbBorder"
             controls
           >
             <source
@@ -37,8 +37,8 @@ function RouteComponent() {
             브라우저가 video 태그를 지원하지 않습니다.
           </video>
         </section>
-        <div className="absolute bottom-26 bg-rbTextPadding w-full text-center py-2 animate-[marquee] overflow-x-hidden">
-          <span className="text-white text-lg font-bold animate-marquee">
+        <div className="absolute bottom-26 bg-rbPointColor w-full text-center py-2 animate-[marquee] overflow-x-hidden">
+          <span className="text-rbHoverText text-lg font-bold animate-marquee">
             로블록스 수업, 어렵지 않아요! 블록을 쌓듯 간단하게 가르치고,학생들의
             창의력과 협업을 이끌어보세요.
           </span>

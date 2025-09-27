@@ -15,7 +15,7 @@ export function SocialLoginButton({ className = "" }: { className: string }) {
       href={robloxUrl}
     >
       <img src="/Roblox_logo.png" className="w-7 h-7" />
-      <div className="text-white">Roblox로 시작하기</div>
+      <div className="text-rbHoverText">Roblox로 시작하기</div>
     </a>
   );
 }

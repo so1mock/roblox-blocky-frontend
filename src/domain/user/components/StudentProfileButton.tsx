@@ -16,7 +16,7 @@ export function StudentProfileButton({
       }}
     >
       <img src="/profileIcon.png" className="w-7 h-7" />
-      <div className="text-white">{nickname} 로그아웃</div>
+      <div className="text-rbHoverText">{nickname} 로그아웃</div>
     </button>
   );
 }

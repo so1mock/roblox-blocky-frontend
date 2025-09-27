@@ -6,7 +6,7 @@ const email = "contact@samplecorp.com";
 
 function Footer() {
   return (
-    <footer className="bg-rbBg py-8 relative min-w-[800px] flex justify-center text-gray-800">
+    <footer className="bg-rbBackground py-8 relative min-w-[800px] flex justify-center text-rbGrayText">
       <div className="relative">
         {/* 로고 */}
         <div className="absolute left-[-200px] top-2">
@@ -35,7 +35,7 @@ function Footer() {
         </div>
       </div>
       {/* 하단 카피라이트 */}
-      <div className="my-2 absolute text-xs text-gray-400 bottom-2 right-2">
+      <div className="my-2 absolute text-xs text-rbGrayText bottom-2 right-2">
         © {new Date().getFullYear()}All rights reserved.
       </div>
     </footer>
