@@ -1,3 +1,4 @@
+import Footer from "@common/components/Footer";
 import { StudentHeader } from "@common/components/header/StudentHeader";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
@@ -12,6 +13,7 @@ function RouteComponent() {
       <main>
         <Outlet />
       </main>
+      <Footer />
     </div>
   );
 }
