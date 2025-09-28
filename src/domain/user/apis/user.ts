@@ -1,6 +1,6 @@
 import { type BaseUser, type Auth, type DetailedUser } from "../types/user.ts";
 import { api } from "../../common/apis/axios.ts";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 export type GetTokenResponse = {
   info: BaseUser;
@@ -13,24 +13,45 @@ export type RefreshTokenResponse = {
 };
 
 export const getToken = async (code: string): Promise<GetTokenResponse> => {
-  const response = await api.post("/oauth2/roblox/callback", { code: code });
-  const { token, info } = response.data;
-  return {
-    info: info,
-    auth: {
-      accessToken: token,
-    },
-  };
+  try {
+    const response = await api.post("/oauth2/roblox/callback", { code: code });
+    const { token, info } = response.data;
+    return {
+      info: info,
+      auth: {
+        accessToken: token,
+      },
+    };
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw e;
+    }
+    throw e;
+  }
 };
 
 export const getUserInfo = async (): Promise<DetailedUser> => {
-  const response = await api.get("/member/me");
-  const info: DetailedUser = response.data;
-  return info;
+  try {
+    const response = await api.get("/member/me");
+    const info: DetailedUser = response.data;
+    return info;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw e;
+    }
+    throw e;
+  }
 };
 
 export const logout = async (): Promise<void> => {
-  await api.post("/member/logout");
+  try {
+    await api.post("/member/logout");
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw e;
+    }
+    throw e;
+  }
 };
 
 // refreshApi.ts
@@ -44,13 +65,19 @@ const refreshApi = axios.create({
 });
 
 export const refreshToken = async () => {
-  const response = await refreshApi.post("/member/refresh");
-  console.log("refreshToken response:", response.data); // 디버깅용
-  const { token, info } = response.data;
-  return {
-    info: info,
-    auth: {
-      accessToken: token,
-    },
-  };
+  try {
+    const response = await refreshApi.post("/member/refresh");
+    const { token, info } = response.data;
+    return {
+      info: info,
+      auth: {
+        accessToken: token,
+      },
+    };
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw e;
+    }
+    throw e;
+  }
 };

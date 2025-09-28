@@ -53,6 +53,13 @@ export const saveBlockScript = async (
 };
 
 export const getMyPlaces = async (): Promise<PlaceSummary[]> => {
-  const response = await api.get("/places/me");
-  return response.data.places;
+  try {
+    const response = await api.get("/places/me");
+    return response.data.places;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw e.message;
+    }
+    throw e;
+  }
 };
