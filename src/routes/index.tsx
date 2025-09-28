@@ -5,7 +5,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const naviate = useNavigate();
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen flex bg-[url(/mainBackground.png)] bg-center bg-cover">
       {/* 왼쪽: 선생님 */}
@@ -18,7 +18,7 @@ function Index() {
         <button
           className="px-6 py-3 bg-green-500 rounded-lg font-semibold hover:bg-green-600 transition cursor-pointer"
           onClick={() => {
-            naviate({ to: "/teacher" });
+            navigate({ to: "/teacher" });
           }}
         >
           시작하기
@@ -35,7 +35,7 @@ function Index() {
         <button
           className="px-6 py-3 bg-blue-500 rounded-lg font-semibold hover:bg-blue-600 transition cursor-pointer"
           onClick={() => {
-            naviate({ to: "/student" });
+            navigate({ to: "/student" });
           }}
         >
           시작하기

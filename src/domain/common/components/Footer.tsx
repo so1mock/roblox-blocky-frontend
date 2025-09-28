@@ -30,7 +30,10 @@ function Footer() {
             <span className="mr-6">{businessNumber}</span>
             <span className="font-medium">대표전화: </span>
             <span className="mr-6">{representativePhoneNumber}</span>
-            <span className="font-medium">이메일: </span> {email}
+            <span className="font-medium">이메일: </span>
+            <a href={`mailto:${email}`} className="text-blue-600 underline">
+              {email}
+            </a>
           </div>
         </div>
       </div>
