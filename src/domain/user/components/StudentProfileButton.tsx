@@ -1,6 +1,6 @@
 import { useUser } from "@user/hooks/useUser";
 
-export function ProfileButton({
+export function StudentProfileButton({
   className = "",
   nickname = "",
 }: {
@@ -10,13 +10,13 @@ export function ProfileButton({
   const { handleLogout } = useUser();
   return (
     <button
-      className={`flex items-center whitespace-nowrap gap-2 h-10 bg-rbLogin min-w-fit p-2 rounded-lg cursor-pointer ${className}`}
+      className={`flex items-center whitespace-nowrap gap-2 h-10 bg-[#335fff] min-w-fit p-2 rounded-lg cursor-pointer ${className}`}
       onClick={() => {
         handleLogout();
       }}
     >
       <img src="/profileIcon.png" className="w-7 h-7" />
-      <div className="text-white">{nickname} 로그아웃</div>
+      <div className="text-rbHoverText">{nickname} 로그아웃</div>
     </button>
   );
 }
