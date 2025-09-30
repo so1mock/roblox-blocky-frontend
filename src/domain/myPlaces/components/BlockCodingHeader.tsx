@@ -52,9 +52,9 @@ function BlockCodingHeader({
   return (
     <header className="flex justify-between gap-2 bg-white py-4 px-4">
       <div className="flex items-center space-x-4">
-        <h2 className="text-lg font-medium text-gray-900">블록 편집기</h2>
+        <h2 className="text-lg font-medium text-rbDeepGrayText">블록 편집기</h2>
         {selectedScript && (
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-rbGrayText">
             편집 중: {selectedScript.name}
           </span>
         )}
@@ -63,7 +63,7 @@ function BlockCodingHeader({
         <button
           type="button"
           onClick={handleSave}
-          className="relative px-4 py-2 font-semibold rounded transition-colors bg-blue-600 text-white hover:bg-blue-700 cursor-pointer"
+          className="relative px-4 py-2 font-semibold rounded transition-colors bg-blue-600 text-rbHoverText hover:bg-blue-700 cursor-pointer"
         >
           <span>저장</span>
         </button>

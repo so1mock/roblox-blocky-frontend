@@ -11,11 +11,11 @@ const robloxUrl = `${baseUrl}?${searchParams.toString()}`;
 export function SocialLoginButton({ className = "" }: { className: string }) {
   return (
     <a
-      className={`flex items-center whitespace-nowrap gap-1 h-10 bg-rbLogin min-w-fit p-2 rounded-lg cursor-pointer ${className}`}
+      className={`flex items-center whitespace-nowrap gap-1 h-10 bg-[#335fff] min-w-fit p-2 rounded-lg cursor-pointer ${className}`}
       href={robloxUrl}
     >
       <img src="/Roblox_logo.png" className="w-7 h-7" />
-      <div className="text-white">Roblox로 시작하기</div>
+      <div className="text-rbHoverText">Roblox로 시작하기</div>
     </a>
   );
 }

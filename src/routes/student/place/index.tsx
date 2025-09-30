@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { verifyAuth } from "@user/utils/authGuard";
 
-export const Route = createFileRoute("/my-places/")({
+export const Route = createFileRoute("/student/place/")({
   beforeLoad: async () => {
     await verifyAuth({ timeoutMs: 3000 });
   },
