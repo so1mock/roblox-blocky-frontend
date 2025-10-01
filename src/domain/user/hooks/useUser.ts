@@ -2,10 +2,12 @@ import { useAuthStore } from "@user/stores/authStore";
 import { useMutation } from "@tanstack/react-query";
 import { getToken, getUserInfo, logout } from "@user/apis/user.ts";
 import { api } from "@common/apis/axios.ts";
+import { useNavigate } from "@tanstack/react-router";
 
 export const useUser = () => {
   const setAuth = useAuthStore((state) => state.setAuth);
   const clearAuth = useAuthStore((state) => state.clearAuth);
+  const navigate = useNavigate();
 
   const handleLogin = useMutation({
     mutationFn: getToken,
@@ -32,6 +34,7 @@ export const useUser = () => {
     mutationFn: logout,
     onSuccess: () => {
       clearAuth();
+      navigate({ to: "/" });
     },
     onError: (error) => {
       console.log("로그아웃 오류" + error.message);
