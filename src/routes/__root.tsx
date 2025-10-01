@@ -1,10 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { createRootRoute, Outlet, useNavigate } from "@tanstack/react-router";
-import { useAuthStore } from "@user/stores/authStore";
-import { useEffect } from "react";
+import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { refreshToken } from "@user/apis/user";
-import { api } from "@common/apis/axios";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,35 +11,11 @@ const queryClient = new QueryClient({
 });
 
 export const Route = createRootRoute({
-  beforeLoad: async () => {
-    const { isLogin, setAuth, clearAuth } = useAuthStore.getState();
-    if (isLogin !== null) return;
-
-    try {
-      const response = await refreshToken();
-      api.defaults.headers.common["Authorization"] =
-        `Bearer ${response.auth.accessToken}`;
-      setAuth(response.info);
-    } catch (error) {
-      clearAuth();
-    }
-  },
   component: () => {
-    const isLogin = useAuthStore((state) => state.isLogin);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-      if (isLogin === false) {
-        navigate({ to: "/" });
-      }
-    }, [isLogin]);
-
     return (
       <QueryClientProvider client={queryClient}>
-        <div className="min-h-screen flex flex-col">
-          <Outlet />
-          <TanStackRouterDevtools />
-        </div>
+        <Outlet />
+        <TanStackRouterDevtools />
       </QueryClientProvider>
     );
   },

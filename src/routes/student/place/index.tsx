@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { getMyPlaces } from "src/domain/myPlaces/workspace/apis/workspace";
 import type { PlaceSummary } from "src/domain/myPlaces/workspace/types/workspace";
 
-export const Route = createFileRoute("/my-places/")({
+export const Route = createFileRoute("/student/place/")({
   beforeLoad: async () => {
     await verifyAuth({ timeoutMs: 3000 });
   },
