@@ -48,8 +48,8 @@ api.interceptors.response.use(
       if (originalRequest._retry) {
         // 이미 리프레시 토큰을 통한 재요청을 시도해본 경우 -> 리프레시 토큰이 만료됐다는 뜻
         // _retry는 원래는 존재하지 않고 우리가 추가한 프로퍼티 이다.
-        console.log("리프레시 토큰이 만료되어 메인 페이지로 이동");
         useAuthStore.getState().clearAuth(); // 로그인 상태 false로 변경
+        setTimeout(() => window.location.reload(), 0);
         return Promise.reject(error);
       }
 
@@ -76,7 +76,7 @@ api.interceptors.response.use(
       isRefreshing = true;
       try {
         const response = await refreshToken();
-        console.log("성공");
+        // console.log("성공");
         const newToken = response.auth.accessToken;
         api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
         // data에서 받아온 데이터로 유저 정보 다시 초기화 시키기
