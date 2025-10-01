@@ -40,7 +40,7 @@ function RouteComponent() {
         // const response = await getPluginAuth(String(userCode));
         // alert("인증에 성공했어요~" + JSON.stringify(response));
         await getPluginAuth(String(userCode));
-        navigate({ to: "/my-places" });
+        navigate({ to: "/student/my-places" });
       } catch (error: any) {
         alert("api 요청 실패" + error.message);
       }
