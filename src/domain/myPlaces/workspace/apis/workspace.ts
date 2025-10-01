@@ -1,9 +1,5 @@
 import { api } from "@common/apis/axios";
-import type {
-  BlockScript,
-  PlaceSummary,
-  WorkspaceData,
-} from "../types/workspace";
+import type { BlockScript, WorkspaceData } from "../types/workspace";
 import { AxiosError } from "axios";
 import type { ConvertedScript } from "../types/script";
 
@@ -44,18 +40,6 @@ export const saveBlockScript = async (
   try {
     const response = await api.put(`/block-script/${uuid}`, blockScript);
     return response.data;
-  } catch (e) {
-    if (e instanceof AxiosError) {
-      throw e.message;
-    }
-    throw e;
-  }
-};
-
-export const getMyPlaces = async (): Promise<PlaceSummary[]> => {
-  try {
-    const response = await api.get("/places/me");
-    return response.data.places;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw e.message;
