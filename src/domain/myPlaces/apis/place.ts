@@ -14,9 +14,16 @@ export const getMyPlaces = async (): Promise<PlaceSummary[]> => {
   }
 };
 
-export const updatePlace = async (placeUuid: string) => {
+export const updatePlace = async (
+  placeUuid: string,
+  name: string,
+  description: string,
+) => {
   try {
-    const response = await api.put(`/place/${placeUuid}`);
+    const response = await api.put(`/place/${placeUuid}`, {
+      name: name,
+      description: description,
+    });
     return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
@@ -29,8 +36,7 @@ export const updatePlace = async (placeUuid: string) => {
 export const deletePlace = async (placeUuid: string): Promise<boolean> => {
   try {
     const response = await api.delete(`/place/${placeUuid}`);
-    if (response.status === 200) return true;
-    return false;
+    return 200 <= response.status && response.status < 300;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw e.message;
