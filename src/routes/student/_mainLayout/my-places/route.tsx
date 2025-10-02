@@ -1,11 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import {
-  getMyPlaces,
-  updatePlace,
-  deletePlace,
-} from "src/domain/myPlaces/apis/place";
+import { getMyPlaces } from "src/domain/myPlaces/apis/place";
 import type { PlaceSummary } from "src/domain/myPlaces/workspace/types/workspace";
+import { PlaceCard } from "src/domain/myPlaces/components/PlaceCard";
 
 export const Route = createFileRoute("/student/_mainLayout/my-places")({
   component: RouteComponent,
@@ -29,33 +26,7 @@ function RouteComponent() {
     }
   };
 
-  const onUpdate = async (
-    uuid: string,
-    currentName: string,
-    currentDescription: string,
-  ) => {
-    const name = prompt("이름을 입력하세요", currentName)?.trim();
-    if (name == null) return;
-    const description = prompt("설명을 입력하세요", currentDescription)?.trim();
-    if (description == null) return;
-    try {
-      await updatePlace(uuid, name, description);
-      await refresh();
-    } catch (e: any) {
-      alert("업데이트 실패: " + (e?.message ?? e));
-    }
-  };
-
-  const onDelete = async (uuid: string) => {
-    if (!confirm("정말 삭제하시겠어요?")) return;
-    try {
-      const ok = await deletePlace(uuid);
-      if (!ok) throw new Error("삭제에 실패했습니다.");
-      await refresh();
-    } catch (e: any) {
-      alert("삭제 실패: " + (e?.message ?? e));
-    }
-  };
+  // 업데이트/삭제는 카드 내부에서 처리
 
   useEffect(() => {
     refresh();
@@ -70,40 +41,13 @@ function RouteComponent() {
         )}
         {!isLoading && !error && myPlaces.length > 0 && (
           <div>
-            {myPlaces.map((placeSummary) => {
-              return (
-                <div
-                  key={placeSummary.uuid}
-                  className="w-150 p-4 border border-gray-200 rounded-md mb-3 bg-white"
-                >
-                  {placeSummary.uuid} <br />
-                  name: {placeSummary.name} <br />
-                  description: {placeSummary.description} <br />
-                  owner: {placeSummary.ownerName} <br />
-                  lastModified: {placeSummary.lastModifiedAt} <br />
-                  <div className="mt-2 flex gap-2">
-                    <button
-                      className="px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800"
-                      onClick={() =>
-                        onUpdate(
-                          placeSummary.uuid,
-                          placeSummary.name,
-                          placeSummary.description,
-                        )
-                      }
-                    >
-                      업데이트
-                    </button>
-                    <button
-                      className="px-3 py-1 rounded bg-red-600 text-white hover:bg-red-700 active:bg-red-800"
-                      onClick={() => onDelete(placeSummary.uuid)}
-                    >
-                      삭제
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+            {myPlaces.map((placeSummary) => (
+              <PlaceCard
+                key={placeSummary.uuid}
+                place={placeSummary}
+                onChanged={refresh}
+              />
+            ))}
           </div>
         )}
       </div>
