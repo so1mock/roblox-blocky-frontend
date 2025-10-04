@@ -43,6 +43,7 @@ function RouteComponent() {
         navigate({ to: "/student/my-places" });
       } catch (error: any) {
         alert("api 요청 실패" + error.message);
+        navigate({ to: "/" });
       }
     };
     fetchPluginAuth();
