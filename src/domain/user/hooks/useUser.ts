@@ -43,7 +43,7 @@ export const useUser = () => {
   });
 
   return {
-    handleLogin: handleLogin.mutate,
+    handleLogin: handleLogin.mutateAsync,
     handleLogout: handleLogout.mutate,
   };
 };

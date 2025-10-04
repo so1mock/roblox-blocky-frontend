@@ -25,17 +25,22 @@ export const Route = createFileRoute("/oauth/callback")({
 });
 
 export function RouteComponent() {
-  const { code, error } = useSearch({ from: "/oauth/callback" });
+  const { code, error } = useSearch({
+    from: "/oauth/callback",
+  }) as SearchParams;
   const navigate = useNavigate();
   const { handleLogin } = useUser();
 
   // RouteComponent 내 useEffect 예시
   useEffect(() => {
-    if (error) {
-      alert("로블록스 로그인에서 에러 발생: " + error.message);
-    } else if (code) {
-      handleLogin(code);
-    }
+    const fetchLogin = async () => {
+      if (error) {
+        alert("로블록스 로그인에서 에러 발생: " + error.message);
+      } else if (code) {
+        await handleLogin(code);
+      }
+    };
+    fetchLogin();
     navigate({ to: "/" });
   }, [code, error]);
   return <div> Redirecting...</div>;
