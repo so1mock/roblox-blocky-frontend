@@ -2,6 +2,12 @@ import { api } from "@common/apis/axios";
 import { AxiosError } from "axios";
 import type { PlaceSummary } from "../workspace/types/workspace";
 
+type PlaceInfo = {
+  uuid: string;
+  name: string;
+  description: string;
+};
+
 export const getMyPlaces = async (): Promise<PlaceSummary[]> => {
   try {
     const response = await api.get("/places/me");
@@ -14,15 +20,11 @@ export const getMyPlaces = async (): Promise<PlaceSummary[]> => {
   }
 };
 
-export const updatePlace = async (
-  placeUuid: string,
-  name: string,
-  description: string,
-) => {
+export const updatePlace = async (placeInfo: PlaceInfo) => {
   try {
-    const response = await api.put(`/place/${placeUuid}`, {
-      name: name,
-      description: description,
+    const response = await api.put(`/place/${placeInfo.uuid}`, {
+      name: placeInfo.name,
+      description: placeInfo.description,
     });
     return response.data;
   } catch (e) {
