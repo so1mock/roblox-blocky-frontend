@@ -8,9 +8,9 @@ export const Route = createFileRoute("/teacher/_mainLayout")({
 
 function RouteComponent() {
   return (
-    <div className="relative min-h-screen flex flex-col justify-between bg-[url(/mainBackground.png)] bg-center bg-cover">
+    <div className="relative min-h-screen flex flex-col justify-between bg-[#E8F5FF] bg-center bg-cover">
       <TeacherHeader />
-      <main>
+      <main className="mb-[120px]">
         <Outlet />
       </main>
       <div className="absolute bottom-0 left-0 w-full">

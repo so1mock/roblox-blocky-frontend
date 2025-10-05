@@ -27,7 +27,7 @@ function MyPlacePage() {
   }, []);
 
   return (
-    <div className="flex justify-center w-[1200px] items-center">
+    <div className="w-[1400px] mx-auto mt-12">
       <div>
         <h1 className="mb-12 text-left">
           <span className="text-3xl font-bold">마이 플레이스</span>
@@ -39,7 +39,98 @@ function MyPlacePage() {
           <div>플레이스가 없습니다.</div>
         )}
         {!isLoading && !error && myPlaces.length > 0 && (
-          <div className="flex flex-col items-center">
+          <div className="grid grid-cols-4 gap-12">
+            {myPlaces.map((placeSummary) => (
+              <PlaceCard
+                key={placeSummary.uuid}
+                place={placeSummary}
+                onChanged={refresh}
+              />
+            ))}
+            {myPlaces.map((placeSummary) => (
+              <PlaceCard
+                key={placeSummary.uuid}
+                place={placeSummary}
+                onChanged={refresh}
+              />
+            ))}
+            {myPlaces.map((placeSummary) => (
+              <PlaceCard
+                key={placeSummary.uuid}
+                place={placeSummary}
+                onChanged={refresh}
+              />
+            ))}
+            {myPlaces.map((placeSummary) => (
+              <PlaceCard
+                key={placeSummary.uuid}
+                place={placeSummary}
+                onChanged={refresh}
+              />
+            ))}
+            {myPlaces.map((placeSummary) => (
+              <PlaceCard
+                key={placeSummary.uuid}
+                place={placeSummary}
+                onChanged={refresh}
+              />
+            ))}
+            {myPlaces.map((placeSummary) => (
+              <PlaceCard
+                key={placeSummary.uuid}
+                place={placeSummary}
+                onChanged={refresh}
+              />
+            ))}
+            {myPlaces.map((placeSummary) => (
+              <PlaceCard
+                key={placeSummary.uuid}
+                place={placeSummary}
+                onChanged={refresh}
+              />
+            ))}
+            {myPlaces.map((placeSummary) => (
+              <PlaceCard
+                key={placeSummary.uuid}
+                place={placeSummary}
+                onChanged={refresh}
+              />
+            ))}
+            {myPlaces.map((placeSummary) => (
+              <PlaceCard
+                key={placeSummary.uuid}
+                place={placeSummary}
+                onChanged={refresh}
+              />
+            ))}
+            {myPlaces.map((placeSummary) => (
+              <PlaceCard
+                key={placeSummary.uuid}
+                place={placeSummary}
+                onChanged={refresh}
+              />
+            ))}
+            {myPlaces.map((placeSummary) => (
+              <PlaceCard
+                key={placeSummary.uuid}
+                place={placeSummary}
+                onChanged={refresh}
+              />
+            ))}
+            {myPlaces.map((placeSummary) => (
+              <PlaceCard
+                key={placeSummary.uuid}
+                place={placeSummary}
+                onChanged={refresh}
+              />
+            ))}
+            {myPlaces.map((placeSummary) => (
+              <PlaceCard
+                key={placeSummary.uuid}
+                place={placeSummary}
+                onChanged={refresh}
+              />
+            ))}
             {myPlaces.map((placeSummary) => (
               <PlaceCard
                 key={placeSummary.uuid}
