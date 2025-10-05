@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { PlaceSummary } from "../workspace/types/workspace";
+import type { PlaceSummary } from "src/domain/place/types/place";
 import { useNavigate } from "@tanstack/react-router";
 import { updatePlace, deletePlace } from "../apis/place";
 
@@ -23,7 +23,7 @@ export function PlaceCard({ place, onChanged }: PlaceCardProps) {
     const description = prompt("설명을 입력하세요", place.description)?.trim();
     if (description == null) return;
     try {
-      await updatePlace(place.uuid, name, description);
+      await updatePlace({ uuid: place.uuid, name, description });
       if (onChanged) await onChanged();
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : String(e);

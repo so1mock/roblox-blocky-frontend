@@ -2,7 +2,7 @@ import { variableContents } from "./common/categories";
 import type {
   BlockListByCategory,
   Toolbox,
-} from "src/domain/myPlaces/types/block";
+} from "src/domain/place/types/block";
 import { getBlocksByCategory } from "./categories";
 
 /**
