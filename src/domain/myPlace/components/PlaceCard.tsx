@@ -2,6 +2,8 @@ import { useState } from "react";
 import type { PlaceSummary } from "src/domain/place/types/place";
 import { useNavigate } from "@tanstack/react-router";
 import { updatePlace, deletePlace } from "../apis/place";
+import { PlaceEditingOption } from "./PlaceEditingOption";
+import { formatIsoStringToDate } from "../../common/utils/formatIsoStringToDate";
 
 interface PlaceCardProps {
   place: PlaceSummary;
@@ -9,21 +11,28 @@ interface PlaceCardProps {
 }
 
 export function PlaceCard({ place, onChanged }: PlaceCardProps) {
-  const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [isOptionOpen, setIsOptionOpen] = useState<boolean>(false);
+  const [isEditingName, setIsEditingName] = useState<boolean>(false);
+  const [editedPlaceName, setEditedPlaceName] = useState(place.name);
 
   const toggleFavorite = () => setIsFavorite((prev) => !prev);
   const enterPlace = () => {
     navigate({ to: "/student/place/$id", params: { id: place.uuid } });
   };
 
-  const onUpdate = async () => {
-    const name = prompt("이름을 입력하세요", place.name)?.trim();
-    if (name == null) return;
-    const description = prompt("설명을 입력하세요", place.description)?.trim();
-    if (description == null) return;
+  const handleUpdatePlaceNameButton = async () => {
+    setIsEditingName((prev) => !prev);
+  };
+
+  const handleUpdatePlaceName = async () => {
     try {
-      await updatePlace({ uuid: place.uuid, name, description });
+      await updatePlace({
+        uuid: place.uuid,
+        name: editedPlaceName,
+        description: "",
+      });
       if (onChanged) await onChanged();
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : String(e);
@@ -31,7 +40,7 @@ export function PlaceCard({ place, onChanged }: PlaceCardProps) {
     }
   };
 
-  const onDelete = async () => {
+  const handlePlaceDelete = async () => {
     if (!confirm("정말 삭제하시겠어요?")) return;
     try {
       const ok = await deletePlace(place.uuid);
@@ -44,45 +53,95 @@ export function PlaceCard({ place, onChanged }: PlaceCardProps) {
   };
 
   return (
-    <div className="w-150 p-4 border border-gray-200 rounded-md mb-3 bg-white">
-      {place.uuid} <br />
-      name: {place.name} <br />
-      description: {place.description} <br />
-      owner: {place.ownerName} <br />
-      lastModified: {place.lastModifiedAt} <br />
-      <div className="mt-2 flex gap-2 items-center">
+    <div className="w-[300px] border-[2px] border-solid border-[#DDDDDD] rounded-3xl shadow-lg">
+      <div className="relative">
+        <img
+          src="/defaultPlaceThumbnail.png"
+          className="w-full border-b- [2px] border-solid border-[#DDDDDD]"
+        />
         <button
+          className="absolute top-2 left-2 cursor-pointer"
           type="button"
           aria-label="즐겨찾기"
-          className="px-2 py-1 rounded border border-gray-300 hover:bg-gray-50"
           onClick={toggleFavorite}
         >
-          <span className={isFavorite ? "text-yellow-400" : "text-gray-400"}>
-            ★
-          </span>
-          <span className="ml-1">즐겨찾기</span>
+          {isFavorite ? (
+            <img src="/favoriteActive.png" />
+          ) : (
+            <img src="/favoriteInactive.png" />
+          )}
         </button>
         <button
+          className="absolute top-2 right-2 cursor-pointer"
           type="button"
-          className="px-3 py-1 rounded bg-green-600 text-white hover:bg-green-700 active:bg-green-800"
-          onClick={enterPlace}
+          aria-label="옵션 더보기"
+          onClick={() => {
+            setIsOptionOpen((prev) => !prev);
+          }}
         >
-          입장
+          <img src="/moreOptionsButton.png" />
         </button>
-        <button
-          type="button"
-          className="px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800"
-          onClick={onUpdate}
-        >
-          업데이트
-        </button>
-        <button
-          type="button"
-          className="px-3 py-1 rounded bg-red-600 text-white hover:bg-red-700 active:bg-red-800"
-          onClick={onDelete}
-        >
-          삭제
-        </button>
+        {isOptionOpen && !isEditingName && (
+          <PlaceEditingOption
+            handlePlaceDelete={handlePlaceDelete}
+            handleUpdatePlaceNameButton={handleUpdatePlaceNameButton}
+          />
+        )}
+
+        {isEditingName && (
+          <div className="absolute top-8 right-4">
+            <div className="bg-white rounded-t-xl py-[2px] border-[2px] border-solid border-[#DDDDDD]">
+              <button
+                type="button"
+                onClick={handleUpdatePlaceName}
+                className="cursor-pointer w-full text-left"
+              >
+                <span className="text-xs px-2 text-[#F05460]">저장</span>
+              </button>
+            </div>
+            <div className="bg-white py-[2px] rounded-b-xl border-[2px] border-t-[0px] border-solid border-[#DDDDDD]">
+              <button
+                type="button"
+                className="cursor-pointer w-full text-left"
+                onClick={() => {
+                  setIsEditingName(false);
+                  setIsOptionOpen(false);
+                }}
+              >
+                <span className="text-xs px-2 text-[#666666]">취소</span>
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="bg-white rounded-b-3xl py-4 px-3">
+        <div className="flex justify-between items-center w-full">
+          {isEditingName ? (
+            <input
+              type="text"
+              className="font-bold text-md truncate block w-[calc(100%-90px)] pl-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-400"
+              placeholder="플레이스 이름 입력"
+              value={editedPlaceName}
+              onChange={(e) => setEditedPlaceName(e.target.value)}
+            />
+          ) : (
+            <span className="font-bold text-md truncate block w-[calc(100%-90px)]">
+              {place.name}
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={enterPlace}
+            className="bg-[#61C1FD] rounded-2xl px-4 py-1 cursor-pointer w-[70px]"
+          >
+            <span className="text-white">입장</span>
+          </button>
+        </div>
+
+        <span className="text-sm text-gray-400">
+          {formatIsoStringToDate(place.lastModifiedAt)}
+        </span>
       </div>
     </div>
   );

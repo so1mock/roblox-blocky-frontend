@@ -27,23 +27,29 @@ function MyPlacePage() {
   }, []);
 
   return (
-    <div>
-      {isLoading && <div>로딩 중...</div>}
-      {!isLoading && error && <div>오류: {error}</div>}
-      {!isLoading && !error && myPlaces.length === 0 && (
-        <div>플레이스가 없습니다.</div>
-      )}
-      {!isLoading && !error && myPlaces.length > 0 && (
-        <div>
-          {myPlaces.map((placeSummary) => (
-            <PlaceCard
-              key={placeSummary.uuid}
-              place={placeSummary}
-              onChanged={refresh}
-            />
-          ))}
-        </div>
-      )}
+    <div className="flex justify-center w-[1200px] items-center">
+      <div>
+        <h1 className="mb-12 text-left">
+          <span className="text-3xl font-bold">마이 플레이스</span>
+        </h1>
+
+        {isLoading && <div>로딩 중...</div>}
+        {!isLoading && error && <div>오류: {error}</div>}
+        {!isLoading && !error && myPlaces.length === 0 && (
+          <div>플레이스가 없습니다.</div>
+        )}
+        {!isLoading && !error && myPlaces.length > 0 && (
+          <div className="flex flex-col items-center">
+            {myPlaces.map((placeSummary) => (
+              <PlaceCard
+                key={placeSummary.uuid}
+                place={placeSummary}
+                onChanged={refresh}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
