@@ -9,5 +9,5 @@ export const Route = createFileRoute("/student/place/")({
 });
 
 function RouteComponent() {
-  return <div>My Place List 페이지</div>;
+  return <div>place id가 있어야 합니다.</div>;
 }
