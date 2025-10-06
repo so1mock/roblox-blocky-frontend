@@ -3,10 +3,20 @@ import { PlaceCard } from "./PlaceCard";
 import { getMyPlaces } from "../apis/place";
 import type { PlaceSummary } from "src/domain/place/types/place";
 
+const sortOptions = [
+  { name: "최신 순", key: "new" },
+  { name: "과거 순", key: "old" },
+];
 function MyPlacePage() {
   const [myPlaces, setMyPlaces] = useState<PlaceSummary[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isSearchOptionsOpen, setIsSearchOptionsOpen] =
+    useState<boolean>(false);
+  const [selectedSort, setSelectedSort] = useState({
+    name: "최신 순",
+    key: "new",
+  });
 
   const refresh = async () => {
     setIsLoading(true);
@@ -29,9 +39,51 @@ function MyPlacePage() {
   return (
     <div className="w-[1400px] mx-auto mt-12">
       <div>
-        <h1 className="mb-12 text-left">
-          <span className="text-3xl font-bold">마이 플레이스</span>
-        </h1>
+        <div className="flex justify-between mb-12">
+          <h1 className="text-left">
+            <span className="text-3xl font-bold">마이 플레이스</span>
+          </h1>
+          <div className="relative w-[180px]">
+            {/* 선택된 옵션 버튼 */}
+            <button
+              className="w-full px-4 py-3 bg-white rounded-2xl cursor-pointer flex justify-between items-center"
+              onClick={() => setIsSearchOptionsOpen((prev) => !prev)}
+            >
+              <span>{selectedSort.name}</span>
+              <div>
+                <img src="/dropdown.png" className="w-4" />
+              </div>
+            </button>
+
+            {/* 옵션 메뉴 */}
+            {isSearchOptionsOpen && (
+              <div className="absolute top-full left-0 mt-2 w-full bg-white rounded-2xl border border-gray-300 shadow-lg z-10">
+                {sortOptions
+                  .filter((option) => option.key !== selectedSort.key)
+                  .map((option, idx, arr) => (
+                    <button
+                      key={option.key}
+                      className={`
+              w-full px-4 py-3 text-left cursor-pointer flex justify-between items-center
+              hover:bg-gray-100
+              ${idx === 0 ? "rounded-t-2xl" : ""}
+              ${idx === arr.length - 1 ? "rounded-b-2xl" : ""}
+            `}
+                      onClick={() => {
+                        setSelectedSort(option);
+                        setIsSearchOptionsOpen(false);
+                      }}
+                    >
+                      <span>{option.name}</span>
+                      <div>
+                        <img src="/dropdown.png" className="w-4" />
+                      </div>
+                    </button>
+                  ))}
+              </div>
+            )}
+          </div>
+        </div>
 
         {isLoading && <div>로딩 중...</div>}
         {!isLoading && error && <div>오류: {error}</div>}
