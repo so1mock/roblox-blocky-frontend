@@ -4,6 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { updatePlace, deletePlace } from "../apis/place";
 import { PlaceEditingOption } from "./PlaceEditingOption";
 import { formatIsoStringToDate } from "../../common/utils/formatIsoStringToDate";
+import Button from "@common/components/Button";
 
 interface PlaceCardProps {
   place: PlaceSummary;
@@ -130,13 +131,7 @@ export function PlaceCard({ place, onChanged }: PlaceCardProps) {
               {place.name}
             </span>
           )}
-          <button
-            type="button"
-            onClick={enterPlace}
-            className="bg-rbPrimaryColor rounded-2xl px-4 py-1 cursor-pointer w-[70px]"
-          >
-            <span className="text-white">입장</span>
-          </button>
+          <Button handleButtonClick={enterPlace} text="입장" />
         </div>
 
         <span className="text-sm text-gray-400">
