@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { PlaceCard } from "./PlaceCard";
 import { getMyPlaces } from "../apis/place";
 import type { PlaceSummary } from "src/domain/place/types/place";
+import PlaceConnectGuideModal from "./PlaceConnectGuideModal";
 
 const sortOptions = [
   { name: "최신 순", key: "new" },
@@ -17,6 +18,7 @@ function MyPlacePage() {
     name: "최신 순",
     key: "new",
   });
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
 
   const refresh = async () => {
     setIsLoading(true);
@@ -38,6 +40,10 @@ function MyPlacePage() {
 
   return (
     <div className="w-[1400px] mx-auto mt-12">
+      <PlaceConnectGuideModal
+        isOpen={isGuideOpen}
+        onClose={() => setIsGuideOpen(false)}
+      />
       <div>
         <div className="flex justify-between mb-12">
           <h1 className="text-left">
@@ -45,7 +51,12 @@ function MyPlacePage() {
           </h1>
           <div className="flex gap-4">
             {/* ℹ️ 안내 버튼 */}
-            <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-[#61C1FD] hover:bg-[#E9F6FF] font-medium transition-all shadow-sm cursor-pointer">
+            <button
+              className="flex items-center gap-2 px-4 py-2 rounded-full border border-[#61C1FD] hover:bg-[#E9F6FF] font-medium transition-all shadow-sm cursor-pointer"
+              onClick={() => {
+                setIsGuideOpen(true);
+              }}
+            >
               <img
                 src="/infoIcon.png"
                 alt="새 플레이스 연결"
