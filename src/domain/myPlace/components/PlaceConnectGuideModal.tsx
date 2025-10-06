@@ -52,7 +52,7 @@ function PlaceConnectGuideModal({
       <div className="flex justify-end">
         <button
           onClick={onClose}
-          className="px-4 py-2 rounded-xl bg-[#61C1FD] hover:bg-[#4DADE3] text-white font-medium transition cursor-pointer"
+          className="px-4 py-2 rounded-xl bg-rbPrimaryColor hover:bg-rbDeepPrimaryColor text-white font-medium transition cursor-pointer"
         >
           닫기
         </button>

@@ -133,7 +133,7 @@ export function PlaceCard({ place, onChanged }: PlaceCardProps) {
           <button
             type="button"
             onClick={enterPlace}
-            className="bg-[#61C1FD] rounded-2xl px-4 py-1 cursor-pointer w-[70px]"
+            className="bg-rbPrimaryColor rounded-2xl px-4 py-1 cursor-pointer w-[70px]"
           >
             <span className="text-white">입장</span>
           </button>

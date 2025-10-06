@@ -52,7 +52,7 @@ function MyPlacePage() {
           <div className="flex gap-4">
             {/* ℹ️ 안내 버튼 */}
             <button
-              className="flex items-center gap-2 px-4 py-2 rounded-full border border-[#61C1FD] hover:bg-[#E9F6FF] font-medium transition-all shadow-sm cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 rounded-full border border-rbPrimaryColor hover:bg-[#E9F6FF] font-medium transition-all shadow-sm cursor-pointer"
               onClick={() => {
                 setIsGuideOpen(true);
               }}
@@ -62,7 +62,7 @@ function MyPlacePage() {
                 alt="새 플레이스 연결"
                 className="w-5 h-5"
               />
-              <span className="font-bold text-[#61C1FD] ">
+              <span className="font-bold text-rbPrimaryColor">
                 새 플레이스 연결
               </span>
             </button>
