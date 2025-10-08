@@ -4,7 +4,7 @@ import { subscribeWithSelector } from "zustand/middleware";
 
 interface AuthState {
   isLogin: boolean | null;
-  role: UserRole;
+  role: UserRole | null;
   userInfo: DetailedUser | null; // UserType은 유저 정보 타입으로 대체하세요
   setAuth: (userInfo: DetailedUser) => void;
   clearAuth: () => void;

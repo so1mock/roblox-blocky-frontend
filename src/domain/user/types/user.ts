@@ -3,7 +3,7 @@ export type Auth = {
   accessToken: string;
 };
 
-export type UserRole = "LEARNER" | "EDUCATOR" | null;
+export type UserRole = "LEARNER" | "EDUCATOR";
 
 export interface BaseUser {
   nickname: string;
