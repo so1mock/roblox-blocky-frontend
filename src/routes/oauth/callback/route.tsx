@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useUser } from "@user/hooks/useUser";
+import { useAuthStore } from "@user/stores/authStore";
 
 type SearchParams = {
   code?: string;
@@ -36,12 +37,18 @@ export function RouteComponent() {
     const fetchLogin = async () => {
       if (error) {
         alert("로블록스 로그인에서 에러 발생: " + error.message);
+        navigate({ to: "/" });
       } else if (code) {
         await handleLogin(code);
+        const { role } = useAuthStore.getState();
+        if (role === "LEARNER") {
+          navigate({ to: "/student" });
+        } else if (role === "EDUCATOR") {
+          navigate({ to: "/teacher" });
+        }
       }
     };
     fetchLogin();
-    navigate({ to: "/" });
   }, [code, error]);
   return <div> Redirecting...</div>;
 }
