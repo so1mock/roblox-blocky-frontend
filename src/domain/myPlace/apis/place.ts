@@ -1,6 +1,6 @@
 import { api } from "@common/apis/axios";
 import { AxiosError } from "axios";
-import type { PlaceSummary } from "../workspace/types/workspace";
+import type { PlaceSummary } from "src/domain/place/types/place";
 
 type PlaceInfo = {
   uuid: string;

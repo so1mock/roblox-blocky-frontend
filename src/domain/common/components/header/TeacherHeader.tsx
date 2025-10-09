@@ -1,7 +1,6 @@
 import { useAuthStore } from "@user/stores/authStore";
 import { Link } from "@tanstack/react-router";
 import { LinkNavButton } from "./LinkNavButton";
-import Button from "../Button";
 import { TeacherProfileButton } from "@user/components/TeacherProfileButton";
 
 export function TeacherHeader() {
@@ -24,12 +23,14 @@ export function TeacherHeader() {
         <TeacherProfileButton nickname={userInfo?.nickname} />
       ) : (
         <div className="absolute right-5">
-          <Button
-            text="로그인"
-            handleButtonClick={() => {
+          <button
+            className="transition-all duration-200 hover:text-rbHoverText hover:bg-rbPointColor px-4 py-2 rounded-xl cursor-pointer mr-2"
+            onClick={() => {
               console.log("로그인");
             }}
-          />
+          >
+            로그인
+          </button>
         </div>
       )}
     </header>
