@@ -55,10 +55,10 @@ export function PlaceCard({ place, onChanged }: PlaceCardProps) {
 
   return (
     <div className="w-[300px] border-[2px] border-solid border-[#DDDDDD] rounded-3xl shadow-lg">
-      <div className="relative">
+      <div className="relative h-[150px]">
         <img
           src="/defaultPlaceThumbnail.png"
-          className="w-full border-b-[2px] border-solid border-[#DDDDDD]"
+          className="w-full h-full object-cover border-b-[2px] border-solid border-[#DDDDDD]"
         />
         <button
           className="absolute top-2 left-2 cursor-pointer"

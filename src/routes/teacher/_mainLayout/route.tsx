@@ -10,7 +10,7 @@ function RouteComponent() {
   return (
     <div className="relative min-h-screen flex flex-col bg-[#E8F5FF] bg-center bg-cover min-w-[1400px]">
       <TeacherHeader />
-      <main className="mb-[120px]">
+      <main className="mb-[120px] px-36 mt-12">
         <Outlet />
       </main>
       <div className="absolute bottom-0 left-0 w-full">

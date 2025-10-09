@@ -39,7 +39,7 @@ function MyPlacePage() {
   }, []);
 
   return (
-    <div className="px-36 mt-12">
+    <div>
       <PlaceConnectGuideModal
         isOpen={isGuideOpen}
         onClose={() => setIsGuideOpen(false)}
@@ -113,7 +113,6 @@ function MyPlacePage() {
             </div>
           </div>
         </div>
-
         {isLoading && <div>로딩 중...</div>}
         {!isLoading && error && <div>오류: {error}</div>}
         {!isLoading && !error && myPlaces.length === 0 && (
