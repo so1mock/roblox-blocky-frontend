@@ -134,6 +134,11 @@ export function PlaceCard({ place, onChanged }: PlaceCardProps) {
               placeholder="플레이스 이름 입력"
               value={editedPlaceName}
               onChange={(e) => setEditedPlaceName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleUpdatePlaceName(); // 저장
+                }
+              }}
               ref={inputNameRef}
             />
           ) : (
