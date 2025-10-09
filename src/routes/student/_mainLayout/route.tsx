@@ -8,7 +8,7 @@ export const Route = createFileRoute("/student/_mainLayout")({
 
 function RouteComponent() {
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#E8F5FF] bg-center bg-cover">
+    <div className="relative min-h-screen flex flex-col bg-[#E8F5FF] bg-center bg-cover min-w-[1400px]">
       <StudentHeader />
       <main className="mb-[120px]">
         <Outlet />

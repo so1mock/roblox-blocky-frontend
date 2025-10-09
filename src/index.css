@@ -36,10 +36,10 @@
 /* 마퀴 (오른쪽 → 왼쪽 무한 반복) */
 @keyframes marquee {
   0% {
-    transform: translateX(100%);
+    transform: translateX(180%);
   }
   100% {
-    transform: translateX(-100%);
+    transform: translateX(-180%);
   }
 }
 
