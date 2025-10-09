@@ -103,9 +103,6 @@ function MyPlacePage() {
                         }}
                       >
                         <span>{option.name}</span>
-                        <div>
-                          <img src="/dropdown.png" className="w-4" />
-                        </div>
                       </button>
                     ))}
                 </div>
@@ -113,6 +110,19 @@ function MyPlacePage() {
             </div>
           </div>
         </div>
+
+        <PlaceCard
+          key="place-001"
+          place={{
+            uuid: "place-001",
+            name: "로블록스 코딩 교실",
+            description:
+              "학생들이 직접 블록 코딩으로 로블록스 게임을 만들어보는 공간이에요!",
+            ownerName: "다라치 선생님",
+            lastModifiedAt: "2025-10-08T14:32:00Z",
+          }}
+          onChanged={refresh}
+        />
 
         {isLoading && <div>로딩 중...</div>}
         {!isLoading && error && <div>오류: {error}</div>}
