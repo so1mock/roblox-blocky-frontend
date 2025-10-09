@@ -107,6 +107,7 @@ export function PlaceCard({ place, onChanged }: PlaceCardProps) {
                 onClick={() => {
                   setIsEditingName(false);
                   setIsOptionOpen(false);
+                  setEditedPlaceName(place.name);
                 }}
               >
                 <span className="text-xs px-2 text-[#666666]">취소</span>
