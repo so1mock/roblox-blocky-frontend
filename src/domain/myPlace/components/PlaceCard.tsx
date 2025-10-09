@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { PlaceSummary } from "src/domain/place/types/place";
 import { useNavigate } from "@tanstack/react-router";
 import { updatePlace, deletePlace } from "../apis/place";
@@ -17,6 +17,7 @@ export function PlaceCard({ place, onChanged }: PlaceCardProps) {
   const [isOptionOpen, setIsOptionOpen] = useState<boolean>(false);
   const [isEditingName, setIsEditingName] = useState<boolean>(false);
   const [editedPlaceName, setEditedPlaceName] = useState(place.name);
+  const inputNameRef = useRef<HTMLInputElement>(null); // ✅ input 참조용 ref 추가
 
   const toggleFavorite = () => setIsFavorite((prev) => !prev);
   const enterPlace = () => {
@@ -26,6 +27,13 @@ export function PlaceCard({ place, onChanged }: PlaceCardProps) {
   const handleUpdatePlaceNameButton = async () => {
     setIsEditingName((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (isEditingName && inputNameRef.current) {
+      inputNameRef.current.focus();
+      inputNameRef.current.select();
+    }
+  }, [isEditingName]);
 
   const handleUpdatePlaceName = async () => {
     try {
@@ -107,6 +115,7 @@ export function PlaceCard({ place, onChanged }: PlaceCardProps) {
                 onClick={() => {
                   setIsEditingName(false);
                   setIsOptionOpen(false);
+                  setEditedPlaceName(place.name);
                 }}
               >
                 <span className="text-xs px-2 text-[#666666]">취소</span>
@@ -125,6 +134,12 @@ export function PlaceCard({ place, onChanged }: PlaceCardProps) {
               placeholder="플레이스 이름 입력"
               value={editedPlaceName}
               onChange={(e) => setEditedPlaceName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleUpdatePlaceName(); // 저장
+                }
+              }}
+              ref={inputNameRef}
             />
           ) : (
             <span className="font-bold text-md truncate block w-[calc(100%-90px)]">

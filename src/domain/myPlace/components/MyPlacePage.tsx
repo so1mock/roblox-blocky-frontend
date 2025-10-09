@@ -103,9 +103,6 @@ function MyPlacePage() {
                         }}
                       >
                         <span>{option.name}</span>
-                        <div>
-                          <img src="/dropdown.png" className="w-4" />
-                        </div>
                       </button>
                     ))}
                 </div>
