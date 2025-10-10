@@ -12,7 +12,7 @@ function Board({
   setPage: React.Dispatch<SetStateAction<number>>;
 }) {
   return (
-    <div className="bg-white rounded-2xl mt-8 px-12 py-12">
+    <div>
       <span className="font-bold text-2xl">게시판</span>
       <hr className="h-[2px] bg-black mt-3" />
       <BoardListHeader />

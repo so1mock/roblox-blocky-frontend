@@ -1,6 +1,6 @@
 function BoardListItem() {
   return (
-    <div className="whitespace-nowrap py-3 border-solid border-[#DEDEDE] border-b-2 border-t-0 bg-white">
+    <div className="whitespace-nowrap py-3 border-solid border-[#DEDEDE] border-b-2 bg-white">
       <div className="inline-block align-middle w-[900px] text-left pl-4 overflow-hidden truncate">
         <span
           className="text-md text-rbPointColor font-bold whitespace-nowrap"

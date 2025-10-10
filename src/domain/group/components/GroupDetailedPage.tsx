@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Board from "../board/components/Board";
+import GroupWallItem from "../wall/components/GroupWallItem";
 
 function GroupDetailedPage({ id }: { id: string }) {
   console.log(id);
@@ -28,13 +29,20 @@ function GroupDetailedPage({ id }: { id: string }) {
         </div>
         <span>이 반은 기초 로블록스 학습을 위해 생성된 반입니다.</span>
       </div>
-      <Board
-        setPage={setPage}
-        pageInfo={{
-          currentPageNumber: 3,
-          possibleNextPageNumbers: [4, 5],
-        }}
-      />
+      <div className="bg-white rounded-2xl px-12 py-12 mt-8">
+        <Board
+          setPage={setPage}
+          pageInfo={{
+            currentPageNumber: 3,
+            possibleNextPageNumbers: [4, 5],
+          }}
+        />
+        <div>
+          <span className="font-bold text-2xl">담벼락</span>
+          <GroupWallItem index={0} />
+          <GroupWallItem index={1} />
+        </div>
+      </div>
     </div>
   );
 }
