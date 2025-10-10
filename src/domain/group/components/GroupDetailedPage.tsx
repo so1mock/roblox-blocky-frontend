@@ -4,7 +4,6 @@ import GroupWallItem from "../wall/components/GroupWallItem";
 import GroupNav from "./GroupNav";
 
 function GroupDetailedPage({ id }: { id: string }) {
-  console.log(id);
   const [, setPage] = useState(1);
 
   return (
@@ -13,12 +12,6 @@ function GroupDetailedPage({ id }: { id: string }) {
 
       <div>
         <div className="flex flex-col gap-6">
-          <div>
-            <button className="cursor-pointer">
-              <img src="/arrowLeftAlt.png" alt="반 개요 페이지로 가가" />
-            </button>
-          </div>
-
           <div className="flex gap-12 items-center">
             <img
               src="/imgProfile.png"
