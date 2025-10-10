@@ -3,8 +3,12 @@ function BoardListItem() {
     <div className="whitespace-nowrap py-3 border-solid border-[#DEDEDE] border-b-2 bg-white">
       <div className="inline-block align-middle w-[900px] text-left pl-4 overflow-hidden truncate">
         <span
-          className="text-md text-rbPointColor font-bold whitespace-nowrap"
+          className="text-md text-rbPointColor font-bold whitespace-nowrap cursor-pointer"
           title="잼민이는 못 깨는 타워 따라 만들기"
+          onClick={() => {
+            // to do
+            // 게시판 상세 페이지로 이동
+          }}
         >
           잼민이는 못 깨는 타워 따라 만들기
         </span>
