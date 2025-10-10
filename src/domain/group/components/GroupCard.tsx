@@ -9,7 +9,7 @@ interface EntryCardProps {
 export function GroupCard({ group }: EntryCardProps) {
   const navigate = useNavigate();
 
-  const enterPlace = () => {
+  const enterGroup = () => {
     navigate({ to: "/teacher/group/$id", params: { id: group.id } });
   };
 
@@ -44,7 +44,7 @@ export function GroupCard({ group }: EntryCardProps) {
             {group.name}
           </span>
 
-          <Button handleButtonClick={enterPlace} text="입장" />
+          <Button handleButtonClick={enterGroup} text="입장" />
         </div>
       </div>
     </div>

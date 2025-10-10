@@ -70,7 +70,7 @@ function GroupEditPage({ id }: { id: string }) {
     <div className="w-[1600px] mx-auto flex justify-center gap-24">
       <GroupNav id={id} />
 
-      <div className="flex flex-col items-center gap-12">
+      <div className="w-[1200px] flex flex-col items-center gap-12">
         {/* 이미지 업로드 */}
         <div className="flex flex-col items-center gap-4">
           <img

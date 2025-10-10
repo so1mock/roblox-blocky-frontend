@@ -10,7 +10,7 @@ function GroupDetailedPage({ id }: { id: string }) {
     <div className="w-[1600px] mx-auto flex justify-center gap-24">
       <GroupNav id={id} />
 
-      <div>
+      <div className="w-[1200px]">
         <div className="flex flex-col gap-6">
           <div className="flex gap-12 items-center">
             <img
@@ -31,7 +31,7 @@ function GroupDetailedPage({ id }: { id: string }) {
           </div>
           <span>이 반은 기초 로블록스 학습을 위해 생성된 반입니다.</span>
         </div>
-        <div className="bg-white rounded-2xl px-12 py-12 mt-8">
+        <div className=" bg-white rounded-2xl px-12 py-12 mt-8">
           <Board
             setPage={setPage}
             pageInfo={{
