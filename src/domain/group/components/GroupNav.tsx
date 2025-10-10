@@ -24,12 +24,6 @@ function GroupNav({ id }: { id: string }) {
       key: "place",
     },
     {
-      name: "게시판 관리",
-      icon: "/expandCircleRight.png",
-      to: `/teacher/group/${id}/board`,
-      key: "board",
-    },
-    {
       name: "회원 관리",
       icon: "/expandCircleRight.png",
       to: `/teacher/group/${id}/user`,

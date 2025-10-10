@@ -1,0 +1,43 @@
+function UserListItem() {
+  function handleUserRemove() {
+    // todo: 사용자 탈퇴 로직 구현
+  }
+
+  return (
+    <div className="whitespace-nowrap py-3 border-solid border-[#DEDEDE] border-b-2 bg-white">
+      <div className="inline-block align-middle w-[300px] text-center pl-4 overflow-hidden truncate">
+        <span
+          className="text-md text-black font-bold whitespace-nowrap"
+          title="잼민이는 못 깨는 타워 따라 만들기"
+        >
+          김XX
+        </span>
+      </div>
+      <div className="inline-block align-middle w-[300px] text-center overflow-hidden truncate">
+        <span
+          className="text-md text-[#888888] whitespace-nowrap"
+          title={"2025-10-10T09:30:00Z"}
+        >
+          {new Date("2025-10-10T09:30:00Z")
+            .toLocaleDateString("ko-KR", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            })
+            .replace(/\s/g, "")}
+        </span>
+      </div>
+      <div className="inline-block align-middle w-[300px] overflow-hidden truncate text-center">
+        <button
+          type="button"
+          onClick={handleUserRemove}
+          className="bg-white rounded-2xl px-4 py-1 cursor-pointer border-solid border-1 border-rbPointColor "
+        >
+          <span className="text-rbPointColor ">탈퇴</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default UserListItem;
