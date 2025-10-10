@@ -34,6 +34,7 @@ function MyPlacePage() {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     refresh();
   }, []);
