@@ -2,13 +2,15 @@ import { useState } from "react";
 import Board from "../board/components/Board";
 import GroupWallItem from "../wall/components/GroupWallItem";
 import GroupNav from "./GroupNav";
+import { useAuthStore } from "@user/stores/authStore";
 
 function GroupDetailedPage({ id }: { id: string }) {
   const [, setPage] = useState(1);
+  const { userInfo } = useAuthStore();
 
   return (
     <div className="w-[1600px] mx-auto flex justify-center gap-24">
-      <GroupNav id={id} />
+      {userInfo.role === "EDUCATOR" && <GroupNav id={id} />}
 
       <div className="w-[1200px]">
         <div className="flex flex-col gap-6">

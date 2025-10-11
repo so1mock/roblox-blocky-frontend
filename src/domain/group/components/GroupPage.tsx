@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { GroupCard } from "./GroupCard";
 import Dropdown from "@common/components/Dropdown";
+import { useAuthStore } from "@user/stores/authStore";
 
 const sortOptions = [
   { name: "최신 순", key: "new" },
@@ -11,6 +12,9 @@ function GroupPage() {
     name: "최신 순",
     key: "new",
   });
+
+  const { userInfo } = useAuthStore();
+
   return (
     <div>
       <div className="flex justify-between mb-12">
@@ -26,7 +30,11 @@ function GroupPage() {
             }}
           >
             <img src="/infoIcon.png" alt="새 그룹 만들기" className="w-5 h-5" />
-            <span className="font-bold text-rbPrimaryColor">새 반 만들기</span>
+            {userInfo.role === "EDUCATOR" && (
+              <span className="font-bold text-rbPrimaryColor">
+                새 반 만들기
+              </span>
+            )}
           </button>
           <Dropdown
             options={sortOptions}

@@ -1,6 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
 import Button from "@common/components/Button";
 import type { GroupSummary } from "../types/group";
+import { useAuthStore } from "@user/stores/authStore";
 
 interface EntryCardProps {
   group: GroupSummary;
@@ -8,9 +9,16 @@ interface EntryCardProps {
 
 export function GroupCard({ group }: EntryCardProps) {
   const navigate = useNavigate();
+  const { userInfo } = useAuthStore();
 
   const enterGroup = () => {
-    navigate({ to: "/teacher/group/$id", params: { id: group.id } });
+    if (userInfo.role === "LEARNER") {
+      navigate({ to: "/student/group/$id", params: { id: group.id } });
+    } else if (userInfo.role === "EDUCATOR") {
+      navigate({ to: "/teacher/group/$id", params: { id: group.id } });
+    } else {
+      alert("역할 정보가 없습니다. 로그인을 해주십시요");
+    }
   };
 
   return (
