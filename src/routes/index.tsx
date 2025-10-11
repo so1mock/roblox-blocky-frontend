@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { SocialLoginButton } from "@user/components/SocialLoginButton";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -32,14 +33,15 @@ function Index() {
           쉽고 재미있게 학습 자료를 이용하고, 학습 진도를 확인하며, 다양한 학습
           도구를 경험할 수 있습니다.
         </p>
-        <button
+        <SocialLoginButton />
+        {/* <button
           className="px-6 py-3 bg-blue-500 rounded-lg font-semibold hover:bg-blue-600 transition cursor-pointer"
           onClick={() => {
             navigate({ to: "/student" });
           }}
         >
           시작하기
-        </button>
+        </button> */}
       </div>
     </div>
   );
