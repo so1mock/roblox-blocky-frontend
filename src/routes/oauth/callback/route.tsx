@@ -52,6 +52,6 @@ export function RouteComponent() {
       }
     };
     fetchLogin();
-  }, [code, error]);
+  }, [code, error, handleLogin, navigate]);
   return <div> Redirecting...</div>;
 }
