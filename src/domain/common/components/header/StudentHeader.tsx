@@ -13,7 +13,8 @@ export function StudentHeader() {
       </Link>
 
       <nav className="flex gap-12 justify-center">
-        <LinkNavButton to="/student/my-places" title="내 플레이스로" />
+        <LinkNavButton to="/student/my-places" title="마이 플레이스" />
+        <LinkNavButton to="/student/course" title="우리반" />
         <LinkNavButton to="/student/about" title="소개" />
       </nav>
 

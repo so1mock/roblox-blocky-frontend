@@ -1,4 +1,4 @@
-import type { DefinitionForToolbox } from "src/domain/myPlaces/types/block";
+import type { DefinitionForToolbox } from "src/domain/place/types/block";
 
 export const mathContents: DefinitionForToolbox[] = [
   {

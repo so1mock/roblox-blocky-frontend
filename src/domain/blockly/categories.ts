@@ -1,7 +1,7 @@
 import type {
   BlockListByCategory,
   DefinitionForToolbox,
-} from "src/domain/myPlaces/types/block";
+} from "src/domain/place/types/block";
 
 export const getBlocksByCategory = (
   blockListByCategory: BlockListByCategory,

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import BlockCodingPage from "src/domain/myPlaces/components/BlockCodingPage";
+import BlockCodingPage from "src/domain/place/components/BlockCodingPage";
 
 export const Route = createFileRoute("/student/place/$id")({
   component: RouteComponent,

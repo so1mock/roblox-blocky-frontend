@@ -7,8 +7,11 @@
   --color-rbBlueText: #68a0e9;
   --color-rbGrayText: #666;
   --color-rbDeepGrayText: #333;
-  --color-rbPointColor: #e63c7a;
   --color-rbBorder: #000;
+
+  --color-rbPointColor: #e63c7a;
+  --color-rbPrimaryColor: #61c1fd;
+  --color-rbDeepPrimaryColor: #4dade3;
 }
 
 /* 다크모드 색상 정의 */
@@ -33,10 +36,10 @@
 /* 마퀴 (오른쪽 → 왼쪽 무한 반복) */
 @keyframes marquee {
   0% {
-    transform: translateX(100%);
+    transform: translateX(180%);
   }
   100% {
-    transform: translateX(-100%);
+    transform: translateX(-180%);
   }
 }
 

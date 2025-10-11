@@ -1,12 +1,5 @@
+import type { PlaceSummary } from "../../types/place";
 import type { ObjectType } from "./object";
-
-export interface PlaceSummary {
-  uuid: string;
-  name: string;
-  description: string;
-  ownerName: string;
-  lastModifiedAt: string;
-}
 
 export type BlockScript = {
   blocks: {

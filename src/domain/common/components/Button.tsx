@@ -7,18 +7,11 @@ function Button({
 }) {
   return (
     <button
+      type="button"
       onClick={handleButtonClick}
-      className="
-        transition-all duration-200
-        hover:text-rbHoverText
-        hover:bg-rbPointColor
-        px-4 py-2
-        rounded-xl
-        cursor-pointer
-        mr-2
-      "
+      className="bg-rbPrimaryColor rounded-2xl px-4 py-1 cursor-pointer"
     >
-      {text}
+      <span className="text-white">{text}</span>
     </button>
   );
 }
