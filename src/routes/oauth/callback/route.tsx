@@ -40,7 +40,7 @@ export function RouteComponent() {
         navigate({ to: "/" });
       } else if (code) {
         await handleLogin(code);
-        const { role } = useAuthStore.getState();
+        const role = useAuthStore.getState().userInfo?.role;
         if (role === "LEARNER") {
           navigate({ to: "/student" });
         } else if (role === "EDUCATOR") {

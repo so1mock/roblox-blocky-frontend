@@ -7,7 +7,7 @@ import type { UserRole } from "@user/types/user";
 빈 배열이어도 로그인 상태는 확인
 */
 export const verifyAuth = (requiredRoles: UserRole[] = []) => {
-  const { isLogin, role } = useAuthStore.getState();
+  const { isLogin, userInfo } = useAuthStore.getState();
   if (!isLogin) {
     alert("로그인이 필요합니다");
     throw redirect({ to: "/", search: { redirect: window.location.pathname } });
@@ -15,7 +15,7 @@ export const verifyAuth = (requiredRoles: UserRole[] = []) => {
 
   if (requiredRoles.length === 0) return;
 
-  if (role && requiredRoles.includes(role)) return;
+  if (userInfo && requiredRoles.includes(userInfo.role)) return;
 
   alert("접근 권한이 없습니다.");
   throw redirect({ to: "/", search: { redirect: window.location.pathname } });

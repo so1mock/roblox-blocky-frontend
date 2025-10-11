@@ -1,9 +1,8 @@
-import type { DetailedUser, UserRole } from "@user/types/user";
+import type { DetailedUser } from "@user/types/user";
 import { create } from "zustand";
 
 interface AuthState {
   isLogin: boolean | null;
-  role: UserRole | null;
   userInfo: DetailedUser | null; // UserType은 유저 정보 타입으로 대체하세요
   setAuth: (userInfo: DetailedUser) => void;
   clearAuth: () => void;
@@ -21,10 +20,9 @@ stateCreator는 저장하고자 하는 상태의 초기값(객체)를 반환
 */
 export const useAuthStore = create<AuthState>()((set) => ({
   isLogin: null,
-  role: null,
   userInfo: null,
-  setAuth: (userInfo) => set({ isLogin: true, userInfo, role: userInfo.role }),
-  clearAuth: () => set({ isLogin: false, role: null, userInfo: null }),
+  setAuth: (userInfo) => set({ isLogin: true, userInfo }),
+  clearAuth: () => set({ isLogin: false, userInfo: null }),
 }));
 /* 리턴값은 useBoundStore 훅으로 매개변수인 선택자(selector)로 선택한 값이 반환된다.
 
