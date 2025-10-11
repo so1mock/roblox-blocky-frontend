@@ -8,7 +8,7 @@ const searchParams = new URLSearchParams({
 });
 const robloxUrl = `${baseUrl}?${searchParams.toString()}`;
 
-export function SocialLoginButton({ className = "" }: { className?: string }) {
+export function SocialLoginButton() {
   return (
     <a
       className={`flex items-center whitespace-nowrap gap-1 h-10 bg-[#335fff] min-w-fit p-2 rounded-lg cursor-pointer ${className}`}
