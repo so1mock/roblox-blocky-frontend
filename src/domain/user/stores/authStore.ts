@@ -1,6 +1,5 @@
 import type { DetailedUser, UserRole } from "@user/types/user";
 import { create } from "zustand";
-import { subscribeWithSelector } from "zustand/middleware";
 
 interface AuthState {
   isLogin: boolean | null;
@@ -20,16 +19,13 @@ store: 상태를 저장하는 함수
 
 stateCreator는 저장하고자 하는 상태의 초기값(객체)를 반환 
 */
-export const useAuthStore = create<AuthState>()(
-  subscribeWithSelector((set) => ({
-    isLogin: null,
-    role: null,
-    userInfo: null,
-    setAuth: (userInfo) =>
-      set({ isLogin: true, userInfo: userInfo, role: userInfo.role }),
-    clearAuth: () => set({ isLogin: false, role: null, userInfo: null }),
-  })),
-);
+export const useAuthStore = create<AuthState>()((set) => ({
+  isLogin: null,
+  role: null,
+  userInfo: null,
+  setAuth: (userInfo) => set({ isLogin: true, userInfo, role: userInfo.role }),
+  clearAuth: () => set({ isLogin: false, role: null, userInfo: null }),
+}));
 /* 리턴값은 useBoundStore 훅으로 매개변수인 선택자(selector)로 선택한 값이 반환된다.
 
 ex)

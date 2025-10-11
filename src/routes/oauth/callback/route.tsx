@@ -45,6 +45,9 @@ export function RouteComponent() {
           navigate({ to: "/student" });
         } else if (role === "EDUCATOR") {
           navigate({ to: "/teacher" });
+        } else {
+          alert("사용자 역할을 찾지 못했습니다. 메인 페이지로 이동합니다.");
+          navigate({ to: "/" });
         }
       }
     };
