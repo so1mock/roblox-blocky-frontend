@@ -1,5 +1,5 @@
 import * as Blockly from "blockly";
-import type { Block } from "src/domain/place/types/block";
+import type { Block } from "@place/types/block";
 
 // ValueInput: 블록이 다른 블록으로부터 값을 입력받을 수 있는 입력 슬롯
 // DummyInput: 다른 블록과 연결되지 않는 입력 공간 (단순한 레이블이나 UI 요소)

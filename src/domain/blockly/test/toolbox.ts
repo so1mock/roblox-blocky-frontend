@@ -5,7 +5,7 @@ import { loopContents } from "./categories/staticCategories/loopContents";
 import { mathContents } from "./categories/staticCategories/mathContents";
 import { serviceContents } from "./categories/staticCategories/serviceContents";
 import { variableContents } from "../common/categories";
-import type { Toolbox } from "src/domain/place/types/block";
+import type { Toolbox } from "@place/types/block";
 
 export const toolbox: Toolbox = {
   kind: "categoryToolbox",

@@ -4,8 +4,10 @@
     "baseUrl": ".",
     "paths": {
       "@common/*": ["src/domain/common/*"],
-      "@page/*": ["src/domain/pages/*"],
-      "@user/*": ["src/domain/user/*"]
+      "@user/*": ["src/domain/user/*"],
+      "@blockly/*": ["src/domain/blockly/*"],
+      "@myPlace/*": ["src/domain/myPlace/*"],
+      "@place/*": ["src/domain/place/*"]
     },
 
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
