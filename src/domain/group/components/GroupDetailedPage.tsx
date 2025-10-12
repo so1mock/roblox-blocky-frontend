@@ -41,6 +41,7 @@ function GroupDetailedPage({ id }: { id: string }) {
               currentPageNumber: 3,
               possibleNextPageNumbers: [4, 5],
             }}
+            groupId={id}
           />
           <div>
             <span className="font-bold text-2xl">담벼락</span>

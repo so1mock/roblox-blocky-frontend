@@ -1,6 +1,7 @@
 import { PlaceViewCard } from "src/domain/myPlace/components/PlaceViewCard";
 import GroupNav from "./GroupNav";
 import type { PlaceSummary } from "src/domain/place/types/place";
+import { useAuthStore } from "@user/stores/authStore";
 
 // 학생별 플레이스 예시 데이터
 const exampleStudentPlaces: Record<string, PlaceSummary[]> = {
@@ -41,9 +42,10 @@ const exampleStudentPlaces: Record<string, PlaceSummary[]> = {
 };
 
 function GroupPlacePage({ id }: { id: string }) {
+  const { userInfo } = useAuthStore();
   return (
     <div className="w-[1600px] mx-auto flex justify-center gap-24">
-      <GroupNav id={id} />
+      {userInfo?.role === "EDUCATOR" && <GroupNav id={id} />}
 
       <div className="w-[1200px]">
         <div className="flex flex-col gap-6">

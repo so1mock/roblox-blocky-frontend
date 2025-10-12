@@ -9,9 +9,11 @@ import { useAuthStore } from "@user/stores/authStore";
 function Board({
   pageInfo,
   setPage,
+  groupId,
 }: {
   pageInfo: PageInfo;
   setPage: React.Dispatch<SetStateAction<number>>;
+  groupId: string;
 }) {
   const { userInfo } = useAuthStore();
   return (
@@ -31,7 +33,7 @@ function Board({
 
       <hr className="h-[2px] bg-black mt-3" />
       <BoardListHeader />
-      <BoardListItem />
+      <BoardListItem groupId={groupId} />
       <Pagination pageInfo={pageInfo} setPage={setPage} />
     </div>
   );

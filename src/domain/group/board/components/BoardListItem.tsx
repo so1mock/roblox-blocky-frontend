@@ -1,10 +1,9 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "@user/stores/authStore";
-import { Route as BoardRoute } from "src/routes/student/_mainLayout/group/$groupId/index"; // Route 객체 import
 
-function BoardListItem() {
+function BoardListItem({ groupId }: { groupId: string }) {
   const navigate = useNavigate();
-  const { groupId } = BoardRoute.useParams(); // 현재 그룹 ID
+
   const boardId = 1; // api 연결 전 임시 id
   const { userInfo } = useAuthStore();
 

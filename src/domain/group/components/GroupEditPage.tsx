@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import GroupNav from "./GroupNav";
+import { useAuthStore } from "@user/stores/authStore";
 
 function GroupEditPage({ id }: { id: string }) {
+  const { userInfo } = useAuthStore();
   const inputNameRef = useRef<HTMLInputElement>(null);
   const inputDescriptionRef = useRef<HTMLTextAreaElement>(null);
 
@@ -68,7 +70,7 @@ function GroupEditPage({ id }: { id: string }) {
 
   return (
     <div className="w-[1600px] mx-auto flex justify-center gap-24">
-      <GroupNav id={id} />
+      {userInfo?.role === "EDUCATOR" && <GroupNav id={id} />}
 
       <div className="w-[1200px] flex flex-col items-center gap-12">
         {/* 이미지 업로드 */}

@@ -1,10 +1,12 @@
+import { useAuthStore } from "@user/stores/authStore";
 import UserBoard from "../user/components/UserBoard";
 import GroupNav from "./GroupNav";
 
 function GroupUserPage({ id }: { id: string }) {
+  const { userInfo } = useAuthStore();
   return (
     <div className="w-[1600px] mx-auto flex justify-center gap-24">
-      <GroupNav id={id} />
+      {userInfo?.role === "EDUCATOR" && <GroupNav id={id} />}
 
       <div className="w-[1200px]">
         <h1 className="font-bold text-4xl">회원 관리</h1>
