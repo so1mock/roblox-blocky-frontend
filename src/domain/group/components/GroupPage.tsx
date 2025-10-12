@@ -22,20 +22,25 @@ function GroupPage() {
           <span className="text-3xl font-bold">반</span>
         </h1>
         <div className="flex gap-4">
-          <button
-            className="flex items-center gap-2 px-4 py-2 rounded-full border border-rbPrimaryColor hover:bg-[#E9F6FF] font-medium transition-all shadow-sm cursor-pointer"
-            onClick={() => {
-              // to do
-              // 새 그룹 만들고, 그룹 이름 및 설명 수정 페이지로 navigate
-            }}
-          >
-            <img src="/infoIcon.png" alt="새 그룹 만들기" className="w-5 h-5" />
-            {userInfo?.role === "EDUCATOR" && (
+          {userInfo?.role === "EDUCATOR" && (
+            <button
+              className="flex items-center gap-2 px-4 py-2 rounded-full border border-rbPrimaryColor hover:bg-[#E9F6FF] font-medium transition-all shadow-sm cursor-pointer"
+              onClick={() => {
+                // to do
+                // 새 그룹 만들고, 그룹 이름 및 설명 수정 페이지로 navigate
+              }}
+            >
+              <img
+                src="/infoIcon.png"
+                alt="새 그룹 만들기"
+                className="w-5 h-5"
+              />
               <span className="font-bold text-rbPrimaryColor">
                 새 반 만들기
               </span>
-            )}
-          </button>
+            </button>
+          )}
+
           <Dropdown
             options={sortOptions}
             selected={selectedSort}
