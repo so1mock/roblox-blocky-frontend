@@ -18,7 +18,7 @@ function Board({
     <div>
       <div className="flex items-center justify-between">
         <span className="font-bold text-2xl">게시판</span>
-        {userInfo.role === "EDUCATOR" && (
+        {userInfo?.role === "EDUCATOR" && (
           <Button
             text="글 쓰기"
             handleButtonClick={() => {

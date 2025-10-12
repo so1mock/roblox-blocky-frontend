@@ -12,10 +12,16 @@ export function GroupCard({ group }: EntryCardProps) {
   const { userInfo } = useAuthStore();
 
   const enterGroup = () => {
-    if (userInfo.role === "LEARNER") {
-      navigate({ to: "/student/group/$id", params: { id: group.id } });
-    } else if (userInfo.role === "EDUCATOR") {
-      navigate({ to: "/teacher/group/$id", params: { id: group.id } });
+    if (userInfo?.role === "LEARNER") {
+      navigate({
+        to: "/student/group/$groupId",
+        params: { groupId: group.id },
+      });
+    } else if (userInfo?.role === "EDUCATOR") {
+      navigate({
+        to: "/teacher/group/$groupId",
+        params: { groupId: group.id },
+      });
     } else {
       alert("역할 정보가 없습니다. 로그인을 해주십시요");
     }

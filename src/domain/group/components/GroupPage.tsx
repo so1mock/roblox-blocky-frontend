@@ -30,7 +30,7 @@ function GroupPage() {
             }}
           >
             <img src="/infoIcon.png" alt="새 그룹 만들기" className="w-5 h-5" />
-            {userInfo.role === "EDUCATOR" && (
+            {userInfo?.role === "EDUCATOR" && (
               <span className="font-bold text-rbPrimaryColor">
                 새 반 만들기
               </span>

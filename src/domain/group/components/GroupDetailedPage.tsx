@@ -10,7 +10,7 @@ function GroupDetailedPage({ id }: { id: string }) {
 
   return (
     <div className="w-[1600px] mx-auto flex justify-center gap-24">
-      {userInfo.role === "EDUCATOR" && <GroupNav id={id} />}
+      {userInfo?.role === "EDUCATOR" && <GroupNav id={id} />}
 
       <div className="w-[1200px]">
         <div className="flex flex-col gap-6">
