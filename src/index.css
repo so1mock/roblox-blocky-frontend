@@ -52,3 +52,7 @@
 .write .ql-container .ql-editor {
   min-height: 400px;
 }
+
+.view .ql-container.ql-snow {
+  border: 0;
+}

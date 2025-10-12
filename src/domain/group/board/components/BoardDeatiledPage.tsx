@@ -1,3 +1,10 @@
+import Button from "@common/components/Button";
+import ReadOnlyReactQuillEditor from "@common/components/ReadOnlyReactQuillEditor";
+import { formatFileSizeToKB } from "@common/utils/formatFilesize";
+import { formatIsoStringToDate } from "@common/utils/formatIsoStringToDate";
+import { useNavigate } from "@tanstack/react-router";
+import { useAuthStore } from "@user/stores/authStore";
+
 function BoardDeatiledPage({
   groupId,
   boardId,
@@ -5,10 +12,83 @@ function BoardDeatiledPage({
   groupId: string;
   boardId: string;
 }) {
+  const navigate = useNavigate();
+  const { userInfo } = useAuthStore();
+  // 예시 데이터
+  const title = "잼민이는 못 깨는 타워 따라 만들기";
+  const createdAt = "2025-10-10T09:30:00Z";
+  const content = `<p>이곳은 게시글 내용이 들어가는 영역입니다.</p>`;
+  const attachedFiles = [
+    { id: 1, name: "예시파일.pdf", size: 1024 * 100 },
+    { id: 2, name: "이미지.png", size: 1024 * 200 },
+  ];
+
   return (
-    <div className="w-[1600px] mx-auto flex justify-center gap-24">
-      <div className="w-[1200px]">
-        <h1 className="font-bold text-4xl">게시판</h1>
+    <div className="w-[1600px] mx-auto flex justify-center gap-24 py-10">
+      <div className="w-[1200px] bg-white p-8 rounded-2xl">
+        {/* 제목 */}
+        <h1 className="font-bold text-4xl text-center mb-4">{title}</h1>
+
+        {/* 작성자 & 작성일 */}
+        <div className="flex justify-center items-center mb-8">
+          <div className="h-[19px]">
+            <img src="/schedule.png" className="mr-1" />
+          </div>
+          <span className="text-gray-500 ">
+            {formatIsoStringToDate(createdAt)}
+          </span>
+        </div>
+        <hr className="bg-gray-300 h-[1px] border-0 my-12" />
+        {/* 본문 */}
+        <div className="bg-white rounded-2xl view mb-16">
+          <ReadOnlyReactQuillEditor contents={content} />
+        </div>
+
+        {/* 첨부파일 */}
+        {attachedFiles.length > 0 && (
+          <div className="">
+            <ul className="flex flex-col gap-2">
+              {attachedFiles.map((file) => (
+                <li
+                  key={file.id}
+                  className="flex items-center justify-between bg-[#F2F9FF] rounded-xl px-4 py-2"
+                >
+                  <div>
+                    <span className="text-rbPrimaryColor text-md mr-8">
+                      첨부파일
+                    </span>
+                    <span className="text-gray-800 font-medium truncate max-w-[200px] mr-4">
+                      {file.name}
+                    </span>
+                    <span className="text-[#888888] font-medium truncate max-w-[200px]">
+                      {formatFileSizeToKB(file.size)}
+                    </span>
+                  </div>
+                  <button type="button" className="cursor-pointer">
+                    <img src="/download.png" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <hr className="bg-gray-300 h-[1px] border-0 my-12" />
+        {/* 버튼 */}
+        <div className="text-center">
+          <Button
+            text="목록으로"
+            xSize={8}
+            ySize={2}
+            handleButtonClick={() => {
+              // 목록으로 돌아가기
+              if (userInfo?.role === "EDUCATOR") {
+                navigate({ to: `/teacher/group/${groupId}` });
+              } else {
+                navigate({ to: `/student/group/${groupId}` });
+              }
+            }}
+          />
+        </div>
       </div>
     </div>
   );
