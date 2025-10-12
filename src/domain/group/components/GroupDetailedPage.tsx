@@ -3,6 +3,7 @@ import Board from "../board/components/Board";
 import GroupWallItem from "../wall/components/GroupWallItem";
 import GroupNav from "./GroupNav";
 import { useAuthStore } from "@user/stores/authStore";
+import GroupWallCreateForm from "../wall/components/GroupWallCreateForm";
 
 function GroupDetailedPage({ id }: { id: string }) {
   const [, setPage] = useState(1);
@@ -43,6 +44,7 @@ function GroupDetailedPage({ id }: { id: string }) {
           />
           <div>
             <span className="font-bold text-2xl">담벼락</span>
+            {userInfo?.role === "LEARNER" && <GroupWallCreateForm />}
             <GroupWallItem index={0} />
             <GroupWallItem index={1} />
           </div>
