@@ -12,6 +12,7 @@ function BoardDeatiledPage({
   groupId: string;
   boardId: string;
 }) {
+  console.log(boardId); // build 에러 방지
   const navigate = useNavigate();
   const { userInfo } = useAuthStore();
   // 예시 데이터
