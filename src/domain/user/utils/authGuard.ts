@@ -17,6 +17,6 @@ export const verifyAuth = (requiredRoles: UserRole[] = []) => {
 
   if (userInfo && requiredRoles.includes(userInfo.role)) return;
 
-  alert("접근 권한이 없습니다.");
-  throw redirect({ to: "/", search: { redirect: window.location.pathname } });
+  // alert("접근 권한이 없습니다.");
+  // throw redirect({ to: "/", search: { redirect: window.location.pathname } });
 };
