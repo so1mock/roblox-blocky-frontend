@@ -13,8 +13,8 @@ type SearchParams = {
 };
 
 export const Route = createFileRoute("/plugin/auth")({
-  beforeLoad: async ({ search }: { search: SearchParams }) => {
-    await verifyAuth({ timeoutMs: 3000 });
+  beforeLoad: ({ search }: { search: SearchParams }) => {
+    verifyAuth();
 
     // 쿼리 파라미터 유효성 검사
     if (!search.user_code) {

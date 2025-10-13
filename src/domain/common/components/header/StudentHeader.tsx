@@ -24,7 +24,9 @@ export function StudentHeader() {
           nickname={userInfo?.nickname}
         />
       ) : (
-        <SocialLoginButton className={"absolute right-5"} />
+        <div className="absolute right-5">
+          <SocialLoginButton />
+        </div>
       )}
     </header>
   );

@@ -5,5 +5,5 @@ export const Route = createFileRoute("/teacher/_mainLayout/group")({
 });
 
 function RouteComponent() {
-  return <div className="text-rbText">About Page</div>;
+  return <div className="text-rbText">Hello teacher/_mainLayout/group</div>;
 }

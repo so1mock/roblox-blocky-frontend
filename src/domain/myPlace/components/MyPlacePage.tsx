@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { PlaceCard } from "./PlaceCard";
 import { getMyPlaces } from "../apis/place";
-import type { PlaceSummary } from "src/domain/place/types/place";
+import type { PlaceSummary } from "@place/types/place";
 import PlaceConnectGuideModal from "./PlaceConnectGuideModal";
 
 const sortOptions = [

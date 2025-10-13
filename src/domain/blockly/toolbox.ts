@@ -1,8 +1,5 @@
 import { variableContents } from "./common/categories";
-import type {
-  BlockListByCategory,
-  Toolbox,
-} from "src/domain/place/types/block";
+import type { BlockListByCategory, Toolbox } from "@place/types/block";
 import { getBlocksByCategory } from "./categories";
 
 /**

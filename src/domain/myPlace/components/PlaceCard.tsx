@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { PlaceSummary } from "src/domain/place/types/place";
+import type { PlaceSummary } from "@place/types/place";
 import { useNavigate } from "@tanstack/react-router";
 import { updatePlace, deletePlace } from "../apis/place";
 import { PlaceEditingOption } from "./PlaceEditingOption";
