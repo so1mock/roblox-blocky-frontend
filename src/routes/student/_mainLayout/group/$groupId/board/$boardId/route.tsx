@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import BoardDeatiledPage from "src/domain/group/board/components/BoardDeatiledPage";
+import BoardDetailedPage from "src/domain/group/board/components/BoardDetailedPage";
 
 export const Route = createFileRoute(
   "/student/_mainLayout/group/$groupId/board/$boardId",
@@ -9,5 +9,5 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { groupId, boardId } = Route.useParams();
-  return <BoardDeatiledPage groupId={groupId} boardId={boardId} />;
+  return <BoardDetailedPage groupId={groupId} boardId={boardId} />;
 }
