@@ -39,7 +39,7 @@ function MyPlacePage() {
   }, []);
 
   return (
-    <div className="w-[1600px]">
+    <div>
       <PlaceConnectGuideModal
         isOpen={isGuideOpen}
         onClose={() => setIsGuideOpen(false)}

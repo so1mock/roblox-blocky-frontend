@@ -5,7 +5,7 @@ import { formatIsoStringToDate } from "@common/utils/formatIsoStringToDate";
 import { useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "@user/stores/authStore";
 
-function BoardDetiledPage({
+function BoardDetailedPage({
   groupId,
   boardId,
 }: {
@@ -95,4 +95,4 @@ function BoardDetiledPage({
   );
 }
 
-export default BoardDetiledPage;
+export default BoardDetailedPage;

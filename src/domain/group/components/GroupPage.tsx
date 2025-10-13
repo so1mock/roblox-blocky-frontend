@@ -16,7 +16,7 @@ function GroupPage() {
   const { userInfo } = useAuthStore();
 
   return (
-    <div className="w-[1600px]">
+    <div>
       <div className="flex justify-between mb-12">
         <h1 className="text-left">
           <span className="text-3xl font-bold">반</span>
