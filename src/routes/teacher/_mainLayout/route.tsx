@@ -8,9 +8,9 @@ export const Route = createFileRoute("/teacher/_mainLayout")({
 
 function RouteComponent() {
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#E8F5FF] bg-center bg-cover min-w-[1400px]">
+    <div className="relative min-h-screen flex flex-col bg-[#E8F5FF] bg-center bg-cover min-w-[1600px]">
       <TeacherHeader />
-      <main className="mb-[120px]">
+      <main className="mb-[120px] mt-12 w-[1600px] mx-auto">
         <Outlet />
       </main>
       <div className="absolute bottom-0 left-0 w-full">

@@ -48,3 +48,11 @@
   white-space: nowrap;
   animation: marquee 13s linear infinite;
 }
+
+.write .ql-container .ql-editor {
+  min-height: 400px;
+}
+
+.view .ql-container.ql-snow {
+  border: 0;
+}

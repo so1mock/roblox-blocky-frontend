@@ -3,6 +3,7 @@ import { PlaceCard } from "./PlaceCard";
 import { getMyPlaces } from "../apis/place";
 import type { PlaceSummary } from "@place/types/place";
 import PlaceConnectGuideModal from "./PlaceConnectGuideModal";
+import Dropdown from "@common/components/Dropdown";
 
 const sortOptions = [
   { name: "최신 순", key: "new" },
@@ -12,8 +13,6 @@ function MyPlacePage() {
   const [myPlaces, setMyPlaces] = useState<PlaceSummary[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [isSearchOptionsOpen, setIsSearchOptionsOpen] =
-    useState<boolean>(false);
   const [selectedSort, setSelectedSort] = useState({
     name: "최신 순",
     key: "new",
@@ -34,12 +33,13 @@ function MyPlacePage() {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     refresh();
   }, []);
 
   return (
-    <div className="px-36 mt-12">
+    <div>
       <PlaceConnectGuideModal
         isOpen={isGuideOpen}
         onClose={() => setIsGuideOpen(false)}
@@ -66,64 +66,14 @@ function MyPlacePage() {
                 새 플레이스 연결
               </span>
             </button>
-            <div className="relative w-[180px]">
-              {/* 선택된 옵션 버튼 */}
-              <button
-                className="w-full px-4 py-3 bg-white rounded-2xl cursor-pointer flex justify-between items-center"
-                onClick={() => setIsSearchOptionsOpen((prev) => !prev)}
-              >
-                <span>{selectedSort.name}</span>
-                <div>
-                  <img
-                    src="/dropdown.png"
-                    className={`w-4 transform transition-transform duration-200 ${
-                      isSearchOptionsOpen ? "-rotate-90" : "rotate-0"
-                    }`}
-                  />
-                </div>
-              </button>
-
-              {/* 옵션 메뉴 */}
-              {isSearchOptionsOpen && (
-                <div className="absolute top-full left-0 mt-2 w-full bg-white rounded-2xl border border-gray-300 shadow-lg z-10">
-                  {sortOptions
-                    .filter((option) => option.key !== selectedSort.key)
-                    .map((option, idx, arr) => (
-                      <button
-                        key={option.key}
-                        className={`
-              w-full px-4 py-3 text-left cursor-pointer flex justify-between items-center
-              hover:bg-gray-100
-              ${idx === 0 ? "rounded-t-2xl" : ""}
-              ${idx === arr.length - 1 ? "rounded-b-2xl" : ""}
-            `}
-                        onClick={() => {
-                          setSelectedSort(option);
-                          setIsSearchOptionsOpen(false);
-                        }}
-                      >
-                        <span>{option.name}</span>
-                      </button>
-                    ))}
-                </div>
-              )}
-            </div>
+            <Dropdown
+              options={sortOptions}
+              selected={selectedSort}
+              onChange={setSelectedSort}
+              width="w-[200px]" // 옵션 (안 넣으면 기본 180px)
+            />
           </div>
         </div>
-
-        <PlaceCard
-          key="place-001"
-          place={{
-            uuid: "place-001",
-            name: "로블록스 코딩 교실",
-            description:
-              "학생들이 직접 블록 코딩으로 로블록스 게임을 만들어보는 공간이에요!",
-            ownerName: "다라치 선생님",
-            lastModifiedAt: "2025-10-08T14:32:00Z",
-          }}
-          onChanged={refresh}
-        />
-
         {isLoading && <div>로딩 중...</div>}
         {!isLoading && error && <div>오류: {error}</div>}
         {!isLoading && !error && myPlaces.length === 0 && (
