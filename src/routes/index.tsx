@@ -1,7 +1,16 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { SocialLoginButton } from "@user/components/SocialLoginButton";
+import { useAuthStore } from "@user/stores/authStore";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: () => {
+    const role = useAuthStore.getState().userInfo?.role;
+    if (role === "EDUCATOR") {
+      throw redirect({ to: "/teacher" });
+    } else if (role === "LEARNER") {
+      throw redirect({ to: "/student" });
+    }
+  },
   component: Index,
 });
 

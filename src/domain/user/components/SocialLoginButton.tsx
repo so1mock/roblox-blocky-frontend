@@ -11,7 +11,7 @@ const robloxUrl = `${baseUrl}?${searchParams.toString()}`;
 export function SocialLoginButton() {
   return (
     <a
-      className={`flex items-center whitespace-nowrap gap-1 h-10 bg-[#335fff] min-w-fit p-2 rounded-lg cursor-pointer ${className}`}
+      className={`flex items-center whitespace-nowrap gap-1 h-10 bg-[#335fff] min-w-fit p-2 rounded-lg cursor-pointer`}
       href={robloxUrl}
     >
       <img src="/Roblox_logo.png" className="w-7 h-7" />

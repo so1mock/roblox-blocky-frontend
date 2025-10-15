@@ -15,8 +15,7 @@ const queryClient = new QueryClient({
 
 export const Route = createRootRoute({
   beforeLoad: async () => {
-    const { isLogin, setAuth, clearAuth } = useAuthStore.getState();
-    if (isLogin !== null) return;
+    const { setAuth, clearAuth } = useAuthStore.getState();
 
     try {
       const response = await refreshToken();
