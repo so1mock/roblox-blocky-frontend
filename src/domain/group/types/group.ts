@@ -10,9 +10,11 @@ export type Group = {
 };
 
 export type GroupSummary = {
-  id: string;
+  groupUuid: string;
+  groupName: string;
+  groupDescription: string;
+  joinedAt: string; // datetime?
   image: string | undefined;
-  name: string;
 };
 
 // 그룹 멤버는 어떻게 저장할까?

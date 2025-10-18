@@ -15,12 +15,12 @@ export function GroupCard({ group }: EntryCardProps) {
     if (userInfo?.role === "LEARNER") {
       navigate({
         to: "/student/group/$groupId",
-        params: { groupId: group.id },
+        params: { groupId: group.groupUuid },
       });
     } else if (userInfo?.role === "EDUCATOR") {
       navigate({
         to: "/teacher/group/$groupId",
-        params: { groupId: group.id },
+        params: { groupId: group.groupUuid },
       });
     } else {
       alert("역할 정보가 없습니다. 로그인을 해주십시요");
@@ -34,7 +34,7 @@ export function GroupCard({ group }: EntryCardProps) {
           <img
             src={group.image}
             className="w-full h-full object-cover border-b-[2px] border-solid border-[#DDDDDD]"
-            alt={group.name}
+            alt={group.groupName}
           />
         </div>
       ) : (
@@ -47,7 +47,7 @@ export function GroupCard({ group }: EntryCardProps) {
           <img
             src="/groupDeafultImage.png"
             className="w-full h-full object-cover border-b-[2px] border-solid border-[#DDDDDD]"
-            alt={group.name}
+            alt={group.groupName}
           />
         </div>
       )}
@@ -55,7 +55,7 @@ export function GroupCard({ group }: EntryCardProps) {
       <div className="bg-white rounded-b-3xl py-4 px-3">
         <div className="flex justify-between items-center w-full">
           <span className="font-bold text-md truncate block w-[calc(100%-90px)]">
-            {group.name}
+            {group.groupName}
           </span>
 
           <Button handleButtonClick={enterGroup} text="입장" />
