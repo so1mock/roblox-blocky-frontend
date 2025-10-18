@@ -1,19 +1,13 @@
-import type { Board } from "../board/types/board";
-import type { GroupMember } from "../user/types/user";
-import type { Wall } from "../wall/types/wall";
-
 export type Group = {
   groupSummary: GroupSummary;
-  members: GroupMember[];
-  boards: Board[];
-  walls: Wall[];
+  ownerNickname: string;
+  memberCount: number;
 };
 
 export type GroupSummary = {
-  groupUuid: string;
-  groupName: string;
-  groupDescription: string;
-  joinedAt: string; // datetime?
+  uuid: string;
+  name: string;
+  description: string;
   image: string | undefined;
 };
 

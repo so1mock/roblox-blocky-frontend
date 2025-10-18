@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { GroupCard } from "./GroupCard";
 import Dropdown from "@common/components/Dropdown";
 import { useAuthStore } from "@user/stores/authStore";
-import { getMyGroups, createGroup, type GroupInfo } from "../apis/group";
+import {
+  getMyGroups,
+  createGroup,
+  type CreateGroupRequest,
+} from "../apis/group";
 import type { GroupSummary } from "../types/group";
 
 const sortOptions = [
@@ -82,7 +86,7 @@ function GroupPage() {
         <div className="grid grid-cols-4 gap-12">
           {myGroups.map((group) => (
             <GroupCard
-              key={group.groupUuid}
+              key={group.uuid}
               group={{ ...group, image: undefined }}
             />
           ))}
@@ -139,7 +143,7 @@ function GroupPage() {
                 onClick={async () => {
                   if (isCreating) return;
                   setIsCreating(true);
-                  const groupInfo: GroupInfo = {
+                  const groupInfo: CreateGroupRequest = {
                     name: newGroupName.trim(),
                     description: newGroupDescription.trim(),
                   };
