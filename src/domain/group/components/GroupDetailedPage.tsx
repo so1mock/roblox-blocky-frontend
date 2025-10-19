@@ -73,7 +73,9 @@ function GroupDetailedPage({ group }: { group: Group }) {
           {/* 여기도 나중에 같은 수준으로 컴포넌트화하는 게 나을 듯?*/}
           <div>
             <span className="font-bold text-2xl">담벼락</span>
-            {userInfo?.role === "LEARNER" && <GroupWallCreateForm />}
+            {userInfo?.role === "LEARNER" && (
+              <GroupWallCreateForm refreshWalls={refreshWalls} />
+            )}
 
             {wallsLoading && <div>로딩 중...</div>}
             {!wallsLoading && wallsError && <div>오류: {wallsError}</div>}
