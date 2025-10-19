@@ -5,8 +5,11 @@ updatedAt
 */
 
 export type Wall = {
-  id: string;
-  author: string;
+  authorName: string;
+  authorUuid: string;
+  authorImage: string | undefined;
+  messageUuid: string;
   content: string;
   createdAt: string;
+  updatedAt: string;
 };
