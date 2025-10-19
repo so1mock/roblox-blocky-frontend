@@ -1,13 +1,8 @@
-import {
-  createFileRoute,
-  redirect,
-  useLoaderData,
-} from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { getGroupInfo } from "src/domain/group/apis/group";
-import GroupDetailedPage from "src/domain/group/components/GroupDetailedPage";
 import type { Group } from "src/domain/group/types/group";
 
-export const Route = createFileRoute("/teacher/_mainLayout/group/$groupId/")({
+export const Route = createFileRoute("/teacher/_mainLayout/group/$groupId")({
   loader: async ({ params }) => {
     try {
       const group: Group = await getGroupInfo(params.groupId);
@@ -21,7 +16,5 @@ export const Route = createFileRoute("/teacher/_mainLayout/group/$groupId/")({
 });
 
 function RouteComponent() {
-  // const { groupId } = Route.useParams();
-  const group = useLoaderData({ from: "/teacher/_mainLayout/group/$groupId" });
-  return <GroupDetailedPage group={group} />;
+  return <Outlet />;
 }

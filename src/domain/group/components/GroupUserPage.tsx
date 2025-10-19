@@ -12,7 +12,7 @@ function GroupUserPage({ id }: { id: string }) {
         <h1 className="font-bold text-4xl">회원 관리</h1>
 
         <div className="bg-white rounded-2xl px-12 py-12 mt-12 flex flex-col gap-8">
-          <UserBoard />
+          <UserBoard groupUuid={id} />
         </div>
       </div>
     </div>
