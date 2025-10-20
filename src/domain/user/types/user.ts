@@ -6,6 +6,7 @@ export type Auth = {
 export type UserRole = "LEARNER" | "EDUCATOR";
 
 export interface BaseUser {
+  uuid: string;
   nickname: string;
   role: UserRole;
   country: string;

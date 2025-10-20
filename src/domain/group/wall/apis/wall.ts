@@ -1,9 +1,9 @@
 import { api } from "@common/apis/axios";
-import type { Wall } from "../types/wall";
+import type { WallInfo } from "../types/wall";
 import { AxiosError } from "axios";
 
 // 그룹 내 담벼락 목록 조회
-export const getGroupWalls = async (groupUuid: string): Promise<Wall[]> => {
+export const getGroupWalls = async (groupUuid: string): Promise<WallInfo[]> => {
   try {
     const response = await api.get(`/groups/${groupUuid}/wall/messages`);
     return response.data.wallMessages;
@@ -52,6 +52,19 @@ export const updateWall = async ({
   } catch (e) {
     if (e instanceof AxiosError) {
       throw e.message;
+    }
+    throw e;
+  }
+};
+
+// 담벼락 삭제
+export const deleteWall = async (messageId: string) => {
+  try {
+    const response = await api.delete(`groups/wall/message/${messageId}`);
+    return 200 <= response.data.status && response.data.status < 300;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw e;
     }
     throw e;
   }

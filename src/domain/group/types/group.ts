@@ -1,4 +1,4 @@
-export type Group = {
+export type GroupInfo = {
   groupSummary: GroupSummary;
   ownerNickname: string;
   memberCount: number;

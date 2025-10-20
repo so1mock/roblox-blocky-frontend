@@ -110,13 +110,6 @@ function GroupPage() {
               group={{ ...group, image: undefined }}
             />
           ))}
-          {/* <GroupCard
-            group={{
-              id: "2",
-              name: "test_group_name",
-              image: undefined,
-            }}
-          /> */}
         </div>
       )}
 
@@ -170,10 +163,10 @@ function GroupPage() {
                   };
                   try {
                     await createGroup(groupInfo);
-                    await refresh();
                     setIsCreateOpen(false);
                     setNewGroupName("");
                     setNewGroupDescription("");
+                    await refresh();
                   } catch (e) {
                     if (e instanceof Error) {
                       alert(e.message);

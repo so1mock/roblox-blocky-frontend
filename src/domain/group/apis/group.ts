@@ -1,6 +1,6 @@
 import { api } from "@common/apis/axios";
 import { AxiosError } from "axios";
-import type { Group, GroupSummary } from "../types/group";
+import type { GroupInfo, GroupSummary } from "../types/group";
 
 export type CreateGroupRequest = {
   name: string;
@@ -61,7 +61,7 @@ type RawGroupInfo = {
 };
 
 // 그룹 상세 정보 조회
-export const getGroupInfo = async (groupId: string): Promise<Group> => {
+export const getGroupInfo = async (groupId: string): Promise<GroupInfo> => {
   try {
     const response = await api.get(`/groups/${groupId}`);
     const raw: RawGroupInfo = response.data.group ?? response.data;

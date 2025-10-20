@@ -4,7 +4,7 @@ updatedAt
 좋아요나 답글
 */
 
-export type Wall = {
+export type WallInfo = {
   authorName: string;
   authorUuid: string;
   authorImage: string | undefined;
