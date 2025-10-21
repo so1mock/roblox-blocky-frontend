@@ -1,14 +1,23 @@
-/*
-확장 가능성
-updatedAt
-좋아요나 답글
-*/
+import type { UserRole } from "@user/types/user";
+
+// export type WallInfo = {
+//   authorName: string;
+//   authorUuid: string;
+//   authorImage: string | undefined;
+//   messageUuid: string;
+//   content: string;
+//   createdAt: string;
+//   updatedAt: string;
+// };
 
 export type WallInfo = {
-  authorName: string;
-  authorUuid: string;
-  authorImage: string | undefined;
-  messageUuid: string;
+  uuid: string;
+  author: {
+    uuid: string;
+    name: string; // 그룹 내 닉네임
+    role: UserRole;
+    profileImageSrc: string | undefined;
+  };
   content: string;
   createdAt: string;
   updatedAt: string;

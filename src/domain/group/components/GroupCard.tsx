@@ -29,10 +29,10 @@ export function GroupCard({ group }: EntryCardProps) {
 
   return (
     <div className="w-[300px] border-[2px] border-solid border-[#DDDDDD] rounded-3xl shadow-lg overflow-hidden ">
-      {group.image ? (
+      {group.iconSrc ? (
         <div className="relative h-[150px] ">
           <img
-            src={group.image}
+            src={group.iconSrc}
             className="w-full h-full object-cover border-b-[2px] border-solid border-[#DDDDDD]"
             alt={group.name}
           />

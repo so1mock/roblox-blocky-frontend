@@ -107,7 +107,7 @@ function GroupPage() {
           {myGroups.map((group) => (
             <GroupCard
               key={group.uuid}
-              group={{ ...group, image: undefined }}
+              group={{ ...group, iconSrc: undefined }}
             />
           ))}
         </div>

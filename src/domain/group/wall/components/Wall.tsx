@@ -40,10 +40,10 @@ function Wall({ groupUuid }: { groupUuid: string }) {
       {!loading &&
         !error &&
         walls.length > 0 &&
-        walls.map((wall) => (
+        walls.map((wallInfo) => (
           <GroupWallItem
-            key={wall.messageUuid}
-            wall={wall}
+            key={wallInfo.uuid}
+            wallInfo={wallInfo}
             onChanged={refresh}
           />
         ))}

@@ -8,7 +8,7 @@ export type GroupSummary = {
   uuid: string;
   name: string;
   description: string;
-  image: string | undefined;
+  iconSrc: string | undefined;
 };
 
 // 그룹 멤버는 어떻게 저장할까?

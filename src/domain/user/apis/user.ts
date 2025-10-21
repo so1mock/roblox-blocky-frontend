@@ -1,14 +1,14 @@
-import { type BaseUser, type Auth, type DetailedUser } from "../types/user.ts";
+import { type UserInfo, type Auth } from "../types/user.ts";
 import { api } from "../../common/apis/axios.ts";
 import axios, { AxiosError } from "axios";
 
 export type LoginResponse = {
-  info: BaseUser;
+  info: UserInfo;
   auth: Auth;
 };
 
 export type RefreshTokenResponse = {
-  info: BaseUser;
+  info: UserInfo;
   auth: Auth;
 };
 
@@ -60,10 +60,10 @@ export const login = async ({
 };
 
 // 사용자 정보 조회
-export const getUserInfo = async (): Promise<DetailedUser> => {
+export const getUserInfo = async (): Promise<UserInfo> => {
   try {
     const response = await api.get("/member/me");
-    const info: DetailedUser = response.data;
+    const info: UserInfo = response.data;
     return info;
   } catch (e) {
     if (e instanceof AxiosError) {
