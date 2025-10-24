@@ -41,8 +41,8 @@ export const getGroupInfo = async (groupId: string): Promise<GroupInfo> => {
     const response = await api.get(`/groups/${groupId}`);
     return {
       groupSummary: response.data.group,
-      ownerNickname: response.data.group.ownerNickname,
-      memberCount: response.data.group.memberCount,
+      ownerNickname: response.data.ownerNickname,
+      memberCount: response.data.memberCount,
     };
   } catch (e) {
     if (e instanceof AxiosError) {

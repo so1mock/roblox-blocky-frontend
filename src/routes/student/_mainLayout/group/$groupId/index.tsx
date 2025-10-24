@@ -7,8 +7,8 @@ export const Route = createFileRoute("/student/_mainLayout/group/$groupId/")({
 });
 
 function RouteComponent() {
-  const group: GroupInfo = useLoaderData({
+  const groupInfo: GroupInfo = useLoaderData({
     from: "/student/_mainLayout/group/$groupId",
   });
-  return <GroupDetailedPage group={group} />;
+  return <GroupDetailedPage groupInfo={groupInfo} />;
 }

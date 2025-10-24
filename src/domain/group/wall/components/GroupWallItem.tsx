@@ -76,7 +76,7 @@ function GroupWallItem({
       </div>
       <div className="flex flex-col gap-4 w-full">
         <div className="flex flex-col gap-2">
-          <span>{wallInfo.author.name}</span>
+          <span>{wallInfo.author.nickname}</span>
           {isEditing ? (
             <textarea
               ref={editTextareaRef}
@@ -135,8 +135,9 @@ function GroupWallItem({
               type="button"
               className="cursor-pointer w-full text-left"
               onClick={() => {
-                setIsEditing(false);
                 setEditedContent(wallInfo.content);
+                setIsEditing(false);
+                setIsOptionOpen(false);
               }}
               disabled={isUpdating}
             >

@@ -14,7 +14,7 @@ export type WallInfo = {
   uuid: string;
   author: {
     uuid: string;
-    name: string; // 그룹 내 닉네임
+    nickname: string; // 그룹 내 닉네임
     role: UserRole;
     profileImageSrc: string | undefined;
   };

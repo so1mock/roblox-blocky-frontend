@@ -1,46 +1,36 @@
 import { api } from "@common/apis/axios";
 import type { WallInfo } from "../types/wall";
-import type { UserRole } from "@user/types/user";
 import { AxiosError } from "axios";
 
 // 그룹 내 담벼락 목록 조회
-// TEMP: Backend returns a wrapper with paging. Map to WallInfo[] until API aligns.
-// After backend update, revert to the simple return (see commented line below).
+// Backend returns a wrapper with paging. Map to WallInfo[].
 type RawWallMessage = {
-  authorName: string;
-  authorUuid: string;
-  messageUuid: string;
+  groupMemberProfile: {
+    uuid: string;
+    nickname: string;
+    profileImageSrc?: string | null;
+    role: string;
+  };
+  uuid: string;
   content: string;
   createdAt: string;
   updatedAt: string;
 };
-type RawGetGroupWallsResponse = {
-  currentPageNumber: number;
-  currentPageSize: number;
-  possibleNextPageNumbers: number[];
-  wallMessages: RawWallMessage[];
-};
 
-// 담벼락 목록 조회
 export const getGroupWalls = async (groupUuid: string): Promise<WallInfo[]> => {
   try {
     const response = await api.get(`/groups/${groupUuid}/wall/messages`);
-    const data: RawGetGroupWallsResponse = response.data;
-    const mapped: WallInfo[] = (data.wallMessages ?? []).map((m) => ({
-      uuid: m.messageUuid,
+    const data = response.data;
+    return data.wallMessages.map((m: RawWallMessage) => ({
+      uuid: m.uuid,
       author: {
-        uuid: m.authorUuid,
-        name: m.authorName,
-        role: "LEARNER" as UserRole, // TEMP: backend 미반영. 필요 시 매핑 수정
-        profileImageSrc: undefined, // TEMP: backend 미반영
+        ...m.groupMemberProfile,
       },
       content: m.content,
       createdAt: m.createdAt,
       updatedAt: m.updatedAt,
     }));
-    return mapped;
-    // When backend returns WallInfo[] directly:
-    // return response.data.wallMessages as WallInfo[];
+    // return mapped;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw e.message;
