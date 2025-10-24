@@ -5,14 +5,14 @@ import GroupNav from "./GroupNav";
 import { useAuthStore } from "@user/stores/authStore";
 import type { GroupInfo } from "../types/group";
 
-function GroupDetailedPage({ group }: { group: GroupInfo }) {
+function GroupDetailedPage({ groupInfo }: { groupInfo: GroupInfo }) {
   const [, setPage] = useState(1);
   const { userInfo } = useAuthStore();
 
   return (
     <div className="w-[1600px] mx-auto flex justify-center gap-24">
       {userInfo?.role === "EDUCATOR" && (
-        <GroupNav id={group.groupSummary.uuid} />
+        <GroupNav id={groupInfo.groupSummary.uuid} />
       )}
 
       <div className="w-[1200px]">
@@ -26,15 +26,17 @@ function GroupDetailedPage({ group }: { group: GroupInfo }) {
             <div className="flex flex-col gap-4">
               <div>
                 <span className="text-white bg-rbPrimaryColor px-2 py-2 rounded-3xl">
-                  학생 {group.memberCount}명
+                  학생 {groupInfo.memberCount}명
                 </span>
               </div>
 
-              <h1 className="font-bold text-4xl">{group.groupSummary.name}</h1>
-              <span>개설자: {group.ownerNickname}</span>
+              <h1 className="font-bold text-4xl">
+                {groupInfo.groupSummary.name}
+              </h1>
+              <span>개설자: {groupInfo.ownerNickname}</span>
             </div>
           </div>
-          <span>{group.groupSummary.description}</span>
+          <span>{groupInfo.groupSummary.description}</span>
         </div>
         <div className=" bg-white rounded-2xl px-12 py-12 mt-8">
           <Board
@@ -43,9 +45,9 @@ function GroupDetailedPage({ group }: { group: GroupInfo }) {
               currentPageNumber: 3,
               possibleNextPageNumbers: [4, 5],
             }}
-            groupId={group.groupSummary.uuid}
+            groupId={groupInfo.groupSummary.uuid}
           />
-          <Wall groupUuid={group.groupSummary.uuid} />
+          <Wall groupUuid={groupInfo.groupSummary.uuid} />
         </div>
       </div>
     </div>

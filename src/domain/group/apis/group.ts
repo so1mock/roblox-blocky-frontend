@@ -26,7 +26,7 @@ export const createGroup = async (
 export const getMyGroups = async (): Promise<GroupSummary[]> => {
   try {
     const response = await api.get("groups/me");
-    return response.data;
+    return response.data.groups;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw e.message;
@@ -39,7 +39,11 @@ export const getMyGroups = async (): Promise<GroupSummary[]> => {
 export const getGroupInfo = async (groupId: string): Promise<GroupInfo> => {
   try {
     const response = await api.get(`/groups/${groupId}`);
-    return response.data;
+    return {
+      groupSummary: response.data.group,
+      ownerNickname: response.data.group.ownerNickname,
+      memberCount: response.data.group.memberCount,
+    };
   } catch (e) {
     if (e instanceof AxiosError) {
       throw e.message;

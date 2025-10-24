@@ -1,33 +1,28 @@
-import { useState } from "react";
-import { deleteWall } from "../apis/wall";
-
 function GroupWallOptions({
-  messageUuid,
-  onChanged,
+  handleDelete,
+  handleEdit,
+  disabled,
 }: {
-  messageUuid: string;
-  onChanged: () => void | Promise<void>;
+  handleDelete: () => Promise<void> | void;
+  handleEdit: () => Promise<void> | void;
+  disabled: boolean;
 }) {
-  const [isDeleting, setIsDeleting] = useState<boolean>(false);
-  const handleDelete = async () => {
-    if (isDeleting) return;
-    setIsDeleting(true);
-    try {
-      await deleteWall(messageUuid);
-      await onChanged();
-    } catch (e) {
-      const message = e instanceof Error ? e.message : String(e);
-      alert("삭제에 실패했습니다: " + message);
-    } finally {
-      setIsDeleting(false);
-    }
-  };
   return (
     <div className="absolute top-16 right-6 w-[80px]">
-      <div className="bg-white rounded-xl border-[1.5px] border-solid border-[#DDDDDD] px-2 py-1">
+      <div className="bg-white rounded-t-xl border-[1.5px] border-solid border-[#DDDDDD] px-2 py-1">
         <button
           type="button"
-          disabled={isDeleting}
+          disabled={disabled}
+          className="cursor-pointer w-full text-center"
+          onClick={handleEdit}
+        >
+          <span className="text-xs text-[#666666]">수정하기</span>
+        </button>
+      </div>
+      <div className="bg-white rounded-b-xl border-[1.5px] border-t-0 border-b-solid border-[#DDDDDD] px-2 py-1">
+        <button
+          type="button"
+          disabled={disabled}
           className="cursor-pointer w-full text-center"
           onClick={handleDelete}
         >
