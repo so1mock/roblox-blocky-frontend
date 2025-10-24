@@ -51,3 +51,29 @@ export const getGroupInfo = async (groupId: string): Promise<GroupInfo> => {
     throw e;
   }
 };
+
+// 그룹 정보 수정(반 이름, 반 설명))
+export const updateGroupInfo = async ({
+  uuid,
+  name,
+  description,
+}: {
+  uuid: string;
+  name: string;
+  description: string;
+}) => {
+  try {
+    const response = await api.put(`groups/${uuid}`, {
+      name: name,
+      description: description,
+    });
+    return 200 <= response.data.status && response.data.status < 300;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw e.message;
+    }
+    throw e;
+  }
+};
+
+// 그룹 아이콘 수정
