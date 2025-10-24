@@ -22,6 +22,19 @@ export const createGroup = async (
   }
 };
 
+// 그룹 삭제
+export const deleteGroup = async (uuid: string) => {
+  try {
+    const response = await api.delete(`groups/${uuid}`);
+    return 200 <= response.data.status && response.data.status < 300;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw e.message;
+    }
+    throw e;
+  }
+};
+
 // 내가 속한 그룹 목록 조회
 export const getMyGroups = async (): Promise<GroupSummary[]> => {
   try {
