@@ -19,14 +19,34 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const [isTeacherLoginOpen, setTeacherLoginOpen] = useState(false);
+  const [isTeacherLoggingIn, setIsTeacherLoggingIn] = useState(false);
   const [teacherId, setTeacherId] = useState("");
   const [teacherPw, setTeacherPw] = useState("");
   const { handleLogin } = useUser();
   const navigate = useNavigate();
 
-  const handleTeacherLogin = (e: FormEvent<HTMLFormElement>) => {
+  const handleTeacherLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: 교사용 로그인 API 호출 (teacherId, teacherPw 사용)
+    if (isTeacherLoggingIn) return;
+    setIsTeacherLoggingIn(true);
+    try {
+      await handleLogin({
+        username: teacherId,
+        password: teacherPw,
+      });
+      const role = useAuthStore.getState().userInfo?.role;
+      if (role === "EDUCATOR") {
+        navigate({ to: "/teacher" });
+      } else if (role === "LEARNER") {
+        navigate({ to: "/student" });
+      } else {
+        alert("사용자 역할을 찾지 못했습니다. 메인 페이지로 이동합니다.");
+      }
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsTeacherLoggingIn(false);
+    }
   };
 
   return (
@@ -54,14 +74,6 @@ function Index() {
           도구를 경험할 수 있습니다.
         </p>
         <SocialLoginButton />
-        {/* <button
-          className="px-6 py-3 bg-blue-500 rounded-lg font-semibold hover:bg-blue-600 transition cursor-pointer"
-          onClick={() => {
-            navigate({ to: "/student" });
-          }}
-        >
-          시작하기
-        </button> */}
       </div>
       {isTeacherLoginOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -97,33 +109,19 @@ function Index() {
                 <button
                   type="button"
                   className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-800"
-                  onClick={() => setTeacherLoginOpen(false)}
+                  disabled={isTeacherLoggingIn}
+                  onClick={() => {
+                    setTeacherLoginOpen(false);
+                    setTeacherId("");
+                    setTeacherPw("");
+                  }}
                 >
                   취소
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white"
-                  onClick={async () => {
-                    try {
-                      await handleLogin({
-                        username: teacherId,
-                        password: teacherPw,
-                      });
-                      const role = useAuthStore.getState().userInfo?.role;
-                      if (role === "EDUCATOR") {
-                        navigate({ to: "/teacher" });
-                      } else if (role === "LEARNER") {
-                        navigate({ to: "/student" });
-                      } else {
-                        alert(
-                          "사용자 역할을 찾지 못했습니다. 메인 페이지로 이동합니다.",
-                        );
-                      }
-                    } catch (error) {
-                      throw error;
-                    }
-                  }}
+                  disabled={isTeacherLoggingIn}
                 >
                   로그인
                 </button>
