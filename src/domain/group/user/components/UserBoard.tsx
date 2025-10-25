@@ -3,6 +3,7 @@ import UserListHeader from "./UserListHeader";
 import UserListItem from "./UserListItem";
 import Button from "@common/components/Button";
 import { createInviteCode } from "../apis/user";
+import { AxiosError } from "axios";
 
 function UserBoard({ groupUuid }: { groupUuid: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,8 +17,9 @@ function UserBoard({ groupUuid }: { groupUuid: string }) {
       const code = await createInviteCode(groupUuid);
       setInviteCode(code);
     } catch (e) {
-      console.log(e);
-      setInviteCode("초대 코드 생성 실패. ");
+      const message =
+        e instanceof AxiosError ? e.response?.data.message : String(e);
+      setInviteCode("초대 코드 생성 실패. " + message);
     } finally {
       setIsOpen(true);
       setIsCreating(false);
