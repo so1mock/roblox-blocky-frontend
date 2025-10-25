@@ -9,7 +9,7 @@ export const Route = createFileRoute("/student/_mainLayout/group/$groupId")({
       return group;
     } catch (error) {
       alert("유효하지 않은 반입니다.");
-      throw redirect({ to: "/teacher/group" });
+      throw redirect({ to: "/student/group" });
     }
   },
   component: RouteComponent,

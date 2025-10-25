@@ -33,7 +33,7 @@ export const getGroupWalls = async (groupUuid: string): Promise<WallInfo[]> => {
     // return mapped;
   } catch (e) {
     if (e instanceof AxiosError) {
-      throw e.message;
+      throw e;
     }
     throw e;
   }
@@ -54,7 +54,7 @@ export const createWall = async ({
     return 200 <= response.status && response.status < 300;
   } catch (e) {
     if (e instanceof AxiosError) {
-      throw e.message;
+      throw e;
     }
     throw e;
   }
@@ -75,7 +75,7 @@ export const updateWall = async ({
     return 200 <= response.status && response.status < 300;
   } catch (e) {
     if (e instanceof AxiosError) {
-      throw e.message;
+      throw e;
     }
     throw e;
   }

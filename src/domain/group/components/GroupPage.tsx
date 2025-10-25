@@ -105,10 +105,7 @@ function GroupPage() {
       {!isLoading && !error && myGroups.length > 0 && (
         <div className="grid grid-cols-4 gap-12">
           {myGroups.map((group) => (
-            <GroupCard
-              key={group.uuid}
-              group={{ ...group, iconSrc: undefined }}
-            />
+            <GroupCard key={group.uuid} groupSummary={{ ...group }} />
           ))}
         </div>
       )}

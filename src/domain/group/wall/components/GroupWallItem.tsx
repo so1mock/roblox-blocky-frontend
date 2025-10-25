@@ -18,7 +18,7 @@ function GroupWallItem({
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editedContent, setEditedContent] = useState<string>(wallInfo.content);
   const editTextareaRef = useRef<HTMLTextAreaElement>(null);
-  const { userInfo } = useAuthStore.getState();
+  const { userInfo } = useAuthStore();
 
   useEffect(() => {
     if (isEditing) {

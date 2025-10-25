@@ -16,7 +16,7 @@ export const createGroup = async (
     return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
-      throw e.message;
+      throw e;
     }
     throw e;
   }
@@ -29,7 +29,7 @@ export const deleteGroup = async (uuid: string) => {
     return 200 <= response.data.status && response.data.status < 300;
   } catch (e) {
     if (e instanceof AxiosError) {
-      throw e.message;
+      throw e;
     }
     throw e;
   }
@@ -42,7 +42,7 @@ export const getMyGroups = async (): Promise<GroupSummary[]> => {
     return response.data.groups;
   } catch (e) {
     if (e instanceof AxiosError) {
-      throw e.message;
+      throw e;
     }
     throw e;
   }
@@ -59,7 +59,7 @@ export const getGroupInfo = async (groupId: string): Promise<GroupInfo> => {
     };
   } catch (e) {
     if (e instanceof AxiosError) {
-      throw e.message;
+      throw e;
     }
     throw e;
   }
@@ -83,7 +83,7 @@ export const updateGroupInfo = async ({
     return 200 <= response.data.status && response.data.status < 300;
   } catch (e) {
     if (e instanceof AxiosError) {
-      throw e.message;
+      throw e;
     }
     throw e;
   }

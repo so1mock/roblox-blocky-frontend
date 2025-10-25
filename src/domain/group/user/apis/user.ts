@@ -7,7 +7,7 @@ export const createInviteCode = async (groupUuid: string): Promise<string> => {
     return response.data.inviteCode;
   } catch (e) {
     if (e instanceof AxiosError) {
-      throw e.message;
+      throw e;
     }
     throw e;
   }
@@ -19,7 +19,8 @@ export const joinGroup = async (inviteCode: string) => {
     return 200 <= response.status && response.status < 300;
   } catch (e) {
     if (e instanceof AxiosError) {
-      throw e.message;
+      throw e;
     }
+    throw e;
   }
 };
