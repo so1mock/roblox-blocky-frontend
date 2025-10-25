@@ -1,6 +1,7 @@
 import { api } from "@common/apis/axios";
 import type { WallInfo } from "../types/wall";
 import { AxiosError } from "axios";
+import type { UserRole } from "@user/types/user";
 
 // 그룹 내 담벼락 목록 조회
 // Backend returns a wrapper with paging. Map to WallInfo[].
@@ -9,7 +10,7 @@ type RawWallMessage = {
     uuid: string;
     nickname: string;
     profileImageSrc?: string | null;
-    role: string;
+    role: UserRole;
   };
   uuid: string;
   content: string;
@@ -25,12 +26,12 @@ export const getGroupWalls = async (groupUuid: string): Promise<WallInfo[]> => {
       uuid: m.uuid,
       author: {
         ...m.groupMemberProfile,
+        profileImageSrc: m.groupMemberProfile.profileImageSrc ?? undefined,
       },
       content: m.content,
       createdAt: m.createdAt,
       updatedAt: m.updatedAt,
     }));
-    // return mapped;
   } catch (e) {
     if (e instanceof AxiosError) {
       throw e;
