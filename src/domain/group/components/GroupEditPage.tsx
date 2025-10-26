@@ -21,6 +21,7 @@ function GroupEditPage({ id }: { id: string }) {
   // 이미지 업로드 상태
   const [groupImage, setGroupImage] = useState<string>("/imgProfile.png");
 
+  // 수정될 정보
   const [editedGroupInformation, setEditedGroupInformation] =
     useState<GroupSummary>({
       uuid: "",
@@ -29,6 +30,12 @@ function GroupEditPage({ id }: { id: string }) {
       iconSrc: undefined,
     });
 
+  // 편집 모드 상태
+  const [isEditingMode, setIsEditingMode] = useState({
+    name: false,
+    description: false,
+  });
+
   useEffect(() => {
     if (groupInfo === undefined) {
       return;
@@ -36,23 +43,17 @@ function GroupEditPage({ id }: { id: string }) {
     setEditedGroupInformation(groupInfo.groupSummary);
   }, [groupInfo]);
 
-  // 편집 모드 상태
-  const [isEditingName, setIsEditingName] = useState(false);
-  const [isEditingDescription, setIsEditingDescription] = useState(false);
-
   useEffect(() => {
-    if (isEditingName && inputNameRef.current) {
+    if (isEditingMode.name && inputNameRef.current) {
       inputNameRef.current.focus();
       inputNameRef.current.select();
     }
-  }, [isEditingName]);
 
-  useEffect(() => {
-    if (isEditingDescription && inputDescriptionRef.current) {
+    if (isEditingMode.description && inputDescriptionRef.current) {
       inputDescriptionRef.current.focus();
       inputDescriptionRef.current.select();
     }
-  }, [isEditingDescription]);
+  }, [isEditingMode]);
 
   // 이미지 선택
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +63,7 @@ function GroupEditPage({ id }: { id: string }) {
     }
   };
 
-  // 저장/취소 핸들러
+  // 그룹 정보 수정 api 요청
   const handleEditGroupInformation = async () => {
     await updateGroupInfo({
       uuid: id,
@@ -71,22 +72,31 @@ function GroupEditPage({ id }: { id: string }) {
     });
   };
 
+  // 이름 수정 취소
   const handleCancelName = () => {
     if (groupInfo === undefined) {
       return;
     }
     setEditedGroupInformation(groupInfo.groupSummary);
-    setIsEditingName(false);
+    setIsEditingMode((prev) => ({
+      ...prev,
+      name: false,
+    }));
   };
 
+  // 설명 수정 취소
   const handleCancelDescription = () => {
     if (groupInfo === undefined) {
       return;
     }
     setEditedGroupInformation(groupInfo.groupSummary);
-    setIsEditingDescription(false);
+    setIsEditingMode((prev) => ({
+      ...prev,
+      description: false,
+    }));
   };
 
+  // changeevent 연결
   const handleChangeGroupInformation = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -135,7 +145,7 @@ function GroupEditPage({ id }: { id: string }) {
             {/* 반 이름 */}
             <div className="flex flex-col gap-2 w-full">
               <span className="font-bold text-2xl">반 이름</span>
-              {isEditingName ? (
+              {isEditingMode.name ? (
                 <div className="flex gap-2 items-center">
                   <input
                     type="text"
@@ -169,7 +179,10 @@ function GroupEditPage({ id }: { id: string }) {
                   <button
                     className="cursor-pointer"
                     onClick={() => {
-                      setIsEditingName(true);
+                      setIsEditingMode((prev) => ({
+                        ...prev,
+                        name: true,
+                      }));
                     }}
                   >
                     <img src="/btnEdit.png" />
@@ -183,7 +196,7 @@ function GroupEditPage({ id }: { id: string }) {
             {/* 반 설명 */}
             <div className="flex flex-col gap-2 w-full">
               <span className="font-bold text-2xl">반 설명</span>
-              {isEditingDescription ? (
+              {isEditingMode.description ? (
                 <div className="flex flex-col gap-2">
                   <textarea
                     value={editedGroupInformation.description}
@@ -218,7 +231,12 @@ function GroupEditPage({ id }: { id: string }) {
                   <span>{groupInfo.groupSummary.description}</span>
                   <button
                     className="cursor-pointer"
-                    onClick={() => setIsEditingDescription(true)}
+                    onClick={() => {
+                      setIsEditingMode((prev) => ({
+                        ...prev,
+                        description: true,
+                      }));
+                    }}
                   >
                     <img src="/btnEdit.png" />
                   </button>
