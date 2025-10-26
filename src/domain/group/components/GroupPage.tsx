@@ -36,7 +36,6 @@ function GroupPage() {
 
   const handleCreateGroup = async () => {
     if (isCreatingGroup || newGroupName.trim().length === 0) return;
-    if (isCreatingGroup) return;
 
     try {
       const groupInfo = {
