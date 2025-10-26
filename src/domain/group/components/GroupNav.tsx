@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { deleteGroup } from "../apis/group";
+import { useDeleteGroupMutation } from "../hooks/useDeleteGroupMutation";
 
 function GroupNav({ id }: { id: string }) {
   const navigate = useNavigate();
@@ -32,21 +32,16 @@ function GroupNav({ id }: { id: string }) {
     },
   ];
 
+  const { mutateAsync: deleteGroupMutation, isPending: isDeletingGroup } =
+    useDeleteGroupMutation();
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(-1);
-  const [isDeleting, setIsDeleting] = useState(false);
+
   const handleGroupDelete = async () => {
-    if (isDeleting) return;
-    setIsDeleting(true);
-    try {
-      if (!confirm("정말 반을 삭제하시겠습니까?")) return;
-      await deleteGroup(id);
-      navigate({ to: "/teacher/group" });
-    } catch (e) {
-      const message = e instanceof Error ? e.message : String(e);
-      alert("반 삭제 실패: " + message);
-    } finally {
-      setIsDeleting(false);
-    }
+    if (isDeletingGroup) return;
+    if (!confirm("정말 반을 삭제하시겠습니까?")) return;
+
+    await deleteGroupMutation(id);
+    navigate({ to: "/teacher/group" });
   };
 
   // URL 경로 변경 시 활성 메뉴 갱신
