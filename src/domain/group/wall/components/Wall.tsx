@@ -1,52 +1,57 @@
 import GroupWallCreateForm from "./GroupWallCreateForm";
-import type { WallInfo } from "../types/wall";
-import { useEffect, useState } from "react";
-import { getGroupWalls } from "../apis/wall";
+import { useState } from "react";
 import GroupWallItem from "./GroupWallItem";
+import { useWallListQuery } from "../hooks/useWallListQuery";
+import Pagination from "@common/components/Pagination";
 
 function Wall({ groupUuid }: { groupUuid: string }) {
-  const [walls, setWalls] = useState<WallInfo[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [page, setPage] = useState(0);
 
-  const refresh = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const walls = await getGroupWalls(groupUuid);
-      setWalls(walls);
-    } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : String(e);
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    refresh();
-  }, []);
+  const {
+    data: walls,
+    isLoading: isGroupWallLoading,
+    isError: isGroupwallError,
+    error: groupwallError,
+  } = useWallListQuery(groupUuid, page);
 
   return (
     <div>
       <span className="font-bold text-2xl">담벼락</span>
-      <GroupWallCreateForm onChanged={refresh} groupUuid={groupUuid} />
+      <GroupWallCreateForm
+        groupUuid={groupUuid}
+        groupId={groupUuid}
+        page={page}
+      />
 
-      {loading && <div>로딩 중...</div>}
-      {!loading && error && <div>오류: {error}</div>}
-      {!loading && !error && walls.length === 0 && (
+      {isGroupWallLoading && <div>로딩 중...</div>}
+
+      {!isGroupWallLoading && isGroupwallError && (
+        <div>오류: {groupwallError.message}</div>
+      )}
+
+      {walls !== undefined && walls.wallMessages.length === 0 && (
         <div>담벼락이 없습니다.</div>
       )}
-      {!loading &&
-        !error &&
-        walls.length > 0 &&
-        walls.map((wallInfo) => (
+
+      {walls !== undefined &&
+        walls.wallMessages.map((wall) => (
           <GroupWallItem
-            key={wallInfo.uuid}
-            wallInfo={wallInfo}
-            onChanged={refresh}
+            key={wall.uuid}
+            wallInfo={wall}
+            groupId={groupUuid}
+            page={page}
           />
         ))}
+
+      {walls !== undefined && (
+        <Pagination
+          setPage={setPage}
+          pageInfo={{
+            currentPageNumber: walls.currentPageNumber,
+            possibleNextPageNumbers: walls.possibleNextPageNumbers,
+          }}
+        />
+      )}
     </div>
   );
 }

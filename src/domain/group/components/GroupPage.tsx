@@ -1,54 +1,72 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { GroupCard } from "./GroupCard";
 import Dropdown from "@common/components/Dropdown";
 import { useAuthStore } from "@user/stores/authStore";
-import {
-  getMyGroups,
-  createGroup,
-  type CreateGroupRequest,
-} from "../apis/group";
-import type { GroupSummary } from "../types/group";
-import { joinGroup } from "../user/apis/user";
+import { useMyGroupsQuery } from "../hooks/useMyGroupsQuery";
+import { useCreateGroupMutation } from "../hooks/useCreateGroupMutation";
+import { useJoinGroupMutation } from "../hooks/useJoinGroupMutation";
 
 const sortOptions = [
   { name: "최신 순", key: "new" },
   { name: "과거 순", key: "old" },
 ];
+
 function GroupPage() {
+  const { userInfo } = useAuthStore();
   const [selectedSort, setSelectedSort] = useState({
     name: "최신 순",
     key: "new",
   });
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [myGroups, setMyGroups] = useState<GroupSummary[]>([]);
-  const { userInfo } = useAuthStore();
+  const {
+    data: myGroups = [],
+    isLoading: isMyGroupsLoading,
+    isError: isMyGroupsError,
+    error: myGroupsError,
+  } = useMyGroupsQuery();
+  const { mutateAsync: createGroupMutation, isPending: isCreatingGroup } =
+    useCreateGroupMutation();
+  const { mutateAsync: joinGroupMutation, isPending: isJoiningGroup } =
+    useJoinGroupMutation();
+
   const [isCreateOpen, setIsCreateOpen] = useState<boolean>(false);
   const [newGroupName, setNewGroupName] = useState<string>("");
   const [newGroupDescription, setNewGroupDescription] = useState<string>("");
-  const [isCreating, setIsCreating] = useState<boolean>(false);
   const [isJoinOpen, setIsJoinOpen] = useState<boolean>(false);
   const [inviteCodeInput, setInviteCodeInput] = useState<string>("");
-  const [isJoining, setIsJoining] = useState<boolean>(false);
 
-  const refresh = async () => {
-    setIsLoading(true);
-    setError(null);
+  const handleCreateGroup = async () => {
+    if (isCreatingGroup || newGroupName.trim().length === 0) return;
+
     try {
-      const response = await getMyGroups();
-      setMyGroups(response);
+      const groupInfo = {
+        name: newGroupName.trim(),
+        description: newGroupDescription.trim(),
+      };
+
+      await createGroupMutation(groupInfo);
+      setIsCreateOpen(false);
+      setNewGroupName("");
+      setNewGroupDescription("");
     } catch (e) {
       if (e instanceof Error) {
-        setError(e.message ?? "그룹 목록을 가져오지 못했습니다.");
+        alert(e.message);
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    refresh();
-  }, []);
+  const handleJoinGroup = async () => {
+    if (isJoiningGroup) return;
+
+    try {
+      await joinGroupMutation(inviteCodeInput.trim());
+      setIsJoinOpen(false);
+      setInviteCodeInput("");
+    } catch (e) {
+      if (e instanceof Error) {
+        alert(e.message);
+      }
+    }
+  };
 
   return (
     <div>
@@ -88,7 +106,6 @@ function GroupPage() {
               </span>
             </button>
           )}
-
           <Dropdown
             options={sortOptions}
             selected={selectedSort}
@@ -97,12 +114,14 @@ function GroupPage() {
           />
         </div>
       </div>
-      {isLoading && <div>로딩 중...</div>}
-      {!isLoading && error && <div>오류: {error}</div>}
-      {!isLoading && !error && myGroups.length === 0 && (
+      {isMyGroupsLoading && <div>로딩 중...</div>}
+      {!isMyGroupsLoading && isMyGroupsError && (
+        <div>오류: {myGroupsError.message}</div>
+      )}
+      {!isMyGroupsLoading && !isMyGroupsError && myGroups.length === 0 && (
         <div>그룹이 없습니다.</div>
       )}
-      {!isLoading && !error && myGroups.length > 0 && (
+      {!isMyGroupsLoading && !isMyGroupsError && myGroups.length > 0 && (
         <div className="grid grid-cols-4 gap-12">
           {myGroups.map((group) => (
             <GroupCard key={group.uuid} groupSummary={{ ...group }} />
@@ -150,30 +169,10 @@ function GroupPage() {
               </button>
               <button
                 className="px-4 py-2 rounded-lg bg-rbPrimaryColor text-white disabled:opacity-60"
-                disabled={isCreating || newGroupName.trim().length === 0}
-                onClick={async () => {
-                  if (isCreating) return;
-                  setIsCreating(true);
-                  const groupInfo: CreateGroupRequest = {
-                    name: newGroupName.trim(),
-                    description: newGroupDescription.trim(),
-                  };
-                  try {
-                    await createGroup(groupInfo);
-                    setIsCreateOpen(false);
-                    setNewGroupName("");
-                    setNewGroupDescription("");
-                    await refresh();
-                  } catch (e) {
-                    if (e instanceof Error) {
-                      alert(e.message);
-                    }
-                  } finally {
-                    setIsCreating(false);
-                  }
-                }}
+                disabled={isCreatingGroup || newGroupName.trim().length === 0}
+                onClick={handleCreateGroup}
               >
-                {isCreating ? "생성 중..." : "생성"}
+                {isCreatingGroup ? "생성 중..." : "생성"}
               </button>
             </div>
           </div>
@@ -209,25 +208,10 @@ function GroupPage() {
               </button>
               <button
                 className="px-4 py-2 rounded-lg bg-rbPrimaryColor text-white disabled:opacity-60"
-                disabled={isJoining || inviteCodeInput.trim().length === 0}
-                onClick={async () => {
-                  if (isJoining) return;
-                  setIsJoining(true);
-                  try {
-                    await joinGroup(inviteCodeInput.trim());
-                    await refresh();
-                    setIsJoinOpen(false);
-                    setInviteCodeInput("");
-                  } catch (e) {
-                    if (e instanceof Error) {
-                      alert(e.message);
-                    }
-                  } finally {
-                    setIsJoining(false);
-                  }
-                }}
+                disabled={isJoiningGroup || inviteCodeInput.trim().length === 0}
+                onClick={handleJoinGroup}
               >
-                {isJoining ? "가입 중..." : "가입"}
+                {isJoiningGroup ? "가입 중..." : "가입"}
               </button>
             </div>
           </div>

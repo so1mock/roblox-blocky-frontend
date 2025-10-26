@@ -66,19 +66,11 @@ export const getGroupInfo = async (groupId: string): Promise<GroupInfo> => {
 };
 
 // 그룹 정보 수정(반 이름, 반 설명))
-export const updateGroupInfo = async ({
-  uuid,
-  name,
-  description,
-}: {
-  uuid: string;
-  name: string;
-  description: string;
-}) => {
+export const updateGroupInfo = async (editedGroupInformation: GroupSummary) => {
   try {
-    const response = await api.put(`groups/${uuid}`, {
-      name: name,
-      description: description,
+    const response = await api.put(`groups/${editedGroupInformation.uuid}`, {
+      name: editedGroupInformation.name,
+      description: editedGroupInformation.description,
     });
     return 200 <= response.data.status && response.data.status < 300;
   } catch (e) {

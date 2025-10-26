@@ -1,5 +1,5 @@
 import { api } from "@common/apis/axios";
-import type { WallInfo } from "../types/wall";
+import type { WallInfoPagination } from "../types/wall";
 import { AxiosError } from "axios";
 import type { UserRole } from "@user/types/user";
 
@@ -18,20 +18,28 @@ type RawWallMessage = {
   updatedAt: string;
 };
 
-export const getGroupWalls = async (groupUuid: string): Promise<WallInfo[]> => {
+export const getGroupWalls = async (
+  groupUuid: string,
+  page: number,
+): Promise<WallInfoPagination> => {
   try {
-    const response = await api.get(`/groups/${groupUuid}/wall/messages`);
+    const response = await api.get(
+      `/groups/${groupUuid}/wall/messages?page=${page}`,
+    );
     const data = response.data;
-    return data.wallMessages.map((m: RawWallMessage) => ({
-      uuid: m.uuid,
-      author: {
-        ...m.groupMemberProfile,
-        profileImageSrc: m.groupMemberProfile.profileImageSrc ?? undefined,
-      },
-      content: m.content,
-      createdAt: m.createdAt,
-      updatedAt: m.updatedAt,
-    }));
+    return {
+      ...data,
+      wallMessages: data.wallMessages.map((m: RawWallMessage) => ({
+        uuid: m.uuid,
+        author: {
+          ...m.groupMemberProfile,
+          profileImageSrc: m.groupMemberProfile.profileImageSrc ?? undefined,
+        },
+        content: m.content,
+        createdAt: m.createdAt,
+        updatedAt: m.updatedAt,
+      })),
+    };
   } catch (e) {
     if (e instanceof AxiosError) {
       throw e;
@@ -62,7 +70,7 @@ export const createWall = async ({
 };
 
 // 담벼락 업데이트
-export const updateWall = async ({
+export const editWall = async ({
   messageUuid,
   content,
 }: {
