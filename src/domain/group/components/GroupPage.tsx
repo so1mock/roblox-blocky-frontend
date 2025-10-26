@@ -2,9 +2,9 @@ import { useState } from "react";
 import { GroupCard } from "./GroupCard";
 import Dropdown from "@common/components/Dropdown";
 import { useAuthStore } from "@user/stores/authStore";
-import { joinGroup } from "../user/apis/user";
 import { useMyGroupsQuery } from "../hooks/useMyGroupsQuery";
 import { useCreateGroupMutation } from "../hooks/useCreateGroupMutation";
+import { useJoinGroupMutation } from "../hooks/useJoinGroupMutation";
 
 const sortOptions = [
   { name: "최신 순", key: "new" },
@@ -26,13 +26,14 @@ function GroupPage() {
   } = useMyGroupsQuery();
   const { mutateAsync: createGroupMutation, isPending: isCreatingGroup } =
     useCreateGroupMutation();
+  const { mutateAsync: joinGroupMutation, isPending: isJoiningGroup } =
+    useJoinGroupMutation();
 
   const [isCreateOpen, setIsCreateOpen] = useState<boolean>(false);
   const [newGroupName, setNewGroupName] = useState<string>("");
   const [newGroupDescription, setNewGroupDescription] = useState<string>("");
   const [isJoinOpen, setIsJoinOpen] = useState<boolean>(false);
   const [inviteCodeInput, setInviteCodeInput] = useState<string>("");
-  const [isJoining, setIsJoining] = useState<boolean>(false);
 
   const handleCreateGroup = async () => {
     if (isCreatingGroup || newGroupName.trim().length === 0) return;
@@ -49,6 +50,21 @@ function GroupPage() {
       setNewGroupName("");
       setNewGroupDescription("");
       await refetchMyGroups();
+    } catch (e) {
+      if (e instanceof Error) {
+        alert(e.message);
+      }
+    }
+  };
+
+  const handleJoinGroup = async () => {
+    if (isJoiningGroup) return;
+
+    try {
+      await joinGroupMutation(inviteCodeInput.trim());
+      await refetchMyGroups();
+      setIsJoinOpen(false);
+      setInviteCodeInput("");
     } catch (e) {
       if (e instanceof Error) {
         alert(e.message);
@@ -94,7 +110,6 @@ function GroupPage() {
               </span>
             </button>
           )}
-
           <Dropdown
             options={sortOptions}
             selected={selectedSort}
@@ -197,25 +212,10 @@ function GroupPage() {
               </button>
               <button
                 className="px-4 py-2 rounded-lg bg-rbPrimaryColor text-white disabled:opacity-60"
-                disabled={isJoining || inviteCodeInput.trim().length === 0}
-                onClick={async () => {
-                  if (isJoining) return;
-                  setIsJoining(true);
-                  try {
-                    await joinGroup(inviteCodeInput.trim());
-                    await refetchMyGroups();
-                    setIsJoinOpen(false);
-                    setInviteCodeInput("");
-                  } catch (e) {
-                    if (e instanceof Error) {
-                      alert(e.message);
-                    }
-                  } finally {
-                    setIsJoining(false);
-                  }
-                }}
+                disabled={isJoiningGroup || inviteCodeInput.trim().length === 0}
+                onClick={handleJoinGroup}
               >
-                {isJoining ? "가입 중..." : "가입"}
+                {isJoiningGroup ? "가입 중..." : "가입"}
               </button>
             </div>
           </div>
