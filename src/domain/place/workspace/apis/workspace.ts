@@ -1,11 +1,11 @@
 import { api } from "@common/apis/axios";
-import type { BlockScript, WorkspaceData } from "../types/workspace";
+import type { BlockScript, Place } from "../types/workspace";
 import { AxiosError } from "axios";
 import type { ConvertedScript } from "../types/script";
 
 export const getWorkspaceDataByPlaceId = async (
   placeId: string,
-): Promise<WorkspaceData> => {
+): Promise<Place> => {
   try {
     const response = await api.get(`/place/${placeId}`);
     return response.data;

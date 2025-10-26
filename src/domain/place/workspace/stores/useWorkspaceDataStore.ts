@@ -1,11 +1,11 @@
 import { create } from "zustand";
-import type { WorkspaceData, WorkspaceObject } from "../types/workspace";
+import type { Place, WorkspaceObject } from "../types/workspace";
 
 interface WorkspaceDataStoreType {
-  workspaceData: WorkspaceData | null;
+  workspaceData: Place | null;
   selectedScript: WorkspaceObject | undefined;
   setSelectedScript: (scriptObject: WorkspaceObject | undefined) => void;
-  setWorkspaceData: (workspaceData: WorkspaceData) => void;
+  setWorkspaceData: (workspaceData: Place) => void;
 }
 
 export const useWorkspaceDataStore = create<WorkspaceDataStoreType>((set) => ({

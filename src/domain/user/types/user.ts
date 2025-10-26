@@ -5,11 +5,11 @@ export type Auth = {
 
 export type UserRole = "LEARNER" | "EDUCATOR";
 
-export interface BaseUser {
+export interface UserInfo {
+  uuid: string;
   nickname: string;
+  profileImageSrc: string | undefined;
   role: UserRole;
   country: string;
   createTime: string;
 }
-
-export type DetailedUser = BaseUser;

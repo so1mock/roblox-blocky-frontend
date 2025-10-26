@@ -7,5 +7,5 @@ export const Route = createFileRoute("/teacher/_mainLayout/group/$groupId/")({
 
 function RouteComponent() {
   const { groupId } = Route.useParams();
-  return <GroupDetailedPage id={groupId} />;
+  return <GroupDetailedPage groupUuid={groupId} />;
 }

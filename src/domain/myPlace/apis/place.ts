@@ -14,7 +14,7 @@ export const getMyPlaces = async (): Promise<PlaceSummary[]> => {
     return response.data.places;
   } catch (e) {
     if (e instanceof AxiosError) {
-      throw e.message;
+      throw e;
     }
     throw e;
   }
@@ -29,7 +29,7 @@ export const updatePlace = async (placeInfo: PlaceInfo) => {
     return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
-      throw e.message;
+      throw e;
     }
     throw e;
   }
@@ -41,7 +41,7 @@ export const deletePlace = async (placeUuid: string): Promise<boolean> => {
     return 200 <= response.status && response.status < 300;
   } catch (e) {
     if (e instanceof AxiosError) {
-      throw e.message;
+      throw e;
     }
     throw e;
   }

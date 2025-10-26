@@ -22,7 +22,7 @@ export interface WorkspaceObject {
   blockScript?: BlockScript;
 }
 
-export interface WorkspaceData {
+export interface Place {
   placeSummary: PlaceSummary;
   objects: WorkspaceObject[];
 }

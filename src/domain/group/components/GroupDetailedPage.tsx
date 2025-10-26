@@ -1,17 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Board from "../board/components/Board";
-import GroupWallItem from "../wall/components/GroupWallItem";
+import Wall from "../wall/components/Wall";
 import GroupNav from "./GroupNav";
 import { useAuthStore } from "@user/stores/authStore";
-import GroupWallCreateForm from "../wall/components/GroupWallCreateForm";
+import type { GroupInfo } from "../types/group";
+import { getGroupInfo } from "../apis/group";
+import { useNavigate } from "@tanstack/react-router";
+import { AxiosError } from "axios";
 
-function GroupDetailedPage({ id }: { id: string }) {
+function GroupDetailedPage({ groupUuid }: { groupUuid: string }) {
+  const [groupInfo, setGroupInfo] = useState<GroupInfo | null>(null);
+  const navigate = useNavigate();
   const [, setPage] = useState(1);
   const { userInfo } = useAuthStore();
+  useEffect(() => {
+    const fetchGroupInfo = async () => {
+      try {
+        const response = await getGroupInfo(groupUuid);
+        setGroupInfo(response);
+      } catch (error) {
+        const message =
+          error instanceof AxiosError
+            ? error.response?.data.message
+            : String(error);
+        alert("유효하지 않은 반입니다. " + message);
+        navigate({
+          to: `/${userInfo?.role === "EDUCATOR" ? "teacher" : "student"}/group`,
+        });
+      }
+    };
+    fetchGroupInfo();
+  }, [groupUuid, navigate]);
 
-  return (
+  return groupInfo ? (
     <div className="w-[1600px] mx-auto flex justify-center gap-24">
-      {userInfo?.role === "EDUCATOR" && <GroupNav id={id} />}
+      {userInfo?.role === "EDUCATOR" && (
+        <GroupNav id={groupInfo.groupSummary.uuid} />
+      )}
 
       <div className="w-[1200px]">
         <div className="flex flex-col gap-6">
@@ -24,15 +49,17 @@ function GroupDetailedPage({ id }: { id: string }) {
             <div className="flex flex-col gap-4">
               <div>
                 <span className="text-white bg-rbPrimaryColor px-2 py-2 rounded-3xl">
-                  학생 12명
+                  학생 {groupInfo.memberCount}명
                 </span>
               </div>
 
-              <h1 className="font-bold text-4xl">연습 1반</h1>
-              <span>개설자: 김선우</span>
+              <h1 className="font-bold text-4xl">
+                {groupInfo.groupSummary.name}
+              </h1>
+              <span>개설자: {groupInfo.ownerNickname}</span>
             </div>
           </div>
-          <span>이 반은 기초 로블록스 학습을 위해 생성된 반입니다.</span>
+          <span>{groupInfo.groupSummary.description}</span>
         </div>
         <div className=" bg-white rounded-2xl px-12 py-12 mt-8">
           <Board
@@ -41,17 +68,14 @@ function GroupDetailedPage({ id }: { id: string }) {
               currentPageNumber: 3,
               possibleNextPageNumbers: [4, 5],
             }}
-            groupId={id}
+            groupId={groupInfo.groupSummary.uuid}
           />
-          <div>
-            <span className="font-bold text-2xl">담벼락</span>
-            {userInfo?.role === "LEARNER" && <GroupWallCreateForm />}
-            <GroupWallItem index={0} />
-            <GroupWallItem index={1} />
-          </div>
+          <Wall groupUuid={groupInfo.groupSummary.uuid} />
         </div>
       </div>
     </div>
+  ) : (
+    <div>Loading...</div>
   );
 }
 

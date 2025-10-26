@@ -5,7 +5,7 @@ function Button({
   ySize = 1, // 기본값 py-1
 }: {
   text: string;
-  handleButtonClick: () => void;
+  handleButtonClick: () => void | Promise<void>;
   xSize?: number;
   ySize?: number;
 }) {

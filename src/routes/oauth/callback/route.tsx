@@ -30,16 +30,13 @@ export function RouteComponent() {
     from: "/oauth/callback",
   }) as SearchParams;
   const navigate = useNavigate();
-  const { handleLogin } = useUser();
+  const { handleSocialLogin } = useUser();
 
   // RouteComponent 내 useEffect 예시
   useEffect(() => {
     const fetchLogin = async () => {
-      if (error) {
-        alert("로블록스 로그인에서 에러 발생: " + error.message);
-        navigate({ to: "/" });
-      } else if (code) {
-        await handleLogin(code);
+      if (code) {
+        await handleSocialLogin(code);
         const role = useAuthStore.getState().userInfo?.role;
         if (role === "LEARNER") {
           navigate({ to: "/student" });
@@ -49,9 +46,12 @@ export function RouteComponent() {
           alert("사용자 역할을 찾지 못했습니다. 메인 페이지로 이동합니다.");
           navigate({ to: "/" });
         }
+      } else if (error) {
+        alert("로블록스 로그인에서 에러 발생: " + error.message);
+        navigate({ to: "/" });
       }
     };
     fetchLogin();
-  }, [code, error, handleLogin, navigate]);
+  }, [code, error, handleSocialLogin, navigate]);
   return <div> Redirecting...</div>;
 }

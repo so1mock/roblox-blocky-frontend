@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import GroupNav from "./GroupNav";
 import { useAuthStore } from "@user/stores/authStore";
+import type { GroupSummary } from "../types/group";
+import { updateGroupInfo } from "../apis/group";
 
-function GroupEditPage({ id }: { id: string }) {
+function GroupEditPage({ groupSummary }: { groupSummary: GroupSummary }) {
   const { userInfo } = useAuthStore();
   const inputNameRef = useRef<HTMLInputElement>(null);
   const inputDescriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -10,19 +12,19 @@ function GroupEditPage({ id }: { id: string }) {
   // 이미지 업로드 상태
   const [groupImage, setGroupImage] = useState<string>("/imgProfile.png");
 
-  // 반 이름/설명 상태
-  const [groupName, setGroupName] = useState("연습 1반");
+  const [groupName, setGroupName] = useState(groupSummary.name);
   const [groupDescription, setGroupDescription] = useState(
-    "이 반은 기초 로블록스 학습을 위해 생성된 반입니다.",
+    groupSummary.description,
   );
-
-  // 임시 편집용 상태
-  const [editName, setEditName] = useState(groupName);
-  const [editDescription, setEditDescription] = useState(groupDescription);
+  const [editedName, setEditedName] = useState(groupName);
+  const [editedDescription, setEditedDescription] = useState(groupDescription);
 
   // 편집 모드 상태
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
+
+  const [isUpdatingName, setIsUpdatingName] = useState(false);
+  const [isUpdatingDescription, setIsUpdatingDescription] = useState(false);
 
   useEffect(() => {
     if (isEditingName && inputNameRef.current) {
@@ -47,30 +49,60 @@ function GroupEditPage({ id }: { id: string }) {
   };
 
   // 저장/취소 핸들러
-  const handleSaveName = () => {
-    setGroupName(editName);
-    setIsEditingName(false);
-    // TODO: API 요청으로 서버 저장
+  const handleSaveName = async () => {
+    if (isUpdatingName) return;
+    setIsUpdatingName(true);
+
+    try {
+      await updateGroupInfo({
+        uuid: groupSummary.uuid,
+        name: editedName,
+        description: groupDescription,
+      });
+      setGroupName(editedName);
+    } catch (e) {
+      const message = e instanceof Error ? e.message : String(e);
+      setGroupName(message);
+      setEditedName(message);
+    } finally {
+      setIsEditingName(false);
+      setIsUpdatingName(false);
+    }
+  };
+
+  const handleSaveDescription = async () => {
+    if (isUpdatingDescription) return;
+    setIsUpdatingDescription(true);
+    try {
+      await updateGroupInfo({
+        uuid: groupSummary.uuid,
+        name: groupName,
+        description: editedDescription,
+      });
+      setGroupDescription(editedDescription);
+    } catch (e) {
+      const message = e instanceof Error ? e.message : String(e);
+      setGroupDescription(message);
+      setEditedDescription(message);
+    } finally {
+      setIsEditingDescription(false);
+      setIsUpdatingDescription(false);
+    }
   };
 
   const handleCancelName = () => {
-    setEditName(groupName);
+    setEditedName(groupSummary.name);
     setIsEditingName(false);
   };
 
-  const handleSaveDescription = () => {
-    setGroupDescription(editDescription);
-    setIsEditingDescription(false);
-    // TODO: API 요청으로 서버 저장
-  };
   const handleCancelDescription = () => {
-    setEditDescription(groupDescription);
+    setEditedDescription(groupDescription);
     setIsEditingDescription(false);
   };
 
   return (
     <div className="w-[1600px] mx-auto flex justify-center gap-24">
-      {userInfo?.role === "EDUCATOR" && <GroupNav id={id} />}
+      {userInfo?.role === "EDUCATOR" && <GroupNav id={groupSummary.uuid} />}
 
       <div className="w-[1200px] flex flex-col items-center gap-12">
         {/* 이미지 업로드 */}
@@ -100,8 +132,8 @@ function GroupEditPage({ id }: { id: string }) {
               <div className="flex gap-2 items-center">
                 <input
                   type="text"
-                  value={editName}
-                  onChange={(e) => setEditName(e.target.value)}
+                  value={editedName}
+                  onChange={(e) => setEditedName(e.target.value)}
                   className="border border-gray-300 rounded-xl px-4 py-2 flex-1 focus:outline-none focus:ring-2 focus:ring-rbPrimaryColor"
                   ref={inputNameRef}
                   onKeyDown={(e) => {
@@ -146,8 +178,8 @@ function GroupEditPage({ id }: { id: string }) {
             {isEditingDescription ? (
               <div className="flex flex-col gap-2">
                 <textarea
-                  value={editDescription}
-                  onChange={(e) => setEditDescription(e.target.value)}
+                  value={editedDescription}
+                  onChange={(e) => setEditedDescription(e.target.value)}
                   rows={4}
                   className="border border-gray-300 rounded-xl px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-rbPrimaryColor"
                   ref={inputDescriptionRef}

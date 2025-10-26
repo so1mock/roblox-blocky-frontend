@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
+import { deleteGroup } from "../apis/group";
 
 function GroupNav({ id }: { id: string }) {
   const navigate = useNavigate();
@@ -32,6 +33,21 @@ function GroupNav({ id }: { id: string }) {
   ];
 
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(-1);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const handleGroupDelete = async () => {
+    if (isDeleting) return;
+    setIsDeleting(true);
+    try {
+      if (!confirm("정말 반을 삭제하시겠습니까?")) return;
+      await deleteGroup(id);
+      navigate({ to: "/teacher/group" });
+    } catch (e) {
+      const message = e instanceof Error ? e.message : String(e);
+      alert("반 삭제 실패: " + message);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   // URL 경로 변경 시 활성 메뉴 갱신
   useEffect(() => {
@@ -74,7 +90,10 @@ function GroupNav({ id }: { id: string }) {
         })}
       </div>
 
-      <button className="flex items-center justify-center bg-white rounded-2xl cursor-pointer border-2 border-rbPointColor hover:bg-gray-50 transition">
+      <button
+        className="flex items-center justify-center bg-white rounded-2xl cursor-pointer border-2 border-rbPointColor hover:bg-gray-50 transition"
+        onClick={handleGroupDelete}
+      >
         <img src="/trashcan.png" className="pl-4" />
         <span className="text-left text-rbPointColor px-6 py-4 text-lg flex-1 font-bold">
           반 삭제하기
