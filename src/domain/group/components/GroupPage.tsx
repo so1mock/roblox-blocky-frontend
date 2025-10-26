@@ -15,13 +15,12 @@ function GroupPage() {
     name: "최신 순",
     key: "new",
   });
-
   const {
     data: myGroups = [],
-    isLoading,
-    isError,
-    error,
-    refetch,
+    isLoading: isMyGroupsLoading,
+    isError: isMyGroupsError,
+    error: myGroupsError,
+    refetch: refetchMyGroups,
   } = useMyGroupsQuery();
 
   const { userInfo } = useAuthStore();
@@ -80,12 +79,14 @@ function GroupPage() {
           />
         </div>
       </div>
-      {isLoading && <div>로딩 중...</div>}
-      {!isLoading && isError && <div>오류: {error.message}</div>}
-      {!isLoading && !isError && myGroups.length === 0 && (
+      {isMyGroupsLoading && <div>로딩 중...</div>}
+      {!isMyGroupsLoading && isMyGroupsError && (
+        <div>오류: {myGroupsError.message}</div>
+      )}
+      {!isMyGroupsLoading && !isMyGroupsError && myGroups.length === 0 && (
         <div>그룹이 없습니다.</div>
       )}
-      {!isLoading && !error && myGroups.length > 0 && (
+      {!isMyGroupsLoading && !isMyGroupsError && myGroups.length > 0 && (
         <div className="grid grid-cols-4 gap-12">
           {myGroups.map((group) => (
             <GroupCard key={group.uuid} groupSummary={{ ...group }} />
@@ -146,7 +147,7 @@ function GroupPage() {
                     setIsCreateOpen(false);
                     setNewGroupName("");
                     setNewGroupDescription("");
-                    await refetch();
+                    await refetchMyGroups();
                   } catch (e) {
                     if (e instanceof Error) {
                       alert(e.message);
@@ -198,7 +199,7 @@ function GroupPage() {
                   setIsJoining(true);
                   try {
                     await joinGroup(inviteCodeInput.trim());
-                    await refetch();
+                    await refetchMyGroups();
                     setIsJoinOpen(false);
                     setInviteCodeInput("");
                   } catch (e) {
