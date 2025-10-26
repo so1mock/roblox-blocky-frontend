@@ -22,7 +22,6 @@ function GroupPage() {
     isLoading: isMyGroupsLoading,
     isError: isMyGroupsError,
     error: myGroupsError,
-    refetch: refetchMyGroups,
   } = useMyGroupsQuery();
   const { mutateAsync: createGroupMutation, isPending: isCreatingGroup } =
     useCreateGroupMutation();
@@ -49,7 +48,6 @@ function GroupPage() {
       setIsCreateOpen(false);
       setNewGroupName("");
       setNewGroupDescription("");
-      await refetchMyGroups();
     } catch (e) {
       if (e instanceof Error) {
         alert(e.message);
@@ -62,7 +60,6 @@ function GroupPage() {
 
     try {
       await joinGroupMutation(inviteCodeInput.trim());
-      await refetchMyGroups();
       setIsJoinOpen(false);
       setInviteCodeInput("");
     } catch (e) {
