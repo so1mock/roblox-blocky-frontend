@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteWall } from "../apis/wall";
 
-export const useDeleteWall = (groupId: string, page: number) => {
+export const useDeleteWall = (groupId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -9,7 +9,7 @@ export const useDeleteWall = (groupId: string, page: number) => {
     onSuccess: () => {
       // 그룹 가입 후, 그룹 목록 자동 갱신
       queryClient.invalidateQueries({
-        queryKey: ["group", groupId, "wall", page],
+        queryKey: ["group", groupId, "wall"],
       });
     },
     onError: (error: unknown) => {
