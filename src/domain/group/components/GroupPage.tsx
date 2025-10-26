@@ -1,14 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { GroupCard } from "./GroupCard";
 import Dropdown from "@common/components/Dropdown";
 import { useAuthStore } from "@user/stores/authStore";
-import {
-  getMyGroups,
-  createGroup,
-  type CreateGroupRequest,
-} from "../apis/group";
-import type { GroupSummary } from "../types/group";
+import { createGroup, type CreateGroupRequest } from "../apis/group";
 import { joinGroup } from "../user/apis/user";
+import { useMyGroupsQuery } from "../hooks/useMyGroupsQuery";
 
 const sortOptions = [
   { name: "최신 순", key: "new" },
@@ -19,9 +15,15 @@ function GroupPage() {
     name: "최신 순",
     key: "new",
   });
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [myGroups, setMyGroups] = useState<GroupSummary[]>([]);
+
+  const {
+    data: myGroups = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useMyGroupsQuery();
+
   const { userInfo } = useAuthStore();
   const [isCreateOpen, setIsCreateOpen] = useState<boolean>(false);
   const [newGroupName, setNewGroupName] = useState<string>("");
@@ -30,25 +32,6 @@ function GroupPage() {
   const [isJoinOpen, setIsJoinOpen] = useState<boolean>(false);
   const [inviteCodeInput, setInviteCodeInput] = useState<string>("");
   const [isJoining, setIsJoining] = useState<boolean>(false);
-
-  const refresh = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await getMyGroups();
-      setMyGroups(response);
-    } catch (e) {
-      if (e instanceof Error) {
-        setError(e.message ?? "그룹 목록을 가져오지 못했습니다.");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    refresh();
-  }, []);
 
   return (
     <div>
@@ -98,8 +81,8 @@ function GroupPage() {
         </div>
       </div>
       {isLoading && <div>로딩 중...</div>}
-      {!isLoading && error && <div>오류: {error}</div>}
-      {!isLoading && !error && myGroups.length === 0 && (
+      {!isLoading && isError && <div>오류: {error.message}</div>}
+      {!isLoading && !isError && myGroups.length === 0 && (
         <div>그룹이 없습니다.</div>
       )}
       {!isLoading && !error && myGroups.length > 0 && (
@@ -163,7 +146,7 @@ function GroupPage() {
                     setIsCreateOpen(false);
                     setNewGroupName("");
                     setNewGroupDescription("");
-                    await refresh();
+                    await refetch();
                   } catch (e) {
                     if (e instanceof Error) {
                       alert(e.message);
@@ -215,7 +198,7 @@ function GroupPage() {
                   setIsJoining(true);
                   try {
                     await joinGroup(inviteCodeInput.trim());
-                    await refresh();
+                    await refetch();
                     setIsJoinOpen(false);
                     setInviteCodeInput("");
                   } catch (e) {
