@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import GroupNav from "./GroupNav";
 import { useAuthStore } from "@user/stores/authStore";
-import { updateGroupInfo } from "../apis/group";
 import { useGroupDetailQuery } from "../hooks/useGroupDetailQuery";
 import { useNavigate } from "@tanstack/react-router";
 import type { GroupSummary } from "../types/group";
+import { useEditGroupMutation } from "../hooks/useEditGroupMutation";
 
 function GroupEditPage({ id }: { id: string }) {
   const navigate = useNavigate();
@@ -35,6 +35,8 @@ function GroupEditPage({ id }: { id: string }) {
     name: false,
     description: false,
   });
+  const { mutateAsync: editGroupMutation, isPending: isEditingGroup } =
+    useEditGroupMutation(id);
 
   useEffect(() => {
     if (groupInfo === undefined) {
@@ -61,15 +63,6 @@ function GroupEditPage({ id }: { id: string }) {
       const file = e.target.files[0];
       setGroupImage(URL.createObjectURL(file)); // 선택한 이미지 바로 표시
     }
-  };
-
-  // 그룹 정보 수정 api 요청
-  const handleEditGroupInformation = async () => {
-    await updateGroupInfo({
-      uuid: id,
-      name: editedGroupInformation.name,
-      description: editedGroupInformation.description,
-    });
   };
 
   // 이름 수정 취소
@@ -104,6 +97,18 @@ function GroupEditPage({ id }: { id: string }) {
     setEditedGroupInformation((prev) => ({
       ...prev,
       [name]: value,
+    }));
+  };
+
+  const handleEditGroup = async (fieldName: "name" | "description") => {
+    if (isEditingGroup) {
+      return;
+    }
+
+    await editGroupMutation(editedGroupInformation);
+    setIsEditingMode((prev) => ({
+      ...prev,
+      [fieldName]: false,
     }));
   };
 
@@ -156,12 +161,14 @@ function GroupEditPage({ id }: { id: string }) {
                     ref={inputNameRef}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
-                        handleEditGroupInformation(); // 저장
+                        handleEditGroup("name"); // 저장
                       }
                     }}
                   />
                   <button
-                    onClick={handleEditGroupInformation}
+                    onClick={() => {
+                      handleEditGroup("name");
+                    }}
                     className="px-3 py-2 bg-rbPrimaryColor text-white rounded-2xl cursor-pointer"
                   >
                     저장
@@ -208,11 +215,13 @@ function GroupEditPage({ id }: { id: string }) {
                   />
                   <div className="flex gap-2">
                     <button
-                      onClick={handleEditGroupInformation}
+                      onClick={() => {
+                        handleEditGroup("description");
+                      }}
                       className="px-3 py-2 bg-rbPrimaryColor text-white rounded-2xl cursor-pointer"
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
-                          handleEditGroupInformation(); // 저장
+                          handleEditGroup("description"); // 저장
                         }
                       }}
                     >
