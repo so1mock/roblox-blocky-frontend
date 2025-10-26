@@ -17,7 +17,11 @@ function Wall({ groupUuid }: { groupUuid: string }) {
   return (
     <div>
       <span className="font-bold text-2xl">담벼락</span>
-      <GroupWallCreateForm groupUuid={groupUuid} />
+      <GroupWallCreateForm
+        groupUuid={groupUuid}
+        groupId={groupUuid}
+        page={page}
+      />
 
       {isGroupWallLoading && <div>로딩 중...</div>}
 
@@ -31,7 +35,12 @@ function Wall({ groupUuid }: { groupUuid: string }) {
 
       {walls !== undefined &&
         walls.wallMessages.map((wall) => (
-          <GroupWallItem key={wall.uuid} wallInfo={wall} />
+          <GroupWallItem
+            key={wall.uuid}
+            wallInfo={wall}
+            groupId={groupUuid}
+            page={page}
+          />
         ))}
 
       {walls !== undefined && (

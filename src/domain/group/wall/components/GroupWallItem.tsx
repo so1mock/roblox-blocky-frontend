@@ -3,59 +3,52 @@ import GroupWallOptions from "./GroupWallOptions";
 import { useEffect, useRef, useState } from "react";
 import type { WallInfo } from "../types/wall";
 import { useAuthStore } from "@user/stores/authStore";
-import { deleteWall, updateWall } from "../apis/wall";
+import { useDeleteWall } from "../hooks/useDeleteWall";
+import { useEditWall } from "../hooks/useEditWall";
 
-function GroupWallItem({ wallInfo }: { wallInfo: WallInfo }) {
+function GroupWallItem({
+  wallInfo,
+  groupId,
+  page,
+}: {
+  wallInfo: WallInfo;
+  groupId: string;
+  page: number;
+}) {
+  const { userInfo } = useAuthStore();
   const [isOptionOpen, setIsOptionOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState<boolean>(false);
-  const [isUpdating, setIsUpdating] = useState<boolean>(false);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [editingMode, setEditingMode] = useState<boolean>(false);
   const [editedContent, setEditedContent] = useState<string>(wallInfo.content);
   const editTextareaRef = useRef<HTMLTextAreaElement>(null);
-  const { userInfo } = useAuthStore();
+  const { mutateAsync: deleteWallMutation, isPending: isDeletingWall } =
+    useDeleteWall(groupId, page);
+  const { mutateAsync: editWallMutation, isPending: isEditingWall } =
+    useEditWall(groupId, page);
 
   useEffect(() => {
-    if (isEditing) {
+    if (editingMode) {
       setEditedContent(wallInfo.content);
       if (editTextareaRef.current) {
         editTextareaRef.current.focus();
         editTextareaRef.current.select();
       }
     }
-  }, [isEditing, wallInfo.content]);
+  }, [editingMode, wallInfo.content]);
 
   const handleDelete = async () => {
-    if (isDeleting) return;
-    setIsDeleting(true);
-    try {
-      await deleteWall(wallInfo.uuid);
-      await onChanged();
-    } catch (e) {
-      const message = e instanceof Error ? e.message : String(e);
-      alert("삭제에 실패했습니다." + message);
-    } finally {
-      setIsDeleting(false);
-    }
+    if (isDeletingWall) return;
+    await deleteWallMutation(wallInfo.uuid);
   };
 
   const handleEdit = () => {
     setIsOptionOpen(false);
-    setIsEditing(true);
+    setEditingMode(true);
   };
 
   const handleUpdate = async (content: string) => {
-    if (isUpdating) return;
-    setIsUpdating(true);
-    try {
-      await updateWall({ messageUuid: wallInfo.uuid, content });
-      await onChanged();
-      setIsEditing(false);
-    } catch (e) {
-      const message = e instanceof Error ? e.message : String(e);
-      alert("수정에 실패했습니다." + message);
-    } finally {
-      setIsUpdating(false);
-    }
+    if (isEditingWall) return;
+    await editWallMutation({ uuid: wallInfo.uuid, content });
+    setEditingMode(false);
   };
 
   return (
@@ -71,12 +64,12 @@ function GroupWallItem({ wallInfo }: { wallInfo: WallInfo }) {
       <div className="flex flex-col gap-4 w-full">
         <div className="flex flex-col gap-2">
           <span>{wallInfo.author.nickname}</span>
-          {isEditing ? (
+          {editingMode ? (
             <textarea
               ref={editTextareaRef}
               className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
               value={editedContent}
-              disabled={isUpdating}
+              disabled={isEditingWall}
               onChange={(e) => setEditedContent(e.target.value)}
             />
           ) : (
@@ -100,15 +93,15 @@ function GroupWallItem({ wallInfo }: { wallInfo: WallInfo }) {
             <img src="/moreOptionsHorizonButton.png" className="" />
           </button>
         )}
-      {isOptionOpen && !isEditing && (
+      {isOptionOpen && !editingMode && (
         <GroupWallOptions
           handleDelete={handleDelete}
           handleEdit={handleEdit}
-          disabled={isDeleting || isUpdating || isEditing}
+          disabled={isDeletingWall || isEditingWall || editingMode}
         />
       )}
 
-      {isEditing && (
+      {editingMode && (
         <div className="absolute top-4 right-4">
           <div className="bg-white rounded-t-xl py-[2px] border-[2px] border-solid border-[#DDDDDD]">
             <button
@@ -116,11 +109,11 @@ function GroupWallItem({ wallInfo }: { wallInfo: WallInfo }) {
               onClick={() => {
                 handleUpdate(editedContent.trim());
               }}
-              disabled={isUpdating || editedContent.trim().length === 0}
+              disabled={isEditingWall || editedContent.trim().length === 0}
               className="cursor-pointer w-full text-left disabled:opacity-60"
             >
               <span className="text-xs px-2 text-[#F05460]">
-                {isUpdating ? "저장 중..." : "저장"}
+                {isEditingWall ? "저장 중..." : "저장"}
               </span>
             </button>
           </div>
@@ -130,10 +123,10 @@ function GroupWallItem({ wallInfo }: { wallInfo: WallInfo }) {
               className="cursor-pointer w-full text-left"
               onClick={() => {
                 setEditedContent(wallInfo.content);
-                setIsEditing(false);
+                setEditingMode(false);
                 setIsOptionOpen(false);
               }}
-              disabled={isUpdating}
+              disabled={isEditingWall}
             >
               <span className="text-xs px-2 text-[#666666]">취소</span>
             </button>

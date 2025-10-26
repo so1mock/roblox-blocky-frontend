@@ -70,7 +70,7 @@ export const createWall = async ({
 };
 
 // 담벼락 업데이트
-export const updateWall = async ({
+export const editWall = async ({
   messageUuid,
   content,
 }: {
