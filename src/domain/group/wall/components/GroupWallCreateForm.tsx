@@ -2,13 +2,7 @@ import Button from "@common/components/Button";
 import { useState } from "react";
 import { createWall } from "../apis/wall";
 
-function GroupWallCreateForm({
-  onChanged,
-  groupUuid,
-}: {
-  onChanged: () => Promise<void>;
-  groupUuid: string;
-}) {
+function GroupWallCreateForm({ groupUuid }: { groupUuid: string }) {
   const [content, setContent] = useState("");
   const [createWallError, setCreateWallError] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState<boolean>(false);

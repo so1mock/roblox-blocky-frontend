@@ -5,13 +5,7 @@ import type { WallInfo } from "../types/wall";
 import { useAuthStore } from "@user/stores/authStore";
 import { deleteWall, updateWall } from "../apis/wall";
 
-function GroupWallItem({
-  wallInfo,
-  onChanged,
-}: {
-  wallInfo: WallInfo;
-  onChanged: () => Promise<void> | void;
-}) {
+function GroupWallItem({ wallInfo }: { wallInfo: WallInfo }) {
   const [isOptionOpen, setIsOptionOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
