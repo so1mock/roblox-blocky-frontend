@@ -2,15 +2,17 @@ import { useState } from "react";
 import { GroupCard } from "./GroupCard";
 import Dropdown from "@common/components/Dropdown";
 import { useAuthStore } from "@user/stores/authStore";
-import { createGroup, type CreateGroupRequest } from "../apis/group";
 import { joinGroup } from "../user/apis/user";
 import { useMyGroupsQuery } from "../hooks/useMyGroupsQuery";
+import { useCreateGroupMutation } from "../hooks/useCreateGroupMutation";
 
 const sortOptions = [
   { name: "최신 순", key: "new" },
   { name: "과거 순", key: "old" },
 ];
+
 function GroupPage() {
+  const { userInfo } = useAuthStore();
   const [selectedSort, setSelectedSort] = useState({
     name: "최신 순",
     key: "new",
@@ -22,15 +24,37 @@ function GroupPage() {
     error: myGroupsError,
     refetch: refetchMyGroups,
   } = useMyGroupsQuery();
+  const { mutateAsync: createGroupMutation, isPending: isCreatingGroup } =
+    useCreateGroupMutation();
 
-  const { userInfo } = useAuthStore();
   const [isCreateOpen, setIsCreateOpen] = useState<boolean>(false);
   const [newGroupName, setNewGroupName] = useState<string>("");
   const [newGroupDescription, setNewGroupDescription] = useState<string>("");
-  const [isCreating, setIsCreating] = useState<boolean>(false);
   const [isJoinOpen, setIsJoinOpen] = useState<boolean>(false);
   const [inviteCodeInput, setInviteCodeInput] = useState<string>("");
   const [isJoining, setIsJoining] = useState<boolean>(false);
+
+  const handleCreateGroup = async () => {
+    if (isCreatingGroup || newGroupName.trim().length === 0) return;
+    if (isCreatingGroup) return;
+
+    try {
+      const groupInfo = {
+        name: newGroupName.trim(),
+        description: newGroupDescription.trim(),
+      };
+
+      await createGroupMutation(groupInfo);
+      setIsCreateOpen(false);
+      setNewGroupName("");
+      setNewGroupDescription("");
+      await refetchMyGroups();
+    } catch (e) {
+      if (e instanceof Error) {
+        alert(e.message);
+      }
+    }
+  };
 
   return (
     <div>
@@ -134,30 +158,10 @@ function GroupPage() {
               </button>
               <button
                 className="px-4 py-2 rounded-lg bg-rbPrimaryColor text-white disabled:opacity-60"
-                disabled={isCreating || newGroupName.trim().length === 0}
-                onClick={async () => {
-                  if (isCreating) return;
-                  setIsCreating(true);
-                  const groupInfo: CreateGroupRequest = {
-                    name: newGroupName.trim(),
-                    description: newGroupDescription.trim(),
-                  };
-                  try {
-                    await createGroup(groupInfo);
-                    setIsCreateOpen(false);
-                    setNewGroupName("");
-                    setNewGroupDescription("");
-                    await refetchMyGroups();
-                  } catch (e) {
-                    if (e instanceof Error) {
-                      alert(e.message);
-                    }
-                  } finally {
-                    setIsCreating(false);
-                  }
-                }}
+                disabled={isCreatingGroup || newGroupName.trim().length === 0}
+                onClick={handleCreateGroup}
               >
-                {isCreating ? "생성 중..." : "생성"}
+                {isCreatingGroup ? "생성 중..." : "생성"}
               </button>
             </div>
           </div>
