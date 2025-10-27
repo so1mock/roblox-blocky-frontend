@@ -8,7 +8,7 @@ export const useEditPlaceMutation = () => {
   return useMutation({
     mutationFn: (placeInfo: PlaceInfo) => updatePlace(placeInfo),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["places/me"] });
+      queryClient.invalidateQueries({ queryKey: ["/places/me"] });
     },
     onError: (error: unknown) => {
       if (error instanceof Error) {
