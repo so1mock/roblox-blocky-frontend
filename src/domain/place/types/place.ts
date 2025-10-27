@@ -4,5 +4,5 @@ export interface PlaceSummary {
   description: string;
   ownerName: string;
   lastModifiedAt: string;
-  image: string | undefined;
+  mainImageUrl: string;
 }

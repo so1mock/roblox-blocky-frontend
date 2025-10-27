@@ -2,7 +2,7 @@ import { api } from "@common/apis/axios";
 import { AxiosError } from "axios";
 import type { PlaceSummary } from "@place/types/place";
 
-type PlaceInfo = {
+export type PlaceInfo = {
   uuid: string;
   name: string;
   description: string;
