@@ -17,11 +17,7 @@ function Wall({ groupUuid }: { groupUuid: string }) {
   return (
     <div>
       <span className="font-bold text-2xl">담벼락</span>
-      <GroupWallCreateForm
-        groupUuid={groupUuid}
-        groupId={groupUuid}
-        page={page}
-      />
+      <GroupWallCreateForm groupUuid={groupUuid} groupId={groupUuid} />
 
       {isGroupWallLoading && <div>로딩 중...</div>}
 

@@ -21,7 +21,7 @@ function GroupWallItem({
   const [editedContent, setEditedContent] = useState<string>(wallInfo.content);
   const editTextareaRef = useRef<HTMLTextAreaElement>(null);
   const { mutateAsync: deleteWallMutation, isPending: isDeletingWall } =
-    useDeleteWall(groupId, page);
+    useDeleteWall(groupId);
   const { mutateAsync: editWallMutation, isPending: isEditingWall } =
     useEditWall(groupId, page);
 

@@ -5,11 +5,9 @@ import { useCreateWall } from "../hooks/useCreateWall";
 function GroupWallCreateForm({
   groupUuid,
   groupId,
-  page,
 }: {
   groupUuid: string;
   groupId: string;
-  page: number;
 }) {
   const [content, setContent] = useState("");
   const {
@@ -17,7 +15,7 @@ function GroupWallCreateForm({
     isPending: isCreatingWall,
     isError: isCreatingError,
     error: creatingError,
-  } = useCreateWall(groupId, page);
+  } = useCreateWall(groupId);
 
   const handleSubmit = async () => {
     const body = content.trim();
