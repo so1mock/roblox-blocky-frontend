@@ -1,11 +1,13 @@
 interface PlaceEditingOptionProps {
   handlePlaceDelete: () => void;
   handleUpdatePlaceNameButton: () => void;
+  handleUpdateThumbnail: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export function PlaceEditingOption({
   handlePlaceDelete,
   handleUpdatePlaceNameButton,
+  handleUpdateThumbnail,
 }: PlaceEditingOptionProps) {
   return (
     <div className="absolute top-8 right-4 w-[130px]">
@@ -19,9 +21,18 @@ export function PlaceEditingOption({
         </button>
       </div>
       <div className="bg-white py-[2px] border-x-[2px] border-solid border-[#DDDDDD]">
-        <button type="button" className="cursor-pointer w-full text-left">
+        {/* <button type="button" className="cursor-pointer w-full text-left">
           <span className="text-xs px-2 text-[#666666]">대표 이미지 수정</span>
-        </button>
+        </button> */}
+        <label className="text-xs px-2 text-[#666666] cursor-pointer">
+          대표 이미지 수정
+          <input
+            type="file"
+            accept="image/jpeg, image/png"
+            className="hidden"
+            onChange={handleUpdateThumbnail}
+          />
+        </label>
       </div>
       <div className="bg-white rounded-b-xl py-[2px] border-[2px] border-solid border-[#DDDDDD]">
         <button

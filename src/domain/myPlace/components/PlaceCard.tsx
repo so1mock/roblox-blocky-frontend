@@ -1,23 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import type { PlaceSummary } from "@place/types/place";
 import { useNavigate } from "@tanstack/react-router";
-import { updatePlace, deletePlace } from "../apis/place";
 import { PlaceEditingOption } from "./PlaceEditingOption";
 import { formatIsoStringToDate } from "../../common/utils/formatIsoStringToDate";
 import Button from "@common/components/Button";
+import { useEditPlaceMutation } from "@myPlace/hooks/useEditPlaceMutation";
+import { useDeletePlaceMutation } from "@myPlace/hooks/useDeletePlaceMutation";
+import { useUploadImageMutation } from "@myPlace/hooks/useUploadImageMutation";
 
-interface PlaceCardProps {
-  place: PlaceSummary;
-  onChanged?: () => Promise<void> | void; // 변경 후 상위에서 재조회 용도
-}
-
-export function PlaceCard({ place, onChanged }: PlaceCardProps) {
+export function PlaceCard({ place }: { place: PlaceSummary }) {
+  const editPlaceMutation = useEditPlaceMutation();
+  const deletePlaceMutation = useDeletePlaceMutation();
+  const uploadImageMutation = useUploadImageMutation();
   const navigate = useNavigate();
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [isOptionOpen, setIsOptionOpen] = useState<boolean>(false);
   const [isEditingName, setIsEditingName] = useState<boolean>(false);
-  const [editedPlaceName, setEditedPlaceName] = useState(place.name);
+  const [editedPlaceName, setEditedPlaceName] = useState<string>(place.name);
   const inputNameRef = useRef<HTMLInputElement>(null); // ✅ input 참조용 ref 추가
+  const imgRef = useRef<HTMLImageElement>(null);
 
   const toggleFavorite = () => setIsFavorite((prev) => !prev);
   const enterPlace = () => {
@@ -28,6 +29,31 @@ export function PlaceCard({ place, onChanged }: PlaceCardProps) {
     setIsEditingName((prev) => !prev);
   };
 
+  const handleUpdatePlaceName = async () => {
+    editPlaceMutation.mutate({
+      uuid: place.uuid,
+      name: editedPlaceName,
+      description: place.description,
+    });
+    setIsEditingName(false);
+    setIsOptionOpen(false);
+    setEditedPlaceName(place.name);
+  };
+
+  const handleUpdateThumbnail = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+    uploadImageMutation.mutate({ uuid: place.uuid, file });
+    setIsOptionOpen(false);
+  };
+
+  const handlePlaceDelete = async () => {
+    if (!confirm("정말 삭제하시겠어요?")) return;
+    deletePlaceMutation.mutate(place.uuid);
+  };
+
   useEffect(() => {
     if (isEditingName && inputNameRef.current) {
       inputNameRef.current.focus();
@@ -35,38 +61,17 @@ export function PlaceCard({ place, onChanged }: PlaceCardProps) {
     }
   }, [isEditingName]);
 
-  const handleUpdatePlaceName = async () => {
-    try {
-      await updatePlace({
-        uuid: place.uuid,
-        name: editedPlaceName,
-        description: "",
-      });
-      if (onChanged) await onChanged();
-    } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : String(e);
-      alert("업데이트 실패: " + message);
-    }
-  };
-
-  const handlePlaceDelete = async () => {
-    if (!confirm("정말 삭제하시겠어요?")) return;
-    try {
-      const ok = await deletePlace(place.uuid);
-      if (!ok) throw new Error("삭제에 실패했습니다.");
-      if (onChanged) await onChanged();
-    } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : String(e);
-      alert("삭제 실패: " + message);
-    }
-  };
-
   return (
     <div className="w-[300px] border-[2px] border-solid border-[#DDDDDD] rounded-3xl shadow-lg">
       <div className="relative h-[150px]">
         <img
-          src="/defaultPlaceThumbnail.png"
+          ref={imgRef}
+          src={place.mainImageUrl}
           className="w-full h-full object-cover border-b-[2px] border-solid border-[#DDDDDD]"
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = "/defaultPlaceThumbnail.png";
+          }}
         />
         <button
           className="absolute top-2 left-2 cursor-pointer"
@@ -94,6 +99,7 @@ export function PlaceCard({ place, onChanged }: PlaceCardProps) {
           <PlaceEditingOption
             handlePlaceDelete={handlePlaceDelete}
             handleUpdatePlaceNameButton={handleUpdatePlaceNameButton}
+            handleUpdateThumbnail={handleUpdateThumbnail}
           />
         )}
 
