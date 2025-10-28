@@ -5,6 +5,7 @@ import { updatePlace, deletePlace } from "../apis/place";
 import { PlaceEditingOption } from "./PlaceEditingOption";
 import { formatIsoStringToDate } from "../../common/utils/formatIsoStringToDate";
 import Button from "@common/components/Button";
+import { useUploadPlaceThumbnailMutation } from "@myPlace/hooks/useUpdatePlaceThumbnail";
 
 interface PlaceCardProps {
   place: PlaceSummary;
@@ -13,6 +14,10 @@ interface PlaceCardProps {
 
 export function PlaceCard({ place, onChanged }: PlaceCardProps) {
   const navigate = useNavigate();
+  const {
+    mutateAsync: uploadPlaceThumbnailMutation,
+    isPending: isUploadingPlaceThumbnail,
+  } = useUploadPlaceThumbnailMutation();
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [isOptionOpen, setIsOptionOpen] = useState<boolean>(false);
   const [isEditingName, setIsEditingName] = useState<boolean>(false);
@@ -61,12 +66,30 @@ export function PlaceCard({ place, onChanged }: PlaceCardProps) {
     }
   };
 
+  const handleEditThumbnail = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    if (isUploadingPlaceThumbnail) return;
+
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    await uploadPlaceThumbnailMutation({ uuid: place.uuid, file });
+
+    // 파일 입력 초기화 (같은 파일 다시 선택할 때도 이벤트 발생하도록)
+    e.target.value = "";
+  };
+
   return (
     <div className="w-[300px] border-[2px] border-solid border-[#DDDDDD] rounded-3xl shadow-lg">
       <div className="relative h-[150px]">
         <img
-          src="/defaultPlaceThumbnail.png"
+          src={place.mainImageUrl}
           className="w-full h-full object-cover border-b-[2px] border-solid border-[#DDDDDD]"
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = "/defaultPlaceThumbnail.png";
+          }}
         />
         <button
           className="absolute top-2 left-2 cursor-pointer"
@@ -94,6 +117,7 @@ export function PlaceCard({ place, onChanged }: PlaceCardProps) {
           <PlaceEditingOption
             handlePlaceDelete={handlePlaceDelete}
             handleUpdatePlaceNameButton={handleUpdatePlaceNameButton}
+            handleEditThumbnail={handleEditThumbnail}
           />
         )}
 
