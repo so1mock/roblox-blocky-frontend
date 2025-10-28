@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { PlaceSummary } from "@place/types/place";
 import { useNavigate } from "@tanstack/react-router";
-import { updatePlace, deletePlace } from "../apis/place";
 import { PlaceEditingOption } from "./PlaceEditingOption";
 import { formatIsoStringToDate } from "../../common/utils/formatIsoStringToDate";
 import Button from "@common/components/Button";
