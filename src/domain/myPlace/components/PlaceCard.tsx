@@ -5,19 +5,27 @@ import { updatePlace, deletePlace } from "../apis/place";
 import { PlaceEditingOption } from "./PlaceEditingOption";
 import { formatIsoStringToDate } from "../../common/utils/formatIsoStringToDate";
 import Button from "@common/components/Button";
-import { useUploadPlaceThumbnailMutation } from "@myPlace/hooks/useUpdatePlaceThumbnail";
+import { useUploadPlaceThumbnailMutation } from "@myPlace/hooks/useUpdatePlaceThumbnailMutation";
+import { useUpdatePlaceInfoMutaton } from "@myPlace/hooks/useUpdatePlaceInfoMutaton";
+import { useDeletePlaceMutation } from "@myPlace/hooks/useDeletePlaceMutation";
 
 interface PlaceCardProps {
   place: PlaceSummary;
-  onChanged?: () => Promise<void> | void; // 변경 후 상위에서 재조회 용도
 }
 
-export function PlaceCard({ place, onChanged }: PlaceCardProps) {
+export function PlaceCard({ place }: PlaceCardProps) {
   const navigate = useNavigate();
   const {
     mutateAsync: uploadPlaceThumbnailMutation,
     isPending: isUploadingPlaceThumbnail,
   } = useUploadPlaceThumbnailMutation();
+  const {
+    mutateAsync: updatePlaceInfoMutation,
+    isPending: isUpdatingPlaceInfo,
+  } = useUpdatePlaceInfoMutaton();
+  const { mutateAsync: deletePlaceMutation, isPending: isDeletingPlace } =
+    useDeletePlaceMutation();
+
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [isOptionOpen, setIsOptionOpen] = useState<boolean>(false);
   const [isEditingName, setIsEditingName] = useState<boolean>(false);
@@ -41,38 +49,33 @@ export function PlaceCard({ place, onChanged }: PlaceCardProps) {
   }, [isEditingName]);
 
   const handleUpdatePlaceName = async () => {
-    try {
-      await updatePlace({
-        uuid: place.uuid,
-        name: editedPlaceName,
-        description: "",
-      });
-      if (onChanged) await onChanged();
-    } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : String(e);
-      alert("업데이트 실패: " + message);
+    if (isUpdatingPlaceInfo) {
+      return;
     }
+    await updatePlaceInfoMutation({
+      uuid: place.uuid,
+      editedPlaceName,
+    });
   };
 
   const handlePlaceDelete = async () => {
-    if (!confirm("정말 삭제하시겠어요?")) return;
-    try {
-      const ok = await deletePlace(place.uuid);
-      if (!ok) throw new Error("삭제에 실패했습니다.");
-      if (onChanged) await onChanged();
-    } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : String(e);
-      alert("삭제 실패: " + message);
+    if (isDeletingPlace) {
+      return;
     }
+    await deletePlaceMutation(place.uuid);
   };
 
   const handleEditThumbnail = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    if (isUploadingPlaceThumbnail) return;
+    if (isUploadingPlaceThumbnail) {
+      return;
+    }
 
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      return;
+    }
 
     await uploadPlaceThumbnailMutation({ uuid: place.uuid, file });
 
