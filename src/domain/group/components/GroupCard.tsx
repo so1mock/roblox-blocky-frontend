@@ -25,29 +25,17 @@ export function GroupCard({ groupSummary }: { groupSummary: GroupSummary }) {
 
   return (
     <div className="w-[300px] border-[2px] border-solid border-[#DDDDDD] rounded-3xl shadow-lg overflow-hidden ">
-      {groupSummary.iconSrc ? (
-        <div className="relative h-[150px] ">
-          <img
-            src={groupSummary.iconSrc}
-            className="w-full h-full object-cover border-b-[2px] border-solid border-[#DDDDDD]"
-            alt={groupSummary.name}
-          />
-        </div>
-      ) : (
-        <div className="relative h-[150px]">
-          <img
-            src="/imageMode.png"
-            className="absolute top-16 left-32 w-8 h-8"
-            alt="mode"
-          />
-          <img
-            src="/groupDeafultImage.png"
-            className="w-full h-full object-cover border-b-[2px] border-solid border-[#DDDDDD]"
-            alt={groupSummary.name}
-          />
-        </div>
-      )}
-
+      <div className="relative h-[150px] ">
+        <img
+          src={groupSummary.iconSrc}
+          className="w-full h-full object-cover border-b-[2px] border-solid border-[#DDDDDD]"
+          alt={groupSummary.name}
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = "/groupDeafultImage.png";
+          }}
+        />
+      </div>
       <div className="bg-white rounded-b-3xl py-4 px-3">
         <div className="flex justify-between items-center w-full">
           <span className="font-bold text-md truncate block w-[calc(100%-90px)]">
