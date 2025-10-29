@@ -77,7 +77,7 @@ export function PlaceCard({ place }: PlaceCardProps) {
     }
 
     await uploadPlaceThumbnailMutation({ uuid: place.uuid, file });
-
+    setIsOptionOpen(false);
     // 파일 입력 초기화 (같은 파일 다시 선택할 때도 이벤트 발생하도록)
     e.target.value = "";
   };
