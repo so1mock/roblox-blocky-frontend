@@ -29,25 +29,21 @@ export function PlaceEditingOption({
         </button>
       </div>
       <div className="bg-white py-[2px] border-x-[2px] border-solid border-[#DDDDDD]">
-        <>
-          <input
-            type="file"
-            accept=".jpeg,.jpg,.png"
-            ref={fileInputRef}
-            className="hidden"
-            onChange={handleEditThumbnail}
-          />
+        <input
+          type="file"
+          accept=".jpeg,.jpg,.png"
+          ref={fileInputRef}
+          className="hidden"
+          onChange={handleEditThumbnail}
+        />
 
-          <button
-            type="button"
-            className="cursor-pointer w-full text-left"
-            onClick={handleButtonClick}
-          >
-            <span className="text-xs px-2 text-[#666666]">
-              대표 이미지 수정
-            </span>
-          </button>
-        </>
+        <button
+          type="button"
+          className="cursor-pointer w-full text-left"
+          onClick={handleButtonClick}
+        >
+          <span className="text-xs px-2 text-[#666666]">대표 이미지 수정</span>
+        </button>
       </div>
       <div className="bg-white rounded-b-xl py-[2px] border-[2px] border-solid border-[#DDDDDD]">
         <button

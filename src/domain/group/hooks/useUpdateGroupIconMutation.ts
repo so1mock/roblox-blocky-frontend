@@ -7,7 +7,7 @@ export const useUpdateGroupIconMutation = (uuid: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ uuid, file }: { uuid: string; file: File }) => {
+    mutationFn: async ({ file }: { file: File }) => {
       const ext = file.name.split(".").pop()?.toLowerCase();
 
       // jpeg, jpg, png만 허용

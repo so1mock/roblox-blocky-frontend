@@ -68,11 +68,7 @@ function GroupEditPage({ id }: { id: string }) {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
 
-      if (!file) {
-        return;
-      }
-
-      await uploadGroupIconMutation({ uuid: id, file });
+      await uploadGroupIconMutation({ file });
     }
   };
 
