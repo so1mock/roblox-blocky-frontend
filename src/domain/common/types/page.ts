@@ -1,4 +1,5 @@
 export type PageInfo = {
   currentPageNumber: number;
-  possibleNextPageNumbers: number[];
+  visiblePagesCount: number;
+  totalPages: number;
 };
