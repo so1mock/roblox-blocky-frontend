@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Board from "../board/components/Board";
 import Wall from "../wall/components/Wall";
 import GroupNav from "./GroupNav";
@@ -8,7 +7,6 @@ import { useGroupDetailQuery } from "../hooks/useGroupDetailQuery";
 
 function GroupDetailedPage({ groupUuid }: { groupUuid: string }) {
   const navigate = useNavigate();
-  const [, setPage] = useState(1);
   const { userInfo } = useAuthStore();
 
   const {
@@ -59,14 +57,7 @@ function GroupDetailedPage({ groupUuid }: { groupUuid: string }) {
           <span>{groupInfo.groupSummary.description}</span>
         </div>
         <div className=" bg-white rounded-2xl px-12 py-12 mt-8">
-          <Board
-            setPage={setPage}
-            pageInfo={{
-              currentPageNumber: 3,
-              possibleNextPageNumbers: [4, 5],
-            }}
-            groupId={groupInfo.groupSummary.uuid}
-          />
+          <Board groupId={groupInfo.groupSummary.uuid} />
           <Wall groupUuid={groupInfo.groupSummary.uuid} />
         </div>
       </div>

@@ -5,14 +5,14 @@ import { useWallListQuery } from "../hooks/useWallListQuery";
 import Pagination from "@common/components/Pagination";
 
 function Wall({ groupUuid }: { groupUuid: string }) {
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
 
   const {
     data: walls,
     isLoading: isGroupWallLoading,
     isError: isGroupwallError,
     error: groupwallError,
-  } = useWallListQuery(groupUuid, page);
+  } = useWallListQuery(groupUuid, page - 1, 4);
 
   return (
     <div>
@@ -39,12 +39,13 @@ function Wall({ groupUuid }: { groupUuid: string }) {
           />
         ))}
 
-      {walls !== undefined && (
+      {walls !== undefined && walls.totalPages > 1 && (
         <Pagination
-          setPage={setPage}
+          setCurrentPage={setPage}
           pageInfo={{
-            currentPageNumber: walls.currentPageNumber,
-            possibleNextPageNumbers: walls.possibleNextPageNumbers,
+            currentPageNumber: walls.currentPageNumber + 1,
+            visiblePagesCount: 5,
+            totalPages: walls.totalPages, // 백엔드 api가 수정되면 응답 값으로 수정
           }}
         />
       )}
