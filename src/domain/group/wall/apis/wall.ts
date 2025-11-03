@@ -21,10 +21,11 @@ type RawWallMessage = {
 export const getGroupWalls = async (
   groupUuid: string,
   page: number,
+  size: number = 10,
 ): Promise<WallInfoPagination> => {
   try {
     const response = await api.get(
-      `/groups/${groupUuid}/wall/messages?page=${page}`,
+      `/groups/${groupUuid}/wall/messages?page=${page}&size=${size}`,
     );
     const data = response.data;
     return {
