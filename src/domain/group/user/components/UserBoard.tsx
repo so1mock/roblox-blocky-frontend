@@ -7,12 +7,12 @@ import { AxiosError } from "axios";
 
 function UserBoard({ groupUuid }: { groupUuid: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isCreating, setIsCreating] = useState(false);
+  const [isCreatingInviteCode, setIsCreatingInvideCode] = useState(false);
   const [inviteCode, setInviteCode] = useState<string | null>(null);
 
   const handleCreateInvite = async () => {
-    if (isCreating) return;
-    setIsCreating(true);
+    if (isCreatingInviteCode) return;
+    setIsCreatingInvideCode(true);
     try {
       const code = await createInviteCode(groupUuid);
       setInviteCode(code);
@@ -22,7 +22,7 @@ function UserBoard({ groupUuid }: { groupUuid: string }) {
       setInviteCode("초대 코드 생성 실패. " + message);
     } finally {
       setIsOpen(true);
-      setIsCreating(false);
+      setIsCreatingInvideCode(false);
     }
   };
 
@@ -31,7 +31,7 @@ function UserBoard({ groupUuid }: { groupUuid: string }) {
       <div className="flex items-center justify-between">
         <span className="font-bold text-2xl">반 구성원 리스트</span>
         <Button
-          text={isCreating ? "생성 중..." : "초대 코드 생성"}
+          text={isCreatingInviteCode ? "생성 중..." : "초대 코드 생성"}
           handleButtonClick={handleCreateInvite}
         />
       </div>
