@@ -39,9 +39,13 @@ function GroupDetailedPage({ groupUuid }: { groupUuid: string }) {
         <div className="flex flex-col gap-6">
           <div className="flex gap-12 items-center">
             <img
-              src="/imgProfile.png"
-              alt="기본 반 이미지"
-              className="w-32 h-32 object-cover rounded-2xl"
+              src={groupInfo.groupSummary.iconSrc}
+              alt={groupInfo.groupSummary.name}
+              className="w-[160px] h-full object-cover border-b-[2px] border-solid border-[#DDDDDD]"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/imgProfile.png";
+              }}
             />
             <div className="flex flex-col gap-4">
               <div>

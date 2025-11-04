@@ -5,6 +5,7 @@ import { useGroupDetailQuery } from "../hooks/useGroupDetailQuery";
 import { useNavigate } from "@tanstack/react-router";
 import type { GroupSummary } from "../types/group";
 import { useEditGroupMutation } from "../hooks/useEditGroupMutation";
+import { useUpdateGroupIconMutation } from "../hooks/useUpdateGroupIconMutation";
 
 function GroupEditPage({ id }: { id: string }) {
   const navigate = useNavigate();
@@ -18,8 +19,10 @@ function GroupEditPage({ id }: { id: string }) {
   const inputNameRef = useRef<HTMLInputElement>(null);
   const inputDescriptionRef = useRef<HTMLTextAreaElement>(null);
 
-  // 이미지 업로드 상태
-  const [groupImage, setGroupImage] = useState<string>("/imgProfile.png");
+  const {
+    mutateAsync: uploadGroupIconMutation,
+    isPending: isUploadingGroupIcon,
+  } = useUpdateGroupIconMutation(id);
 
   // 수정될 정보
   const [editedGroupInformation, setEditedGroupInformation] =
@@ -58,10 +61,14 @@ function GroupEditPage({ id }: { id: string }) {
   }, [isEditingMode]);
 
   // 이미지 선택
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isUploadingGroupIcon) {
+      return;
+    }
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setGroupImage(URL.createObjectURL(file)); // 선택한 이미지 바로 표시
+
+      await uploadGroupIconMutation({ file });
     }
   };
 
@@ -130,8 +137,12 @@ function GroupEditPage({ id }: { id: string }) {
           {/* 이미지 업로드 */}
           <div className="flex flex-col items-center gap-4">
             <img
-              src={groupImage}
-              alt="그룹 이미지"
+              src={groupInfo.groupSummary.iconSrc}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/imgProfile.png";
+              }}
+              alt={groupInfo.groupSummary.name}
               className="w-36 h-36 object-cover rounded-2xl border border-gray-200"
             />
             <label className="px-3 py-2 bg-white text-rbPrimaryColor rounded-3xl cursor-pointer">

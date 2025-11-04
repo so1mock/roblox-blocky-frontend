@@ -1,6 +1,7 @@
 import { api } from "@common/apis/axios";
 import { AxiosError } from "axios";
 import type { PlaceSummary } from "@place/types/place";
+import type { ImageFileType } from "@common/types/image";
 
 type PlaceInfo = {
   uuid: string;
@@ -44,5 +45,29 @@ export const deletePlace = async (placeUuid: string): Promise<boolean> => {
       throw e;
     }
     throw e;
+  }
+};
+
+// 플레이스 썸네일 업로드 presignedUrl 발급
+export const getPlaceThumbnailUploadUrl = async (
+  uuid: string,
+  type: ImageFileType,
+): Promise<string> => {
+  try {
+    const response = await api.post(
+      `/place/${uuid}/thumbnail-upload-url`,
+      null,
+      {
+        params: {
+          type,
+        },
+      },
+    );
+    return response.data.url;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw error;
+    }
+    throw error;
   }
 };

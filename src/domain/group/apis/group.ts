@@ -1,6 +1,7 @@
 import { api } from "@common/apis/axios";
 import { AxiosError } from "axios";
 import type { GroupInfo, GroupSummary } from "../types/group";
+import type { ImageFileType } from "@common/types/image";
 
 export type CreateGroupRequest = {
   name: string;
@@ -81,4 +82,22 @@ export const updateGroupInfo = async (editedGroupInformation: GroupSummary) => {
   }
 };
 
-// 그룹 아이콘 수정
+// 그룹 아이콘 업로드 presignedUrl 발급
+export const getGroupIconUploadUrl = async (
+  uuid: string,
+  type: ImageFileType,
+): Promise<string> => {
+  try {
+    const response = await api.post(`/groups/${uuid}/icon-upload-url`, null, {
+      params: {
+        type,
+      },
+    });
+    return response.data.uploadUrl;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw error;
+    }
+    throw error;
+  }
+};

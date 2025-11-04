@@ -2,6 +2,8 @@ import { PlaceViewCard } from "src/domain/myPlace/components/PlaceViewCard";
 import GroupNav from "./GroupNav";
 import type { PlaceSummary } from "src/domain/place/types/place";
 import { useAuthStore } from "@user/stores/authStore";
+import { useGroupDetailQuery } from "../hooks/useGroupDetailQuery";
+import { useNavigate } from "@tanstack/react-router";
 
 // 학생별 플레이스 예시 데이터
 const exampleStudentPlaces: Record<string, PlaceSummary[]> = {
@@ -12,7 +14,7 @@ const exampleStudentPlaces: Record<string, PlaceSummary[]> = {
       description: "기초 로블록스 학습용 플레이스입니다.",
       ownerName: "김철수",
       lastModifiedAt: "2025-10-10T09:30:00Z",
-      image: undefined,
+      mainImageUrl: undefined,
     },
     {
       uuid: "1b2c3d4e",
@@ -20,7 +22,7 @@ const exampleStudentPlaces: Record<string, PlaceSummary[]> = {
       description: "중급 학습용 플레이스입니다.",
       ownerName: "김철수",
       lastModifiedAt: "2025-10-09T14:20:00Z",
-      image: undefined,
+      mainImageUrl: undefined,
     },
   ],
   이수민: [
@@ -30,7 +32,7 @@ const exampleStudentPlaces: Record<string, PlaceSummary[]> = {
       description: "팀 프로젝트용 플레이스입니다.",
       ownerName: "이수민",
       lastModifiedAt: "2025-10-08T18:45:00Z",
-      image: undefined,
+      mainImageUrl: undefined,
     },
   ],
   박지훈: [
@@ -40,24 +42,47 @@ const exampleStudentPlaces: Record<string, PlaceSummary[]> = {
       description: "개인 연습용 플레이스입니다.",
       ownerName: "박지훈",
       lastModifiedAt: "2025-10-07T10:00:00Z",
-      image: undefined,
+      mainImageUrl: undefined,
     },
   ],
 };
 
 function GroupPlacePage({ id }: { id: string }) {
+  const navigate = useNavigate();
   const { userInfo } = useAuthStore();
+
+  const {
+    data: groupInfo,
+    isLoading: isGroupInfoLoading,
+    isError: isGroupInfoError,
+    error: groupInfoError,
+  } = useGroupDetailQuery(id);
+
+  if (isGroupInfoError) {
+    alert("유효하지 않은 반입니다. " + groupInfoError.message);
+    navigate({
+      to: `/${userInfo?.role === "EDUCATOR" ? "teacher" : "student"}/group`,
+    });
+    return null;
+  }
+
+  if (isGroupInfoLoading || groupInfo === undefined)
+    return <div>Loading...</div>;
+
   return (
     <div className="w-[1600px] mx-auto flex justify-center gap-24">
       {userInfo?.role === "EDUCATOR" && <GroupNav id={id} />}
-
       <div className="w-[1200px]">
         <div className="flex flex-col gap-6">
           <div className="flex gap-12 items-center">
             <img
-              src="/imgProfile.png"
-              alt="기본 반 이미지"
+              src={groupInfo.groupSummary.iconSrc}
+              alt={groupInfo.groupSummary.name}
               className="w-32 h-32 object-cover rounded-2xl"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/imgProfile.png";
+              }}
             />
             <div className="flex flex-col gap-4">
               <div>
