@@ -1,8 +1,18 @@
+import { useDeleteGroupMemberMutation } from "../hooks/useDeleteGroupMemberMutation";
 import type { GroupMember } from "../types/user";
 
-function UserListItem({ groupMember }: { groupMember: GroupMember }) {
+function UserListItem({
+  groupUuid,
+  groupMember,
+}: {
+  groupUuid: string;
+  groupMember: GroupMember;
+}) {
+  const { mutate: deleteGroupMemeber } =
+    useDeleteGroupMemberMutation(groupUuid);
   function handleUserRemove() {
     // todo: 사용자 탈퇴 로직 구현
+    deleteGroupMemeber(groupMember.uuid);
   }
 
   return (

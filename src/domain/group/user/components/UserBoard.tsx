@@ -41,7 +41,13 @@ function UserBoard({ groupUuid }: { groupUuid: string }) {
       <hr className="h-[2px] bg-black mt-3" />
       <UserListHeader />
       {members?.map((member) => {
-        return <UserListItem key={member.uuid} groupMember={member} />;
+        return (
+          <UserListItem
+            key={member.uuid}
+            groupUuid={groupUuid}
+            groupMember={member}
+          />
+        );
       })}
 
       {isOpen && (
