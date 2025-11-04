@@ -39,3 +39,20 @@ export const getGroupMemberList = async (
     throw e;
   }
 };
+
+export const deleteGroupMember = async (
+  groupUuid: string,
+  memberUuid: string,
+) => {
+  try {
+    const response = await api.delete(
+      `/groups/${groupUuid}/members/${memberUuid}`,
+    );
+    return 200 <= response.status && response.status < 300;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw e;
+    }
+    throw e;
+  }
+};
