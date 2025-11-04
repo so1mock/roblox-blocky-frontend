@@ -1,42 +1,26 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PlaceCard } from "./PlaceCard";
-import { getMyPlaces } from "../apis/place";
-import type { PlaceSummary } from "@place/types/place";
 import PlaceConnectGuideModal from "./PlaceConnectGuideModal";
 import Dropdown from "@common/components/Dropdown";
+import { useMyPlacesQuery } from "@myPlace/hooks/useMyPlacesQuery";
 
 const sortOptions = [
   { name: "최신 순", key: "new" },
   { name: "과거 순", key: "old" },
 ];
 function MyPlacePage() {
-  const [myPlaces, setMyPlaces] = useState<PlaceSummary[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    data: myPlaces = [],
+    isLoading: isMyPlacesLoading,
+    isError: isMyPlacesError,
+    error: myPlacesError,
+  } = useMyPlacesQuery();
+
   const [selectedSort, setSelectedSort] = useState({
     name: "최신 순",
     key: "new",
   });
   const [isGuideOpen, setIsGuideOpen] = useState(false);
-
-  const refresh = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await getMyPlaces();
-      setMyPlaces(response);
-    } catch (e: unknown) {
-      if (e instanceof Error) {
-        setError(e.message ?? "플레이스 목록을 불러오지 못했습니다.");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    refresh();
-  }, []);
 
   return (
     <div>
@@ -74,19 +58,17 @@ function MyPlacePage() {
             />
           </div>
         </div>
-        {isLoading && <div>로딩 중...</div>}
-        {!isLoading && error && <div>오류: {error}</div>}
-        {!isLoading && !error && myPlaces.length === 0 && (
+        {isMyPlacesLoading && <div>로딩 중...</div>}
+        {!isMyPlacesLoading && isMyPlacesError && (
+          <div>오류: {myPlacesError.message}</div>
+        )}
+        {!isMyPlacesLoading && !isMyPlacesError && myPlaces.length === 0 && (
           <div>플레이스가 없습니다.</div>
         )}
-        {!isLoading && !error && myPlaces.length > 0 && (
+        {!isMyPlacesLoading && !isMyPlacesError && myPlaces.length > 0 && (
           <div className="grid grid-cols-4 gap-12">
             {myPlaces.map((placeSummary) => (
-              <PlaceCard
-                key={placeSummary.uuid}
-                place={placeSummary}
-                onChanged={refresh}
-              />
+              <PlaceCard key={placeSummary.uuid} place={placeSummary} />
             ))}
           </div>
         )}
