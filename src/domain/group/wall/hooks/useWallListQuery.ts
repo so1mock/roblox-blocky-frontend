@@ -8,7 +8,7 @@ export const useWallListQuery = (
   size: number = 10,
 ) => {
   return useQuery({
-    queryKey: ["group", groupId, "wall", page],
+    queryKey: ["group", groupId, "wall", page, size],
     queryFn: () => getGroupWalls(groupId, page, size),
     staleTime: 1000 * 60 * 5, // 5분 동안 캐시 유지
     retry: 1,

@@ -19,7 +19,6 @@
   - 버튼 클릭 시 setCurrentPage를 호출해 부모에 변경을 전달합니다.
   - 총 페이지 수가 visiblePagesCount보다 적을 수 있어, 실제 표시 개수(showCount)를 두 값 중 작은 값으로 정규화한 뒤 이를 기준으로 계산합니다.
 */
-import type { SetStateAction } from "react";
 import type { PageInfo } from "../types/page";
 
 function Pagination({
@@ -27,7 +26,7 @@ function Pagination({
   setCurrentPage,
 }: {
   pageInfo: PageInfo;
-  setCurrentPage: React.Dispatch<SetStateAction<number>>;
+  setCurrentPage: (page: number) => void;
 }) {
   // 표시할 숫자들의 배열
   let pages: number[] = [];
@@ -41,7 +40,7 @@ function Pagination({
 
   // 페이지 개수가 짝수인 경우 왼쪽 페이지가 하나 더 많도록 설정
   if (showCount % 2 === 0) {
-    endPage = pageInfo.currentPageNumber + half + 1;
+    startPage -= 1;
   }
 
   // 경계 보정: 왼쪽 부족분을 오른쪽으로 채움

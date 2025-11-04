@@ -5,6 +5,8 @@ import { useWallListQuery } from "../hooks/useWallListQuery";
 import Pagination from "@common/components/Pagination";
 
 function Wall({ groupUuid }: { groupUuid: string }) {
+  const VISIBLE_PAGES_COUNT = 5; // 페이지 버튼 최대 개수
+  const PAGE_SIZE = 5; // 페이지 당 담벼락 수
   const [page, setPage] = useState(1);
 
   const {
@@ -12,7 +14,7 @@ function Wall({ groupUuid }: { groupUuid: string }) {
     isLoading: isGroupWallLoading,
     isError: isGroupwallError,
     error: groupwallError,
-  } = useWallListQuery(groupUuid, page - 1, 4);
+  } = useWallListQuery(groupUuid, page - 1, PAGE_SIZE);
 
   return (
     <div>
@@ -44,7 +46,7 @@ function Wall({ groupUuid }: { groupUuid: string }) {
           setCurrentPage={setPage}
           pageInfo={{
             currentPageNumber: walls.currentPageNumber + 1,
-            visiblePagesCount: 5,
+            visiblePagesCount: VISIBLE_PAGES_COUNT,
             totalPages: walls.totalPages, // 백엔드 api가 수정되면 응답 값으로 수정
           }}
         />
