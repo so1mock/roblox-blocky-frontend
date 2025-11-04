@@ -1,4 +1,6 @@
-function UserListItem() {
+import type { GroupMember } from "../types/user";
+
+function UserListItem({ groupMember }: { groupMember: GroupMember }) {
   function handleUserRemove() {
     // todo: 사용자 탈퇴 로직 구현
   }
@@ -10,10 +12,10 @@ function UserListItem() {
           className="text-md text-black font-bold whitespace-nowrap"
           title="잼민이는 못 깨는 타워 따라 만들기"
         >
-          김XX
+          {groupMember.nickname}
         </span>
       </div>
-      <div className="inline-block align-middle w-[300px] text-center overflow-hidden truncate">
+      {/* <div className="inline-block align-middle w-[300px] text-center overflow-hidden truncate">
         <span
           className="text-md text-[#888888] whitespace-nowrap"
           title={"2025-10-10T09:30:00Z"}
@@ -25,6 +27,14 @@ function UserListItem() {
               day: "2-digit",
             })
             .replace(/\s/g, "")}
+        </span>
+      </div> */}
+      <div className="inline-block align-middle w-[300px] text-center overflow-hidden truncate">
+        <span
+          className="text-md text-black whitespace-nowrap"
+          title={groupMember.role}
+        >
+          {groupMember.role}
         </span>
       </div>
       <div className="inline-block align-middle w-[300px] overflow-hidden truncate text-center">

@@ -4,11 +4,13 @@ import UserListItem from "./UserListItem";
 import Button from "@common/components/Button";
 import { createInviteCode } from "../apis/user";
 import { AxiosError } from "axios";
+import { useGroupMemberListQuery } from "../hooks/useGroupMemberListQuery";
 
 function UserBoard({ groupUuid }: { groupUuid: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isCreatingInviteCode, setIsCreatingInvideCode] = useState(false);
   const [inviteCode, setInviteCode] = useState<string | null>(null);
+  const { data: members } = useGroupMemberListQuery(groupUuid);
 
   const handleCreateInvite = async () => {
     if (isCreatingInviteCode) return;
@@ -38,7 +40,9 @@ function UserBoard({ groupUuid }: { groupUuid: string }) {
 
       <hr className="h-[2px] bg-black mt-3" />
       <UserListHeader />
-      <UserListItem />
+      {members?.map((member) => {
+        return <UserListItem key={member.uuid} groupMember={member} />;
+      })}
 
       {isOpen && (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">

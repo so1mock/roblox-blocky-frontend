@@ -5,7 +5,8 @@ function UserListHeader() {
         <span className="text-black text-xl font-bold">이름</span>
       </div>
       <div className="w-[300px] inline-block text-center">
-        <span className="text-black text-xl font-bold">반 가입 날짜</span>
+        {/* <span className="text-black text-xl font-bold">반 가입 날짜</span> */}
+        <span className="text-black text-xl font-bold">역할</span>
       </div>
       <div className="w-[300px] inline-block text-center">
         <span className="text-black text-xl font-bold" />
