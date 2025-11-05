@@ -44,17 +44,19 @@ function UserListItem({
           className="text-md text-black whitespace-nowrap"
           title={groupMember.role}
         >
-          {groupMember.role}
+          {groupMember.role === "OWNER" ? "교사" : "학생"}
         </span>
       </div>
       <div className="inline-block align-middle w-[300px] overflow-hidden truncate text-center">
-        <button
-          type="button"
-          onClick={handleUserRemove}
-          className="bg-white rounded-2xl px-4 py-1 cursor-pointer border-solid border-1 border-rbPointColor "
-        >
-          <span className="text-rbPointColor ">탈퇴</span>
-        </button>
+        {groupMember.role === "MEMBER" && (
+          <button
+            type="button"
+            onClick={handleUserRemove}
+            className="bg-white rounded-2xl px-4 py-1 cursor-pointer border-solid border-1 border-rbPointColor "
+          >
+            <span className="text-rbPointColor ">탈퇴</span>
+          </button>
+        )}
       </div>
     </div>
   );
