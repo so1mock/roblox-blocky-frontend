@@ -1,8 +1,8 @@
 import { PlaceViewCard } from "src/domain/myPlace/components/PlaceViewCard";
-import GroupNav from "./GroupNav";
+import GroupNav from "../../components/GroupNav";
 import type { PlaceSummary } from "src/domain/place/types/place";
 import { useAuthStore } from "@user/stores/authStore";
-import { useGroupDetailQuery } from "../hooks/useGroupDetailQuery";
+import { useGroupDetailQuery } from "../../hooks/useGroupDetailQuery";
 import { useNavigate } from "@tanstack/react-router";
 
 // 학생별 플레이스 예시 데이터
@@ -15,6 +15,7 @@ const exampleStudentPlaces: Record<string, PlaceSummary[]> = {
       ownerName: "김철수",
       lastModifiedAt: "2025-10-10T09:30:00Z",
       mainImageUrl: undefined,
+      createdAt: "2025-10-10T09:30:00Z",
     },
     {
       uuid: "1b2c3d4e",
@@ -23,6 +24,7 @@ const exampleStudentPlaces: Record<string, PlaceSummary[]> = {
       ownerName: "김철수",
       lastModifiedAt: "2025-10-09T14:20:00Z",
       mainImageUrl: undefined,
+      createdAt: "2025-10-09T14:20:00Z",
     },
   ],
   이수민: [
@@ -33,6 +35,7 @@ const exampleStudentPlaces: Record<string, PlaceSummary[]> = {
       ownerName: "이수민",
       lastModifiedAt: "2025-10-08T18:45:00Z",
       mainImageUrl: undefined,
+      createdAt: "2025-10-08T18:45:00Z",
     },
   ],
   박지훈: [
@@ -43,6 +46,7 @@ const exampleStudentPlaces: Record<string, PlaceSummary[]> = {
       ownerName: "박지훈",
       lastModifiedAt: "2025-10-07T10:00:00Z",
       mainImageUrl: undefined,
+      createdAt: "2025-10-07T10:00:00Z",
     },
   ],
 };

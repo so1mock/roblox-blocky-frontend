@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import GroupPlacePage from "src/domain/group/components/GroupPlacePage";
+import GroupPlacePage from "@group/place/components/GroupPlacePage";
 
 export const Route = createFileRoute(
   "/teacher/_mainLayout/group/$groupId/place",

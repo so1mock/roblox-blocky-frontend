@@ -7,7 +7,8 @@
       "@user/*": ["src/domain/user/*"],
       "@blockly/*": ["src/domain/blockly/*"],
       "@myPlace/*": ["src/domain/myPlace/*"],
-      "@place/*": ["src/domain/place/*"]
+      "@place/*": ["src/domain/place/*"],
+      "@group/*": ["src/domain/group/*"]
     },
 
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
