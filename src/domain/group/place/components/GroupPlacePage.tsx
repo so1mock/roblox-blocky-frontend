@@ -1,7 +1,6 @@
 import GroupNav from "../../components/GroupNav";
 import { useAuthStore } from "@user/stores/authStore";
 import { useGroupDetailQuery } from "../../hooks/useGroupDetailQuery";
-import { useNavigate } from "@tanstack/react-router";
 import { useGroupPlacesQuery } from "../hooks/useGroupPlacesQuery";
 import { GroupUserPlacesRow } from "./GroupUserPlacesRow";
 
@@ -52,25 +51,11 @@ import { GroupUserPlacesRow } from "./GroupUserPlacesRow";
 // };
 
 function GroupPlacePage({ id }: { id: string }) {
-  const navigate = useNavigate();
   const { userInfo } = useAuthStore();
-
   const { data: groupPlaces } = useGroupPlacesQuery(id);
 
-  const {
-    data: groupInfo,
-    isLoading: isGroupInfoLoading,
-    isError: isGroupInfoError,
-    error: groupInfoError,
-  } = useGroupDetailQuery(id);
-
-  if (isGroupInfoError) {
-    alert("유효하지 않은 반입니다. " + groupInfoError.message);
-    navigate({
-      to: `/${userInfo?.role === "EDUCATOR" ? "teacher" : "student"}/group`,
-    });
-    return null;
-  }
+  const { data: groupInfo, isLoading: isGroupInfoLoading } =
+    useGroupDetailQuery(id);
 
   if (isGroupInfoLoading || groupInfo === undefined)
     return <div>Loading...</div>;
@@ -93,15 +78,15 @@ function GroupPlacePage({ id }: { id: string }) {
             <div className="flex flex-col gap-4">
               <div>
                 <span className="text-white bg-rbPrimaryColor px-2 py-2 rounded-3xl">
-                  학생 12명
+                  학생 {groupInfo.memberCount}명
                 </span>
               </div>
 
               <h1 className="font-bold text-4xl">연습 1반</h1>
-              <span>개설자: 김선우</span>
+              <span>개설자: {groupInfo.ownerNickname}</span>
             </div>
           </div>
-          <span>이 반은 기초 로블록스 학습을 위해 생성된 반입니다.</span>
+          <span>{groupInfo.groupSummary.description}</span>
         </div>
 
         <div className="bg-white rounded-2xl px-12 py-12 mt-8 flex flex-col gap-8">
