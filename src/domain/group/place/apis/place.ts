@@ -1,11 +1,11 @@
 import { api } from "@common/apis/axios";
-import type { GroupPlaces } from "../../user/types/user";
+import type { GroupMemberPlaces } from "../types/place";
 import { AxiosError } from "axios";
 
 // 그룹 내 모든 멤버의 플레이스 조회
 export const getGroupPlaces = async (
   groupUuid: string,
-): Promise<GroupPlaces[]> => {
+): Promise<GroupMemberPlaces[]> => {
   try {
     const response = await api.get(`groups/${groupUuid}/places`);
     return response.data.members;

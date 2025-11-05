@@ -109,7 +109,7 @@ function GroupPlacePage({ id }: { id: string }) {
               <div className="flex gap-4 p-2 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                 {places.map((place) => (
                   <div key={place.uuid} className="flex-shrink-0">
-                    <PlaceViewCard place={place} />
+                    <PlaceViewCard placeSummary={place} />
                   </div>
                 ))}
               </div>

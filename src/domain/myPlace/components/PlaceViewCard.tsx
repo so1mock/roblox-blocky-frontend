@@ -4,14 +4,14 @@ import { formatIsoStringToDate } from "../../common/utils/formatIsoStringToDate"
 import Button from "@common/components/Button";
 
 interface PlaceViewCardProps {
-  place: PlaceSummary;
+  placeSummary: PlaceSummary;
 }
 
-export function PlaceViewCard({ place }: PlaceViewCardProps) {
+export function PlaceViewCard({ placeSummary }: PlaceViewCardProps) {
   const navigate = useNavigate();
 
   const enterPlace = () => {
-    navigate({ to: "/student/place/$id", params: { id: place.uuid } });
+    navigate({ to: "/student/place/$id", params: { id: placeSummary.uuid } });
   };
 
   return (
@@ -25,13 +25,13 @@ export function PlaceViewCard({ place }: PlaceViewCardProps) {
       <div className="bg-white rounded-b-3xl py-4 px-3">
         <div className="flex justify-between items-center w-full">
           <span className="font-bold text-md truncate block w-[calc(100%-90px)]">
-            {place.name}
+            {placeSummary.name}
           </span>
           <Button handleButtonClick={enterPlace} text="입장" />
         </div>
 
         <span className="text-sm text-gray-400">
-          {formatIsoStringToDate(place.lastModifiedAt)}
+          {formatIsoStringToDate(placeSummary.lastModifiedAt)}
         </span>
       </div>
     </div>
