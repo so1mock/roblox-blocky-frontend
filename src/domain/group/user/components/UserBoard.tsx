@@ -8,13 +8,13 @@ import { useGroupMembersQuery } from "../hooks/useGroupMemberQuery";
 
 function UserBoard({ groupUuid }: { groupUuid: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isCreatingInviteCode, setIsCreatingInvideCode] = useState(false);
+  const [isCreatingInviteCode, setIsCreatingInviteCode] = useState(false);
   const [inviteCode, setInviteCode] = useState<string | null>(null);
   const { data: members } = useGroupMembersQuery(groupUuid);
 
   const handleCreateInvite = async () => {
     if (isCreatingInviteCode) return;
-    setIsCreatingInvideCode(true);
+    setIsCreatingInviteCode(true);
     try {
       const code = await createInviteCode(groupUuid);
       setInviteCode(code);
@@ -24,7 +24,7 @@ function UserBoard({ groupUuid }: { groupUuid: string }) {
       setInviteCode("초대 코드 생성 실패. " + message);
     } finally {
       setIsOpen(true);
-      setIsCreatingInvideCode(false);
+      setIsCreatingInviteCode(false);
     }
   };
 

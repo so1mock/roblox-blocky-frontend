@@ -82,7 +82,9 @@ function GroupPlacePage({ id }: { id: string }) {
                 </span>
               </div>
 
-              <h1 className="font-bold text-4xl">연습 1반</h1>
+              <h1 className="font-bold text-4xl">
+                {groupInfo.groupSummary.name}
+              </h1>
               <span>개설자: {groupInfo.ownerNickname}</span>
             </div>
           </div>

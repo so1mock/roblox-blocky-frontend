@@ -8,11 +8,10 @@ function UserListItem({
   groupUuid: string;
   groupMember: GroupMember;
 }) {
-  const { mutate: deleteGroupMemeber } =
-    useDeleteGroupMemberMutation(groupUuid);
+  const { mutate: deleteGroupMember } = useDeleteGroupMemberMutation(groupUuid);
   function handleUserRemove() {
     // todo: 사용자 탈퇴 로직 구현
-    deleteGroupMemeber(groupMember.uuid);
+    deleteGroupMember(groupMember.uuid);
   }
 
   return (
@@ -20,7 +19,7 @@ function UserListItem({
       <div className="inline-block align-middle w-[300px] text-center pl-4 overflow-hidden truncate">
         <span
           className="text-md text-black font-bold whitespace-nowrap"
-          title="잼민이는 못 깨는 타워 따라 만들기"
+          title={groupMember.nickname}
         >
           {groupMember.nickname}
         </span>
