@@ -1,59 +1,61 @@
-import { PlaceViewCard } from "src/domain/myPlace/components/PlaceViewCard";
 import GroupNav from "../../components/GroupNav";
-import type { PlaceSummary } from "src/domain/place/types/place";
 import { useAuthStore } from "@user/stores/authStore";
 import { useGroupDetailQuery } from "../../hooks/useGroupDetailQuery";
 import { useNavigate } from "@tanstack/react-router";
+import { useGroupPlacesQuery } from "../hooks/useGroupPlacesQuery";
+import { GroupUserPlacesRow } from "./GroupUserPlacesRow";
 
 // 학생별 플레이스 예시 데이터
-const exampleStudentPlaces: Record<string, PlaceSummary[]> = {
-  김철수: [
-    {
-      uuid: "1a2b3c4d",
-      name: "연습 플레이스 1",
-      description: "기초 로블록스 학습용 플레이스입니다.",
-      ownerName: "김철수",
-      lastModifiedAt: "2025-10-10T09:30:00Z",
-      mainImageUrl: undefined,
-      createdAt: "2025-10-10T09:30:00Z",
-    },
-    {
-      uuid: "1b2c3d4e",
-      name: "연습 플레이스 2",
-      description: "중급 학습용 플레이스입니다.",
-      ownerName: "김철수",
-      lastModifiedAt: "2025-10-09T14:20:00Z",
-      mainImageUrl: undefined,
-      createdAt: "2025-10-09T14:20:00Z",
-    },
-  ],
-  이수민: [
-    {
-      uuid: "2a3b4c5d",
-      name: "프로젝트 플레이스",
-      description: "팀 프로젝트용 플레이스입니다.",
-      ownerName: "이수민",
-      lastModifiedAt: "2025-10-08T18:45:00Z",
-      mainImageUrl: undefined,
-      createdAt: "2025-10-08T18:45:00Z",
-    },
-  ],
-  박지훈: [
-    {
-      uuid: "3a4b5c6d",
-      name: "개인 연습 플레이스",
-      description: "개인 연습용 플레이스입니다.",
-      ownerName: "박지훈",
-      lastModifiedAt: "2025-10-07T10:00:00Z",
-      mainImageUrl: undefined,
-      createdAt: "2025-10-07T10:00:00Z",
-    },
-  ],
-};
+// const exampleStudentPlaces: Record<string, PlaceSummary[]> = {
+//   김철수: [
+//     {
+//       uuid: "1a2b3c4d",
+//       name: "연습 플레이스 1",
+//       description: "기초 로블록스 학습용 플레이스입니다.",
+//       ownerName: "김철수",
+//       lastModifiedAt: "2025-10-10T09:30:00Z",
+//       mainImageUrl: undefined,
+//       createdAt: "2025-10-10T09:30:00Z",
+//     },
+//     {
+//       uuid: "1b2c3d4e",
+//       name: "연습 플레이스 2",
+//       description: "중급 학습용 플레이스입니다.",
+//       ownerName: "김철수",
+//       lastModifiedAt: "2025-10-09T14:20:00Z",
+//       mainImageUrl: undefined,
+//       createdAt: "2025-10-09T14:20:00Z",
+//     },
+//   ],
+//   이수민: [
+//     {
+//       uuid: "2a3b4c5d",
+//       name: "프로젝트 플레이스",
+//       description: "팀 프로젝트용 플레이스입니다.",
+//       ownerName: "이수민",
+//       lastModifiedAt: "2025-10-08T18:45:00Z",
+//       mainImageUrl: undefined,
+//       createdAt: "2025-10-08T18:45:00Z",
+//     },
+//   ],
+//   박지훈: [
+//     {
+//       uuid: "3a4b5c6d",
+//       name: "개인 연습 플레이스",
+//       description: "개인 연습용 플레이스입니다.",
+//       ownerName: "박지훈",
+//       lastModifiedAt: "2025-10-07T10:00:00Z",
+//       mainImageUrl: undefined,
+//       createdAt: "2025-10-07T10:00:00Z",
+//     },
+//   ],
+// };
 
 function GroupPlacePage({ id }: { id: string }) {
   const navigate = useNavigate();
   const { userInfo } = useAuthStore();
+
+  const { data: groupPlaces } = useGroupPlacesQuery(id);
 
   const {
     data: groupInfo,
@@ -103,18 +105,14 @@ function GroupPlacePage({ id }: { id: string }) {
         </div>
 
         <div className="bg-white rounded-2xl px-12 py-12 mt-8 flex flex-col gap-8">
-          {Object.entries(exampleStudentPlaces).map(([studentName, places]) => (
-            <div key={studentName}>
-              <h2 className="font-bold text-2xl mb-4">{studentName}</h2>
-              <div className="flex gap-4 p-2 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-                {places.map((place) => (
-                  <div key={place.uuid} className="flex-shrink-0">
-                    <PlaceViewCard placeSummary={place} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
+          {groupPlaces?.map((groupMemberPlaces) => {
+            return (
+              <GroupUserPlacesRow
+                key={groupMemberPlaces.member.uuid}
+                groupMemberPlaces={groupMemberPlaces}
+              />
+            );
+          })}
         </div>
       </div>
     </div>
