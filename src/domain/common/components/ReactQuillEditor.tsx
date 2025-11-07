@@ -27,8 +27,8 @@ function ReactQuillEditor({ value = "", onChange }: ReactQuillEditorProps) {
     <ReactQuill
       theme="snow"
       value={value}
-      onChange={(_html, _delta, _source, editor) => {
-        onChange(editor.getText().trim());
+      onChange={(_html) => {
+        onChange(_html);
       }}
       modules={modules}
       style={{ margin: "0 auto" }}
