@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import type { PlaceSummary } from "@place/types/place";
-import { useNavigate } from "@tanstack/react-router";
 import { PlaceEditingOption } from "./PlaceEditingOption";
 import { formatIsoStringToDate } from "../../common/utils/formatIsoStringToDate";
 import Button from "@common/components/Button";
@@ -13,7 +12,6 @@ interface PlaceCardProps {
 }
 
 export function PlaceCard({ place }: PlaceCardProps) {
-  const navigate = useNavigate();
   const {
     mutateAsync: uploadPlaceThumbnailMutation,
     isPending: isUploadingPlaceThumbnail,
@@ -33,7 +31,7 @@ export function PlaceCard({ place }: PlaceCardProps) {
 
   const toggleFavorite = () => setIsFavorite((prev) => !prev);
   const enterPlace = () => {
-    navigate({ to: "/student/place/$id", params: { id: place.uuid } });
+    window.location.href = `/student/place/${place.uuid}`;
   };
 
   const handleUpdatePlaceNameButton = async () => {
