@@ -64,7 +64,7 @@ export const updateBoard = async (
   boardInfo: UpdateBoardInfo,
 ) => {
   try {
-    const response = await api.put(
+    const response = await api.patch(
       `/groups/${groupUuid}/boards/${boardUuid}`,
       boardInfo,
     );

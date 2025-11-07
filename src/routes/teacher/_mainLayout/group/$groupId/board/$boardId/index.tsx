@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import BoardDetailedPage from "src/domain/group/board/components/BoardDetailedPage";
 
 export const Route = createFileRoute(
-  "/teacher/_mainLayout/group/$groupId/board/$boardId",
+  "/teacher/_mainLayout/group/$groupId/board/$boardId/",
 )({
   component: RouteComponent,
 });

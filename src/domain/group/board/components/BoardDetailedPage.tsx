@@ -45,8 +45,7 @@ function BoardDetailedPage({
 
   const handleEdit = () => {
     navigate({
-      to: `/teacher/group/${groupUuid}/board/write`,
-      search: { boardUuid },
+      to: `/teacher/group/${groupUuid}/board/${boardUuid}/edit`,
     });
   };
 

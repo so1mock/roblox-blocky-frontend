@@ -18,3 +18,11 @@ export type BoardInfo = BoardSummary & {
     fileSrc: string;
   }[];
 };
+
+// 수정, 생성용 게시글 정보
+export type UpdateBoardInfo = {
+  title: string;
+  content: string;
+  attachmentUuids: string[];
+};
+export type CreateBoardInfo = UpdateBoardInfo;

@@ -14,5 +14,10 @@ export const useDeleteBoardMutation = (
         queryKey: ["groups", groupUuid, "boards"],
       });
     },
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
+    },
   });
 };
