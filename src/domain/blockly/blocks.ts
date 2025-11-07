@@ -36,9 +36,7 @@ import type { Block } from "@place/types/block";
  */
 export const initBlocks = (blocks: Block[]) => {
   // 1. 등록
-  console.log(blocks);
   blocks.forEach((block) => {
-    console.log(block);
     Blockly.Blocks[block.type] = {
       init: function () {
         block.blockDefinition.components.forEach((component) => {
@@ -102,6 +100,9 @@ export const initBlocks = (blocks: Block[]) => {
               new Blockly.FieldDropdown(options),
               component.name,
             );
+          } else if (component.componentType === "ParameterLabel") {
+            const input = this.appendValueInput(component.name);
+            if (component.type) input.setCheck(component.type);
           }
         });
 

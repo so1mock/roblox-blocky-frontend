@@ -127,4 +127,13 @@ export const defineVariableBlocks = () => {
       }
     },
   };
+
+  // 스크립트 본인을 불러오는 블록
+  Blockly.Blocks["script"] = {
+    init: function () {
+      this.appendDummyInput().appendField("이 스크립트"); // 블록에 표시될 이름
+      this.setOutput(true, "Script"); // 출력 타입을 Script로 지정
+      this.setStyle("variable_block"); // 변수 관련 블록 스타일 적용
+    },
+  };
 };

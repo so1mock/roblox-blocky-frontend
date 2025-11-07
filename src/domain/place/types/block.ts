@@ -58,6 +58,11 @@ export type BlockComponent =
         name: string;
         value: string;
       }>;
+    }
+  | {
+      componentType: "ParameterLabel";
+      name: string;
+      type: string;
     };
 
 export type BlockListByCategory = {
