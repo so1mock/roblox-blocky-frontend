@@ -63,6 +63,8 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
   }, [selectedScript]);
 
   useEffect(() => {
+    let intervalId: number;
+
     const fetchWorkspaceData = async () => {
       try {
         const data = await getWorkspaceDataByPlaceId(placeId);
@@ -74,7 +76,12 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
 
     if (placeId) {
       fetchWorkspaceData();
+      intervalId = setInterval(fetchWorkspaceData, 5000);
     }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
   }, [placeId]);
 
   return (
