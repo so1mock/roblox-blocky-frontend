@@ -11,13 +11,10 @@ export type BoardInfo = BoardSummary & {
     uuid: string;
     name: string;
   };
-};
-
-export type BoardInfo = {
-  boardSummary: BoardSummary;
   content: string;
-  attachedFiles: {
-    name: string;
-    src: string;
+  attchments: {
+    attachmentUuid: string;
+    fileName: string;
+    fileSrc: string;
   }[];
 };
