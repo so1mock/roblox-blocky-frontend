@@ -4,52 +4,69 @@ import { formatFileSizeToKB } from "@common/utils/formatFilesize";
 import { formatIsoStringToDate } from "@common/utils/formatIsoStringToDate";
 import { useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "@user/stores/authStore";
+import { useBoardInfoQuery } from "../hooks/useBoardInfoQuery";
+
+const mockBoardInfo = {
+  title: "잼민이는 못 깨는 타워 따라 만들기",
+  createdAt: "2025-10-10T09:30:00Z",
+  content: `<p>이곳은 게시글 내용이 들어가는 영역입니다.</p>`,
+  attachedFiles: [
+    { id: 1, name: "예시파일.pdf", size: 1024 * 100 },
+    { id: 2, name: "이미지.png", size: 1024 * 200 },
+  ],
+};
 
 function BoardDetailedPage({
-  groupId,
-  boardId,
+  groupUuid,
+  boardUuid,
 }: {
-  groupId: string;
-  boardId: string;
+  groupUuid: string;
+  boardUuid: string;
 }) {
-  console.log(boardId); // build 에러 방지
   const navigate = useNavigate();
   const { userInfo } = useAuthStore();
   // 예시 데이터
-  const title = "잼민이는 못 깨는 타워 따라 만들기";
-  const createdAt = "2025-10-10T09:30:00Z";
-  const content = `<p>이곳은 게시글 내용이 들어가는 영역입니다.</p>`;
-  const attachedFiles = [
-    { id: 1, name: "예시파일.pdf", size: 1024 * 100 },
-    { id: 2, name: "이미지.png", size: 1024 * 200 },
-  ];
+  const { data: boardInfo, error } = useBoardInfoQuery(groupUuid, boardUuid);
+
+  if (error) {
+    alert("게시글 정보를 불러오지 못했습니다." + error.message);
+    navigate({ to: `/teacher/group/${groupUuid}/` });
+  }
 
   return (
     <div className="w-[1600px] mx-auto flex justify-center gap-24 py-10">
       <div className="w-[1200px] bg-white p-8 rounded-2xl">
         {/* 제목 */}
-        <h1 className="font-bold text-4xl text-center mb-4">{title}</h1>
+        {boardInfo && (
+          <h1 className="font-bold text-4xl text-center mb-4">
+            {boardInfo.title}
+          </h1>
+        )}
 
         {/* 작성자 & 작성일 */}
         <div className="flex justify-center items-center mb-8">
           <div className="h-[19px]">
             <img src="/schedule.png" className="mr-1" />
           </div>
-          <span className="text-gray-500 ">
-            {formatIsoStringToDate(createdAt)}
-          </span>
+          {boardInfo && (
+            <span className="text-gray-500 ">
+              {formatIsoStringToDate(boardInfo.createdAt)}
+            </span>
+          )}
         </div>
         <hr className="bg-gray-300 h-[1px] border-0 my-12" />
         {/* 본문 */}
         <div className="bg-white rounded-2xl view mb-16">
-          <ReadOnlyReactQuillEditor contents={content} />
+          {boardInfo && (
+            <ReadOnlyReactQuillEditor contents={boardInfo.content} />
+          )}
         </div>
 
         {/* 첨부파일 */}
-        {attachedFiles.length > 0 && (
+        {mockBoardInfo.attachedFiles.length > 0 && (
           <div className="">
             <ul className="flex flex-col gap-2">
-              {attachedFiles.map((file) => (
+              {mockBoardInfo.attachedFiles.map((file) => (
                 <li
                   key={file.id}
                   className="flex items-center justify-between bg-[#F2F9FF] rounded-xl px-4 py-2"
@@ -83,9 +100,9 @@ function BoardDetailedPage({
             handleButtonClick={() => {
               // 목록으로 돌아가기
               if (userInfo?.role === "EDUCATOR") {
-                navigate({ to: `/teacher/group/${groupId}` });
+                navigate({ to: `/teacher/group/${groupUuid}` });
               } else {
-                navigate({ to: `/student/group/${groupId}` });
+                navigate({ to: `/student/group/${groupUuid}` });
               }
             }}
           />

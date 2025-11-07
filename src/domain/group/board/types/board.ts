@@ -1,8 +1,13 @@
 export type BoardSummary = {
-  uuid: string;
+  boardUuid: string;
   title: string;
   createdAt: string;
-  author: {
+  updatedAt: string;
+};
+
+// 상세 조회용 게시글 정보
+export type BoardInfo = BoardSummary & {
+  groupMemberProfile: {
     uuid: string;
     name: string;
   };

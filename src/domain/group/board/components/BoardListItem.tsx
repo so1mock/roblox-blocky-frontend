@@ -1,16 +1,15 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "@user/stores/authStore";
+import type { BoardSummary } from "../types/board";
 
 function BoardListItem({
-  groupId,
-  // curPage, // 임시로 주석 처리
+  groupUuid,
+  boardSummary,
 }: {
-  groupId: string;
-  curPage: number;
+  groupUuid: string;
+  boardSummary: BoardSummary;
 }) {
   const navigate = useNavigate();
-
-  const boardId = 1; // api 연결 전 임시 id
   const { userInfo } = useAuthStore();
 
   // params의 구조는 라우터 정의에 따라 다름
@@ -21,26 +20,28 @@ function BoardListItem({
       <div className="inline-block align-middle w-[900px] text-left pl-4 overflow-hidden truncate">
         <span
           className="text-md text-rbPointColor font-bold whitespace-nowrap cursor-pointer"
-          title="잼민이는 못 깨는 타워 따라 만들기"
+          title={boardSummary.title}
           onClick={() => {
-            // to do
-            // 게시판 상세 페이지로 이동
             if (userInfo?.role === "EDUCATOR") {
-              navigate({ to: `/teacher/group/${groupId}/board/${boardId}` });
+              navigate({
+                to: `/teacher/group/${groupUuid}/board/${boardSummary.boardUuid}`,
+              });
             } else {
-              navigate({ to: `/student/group/${groupId}/board/${boardId}` });
+              navigate({
+                to: `/student/group/${groupUuid}/board/${boardSummary.boardUuid}`,
+              });
             }
           }}
         >
-          잼민이는 못 깨는 타워 따라 만들기
+          {boardSummary.title}
         </span>
       </div>
       <div className="inline-block align-middle w-[200px] text-center overflow-hidden truncate">
         <span
           className="text-md text-[#888888] whitespace-nowrap"
-          title={"2025-10-10T09:30:00Z"}
+          title={boardSummary.createdAt}
         >
-          {new Date("2025-10-10T09:30:00Z")
+          {new Date(boardSummary.createdAt)
             .toLocaleDateString("ko-KR", {
               year: "numeric",
               month: "2-digit",

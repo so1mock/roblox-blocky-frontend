@@ -2,14 +2,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { CreateBoardInfo } from "../types/board";
 import { createBoard } from "../apis/board";
 
-export const useCreateBoardMutation = (
-  groupUuid: string,
-  boardInfo: CreateBoardInfo,
-) => {
+export const useCreateBoardMutation = (groupUuid: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: () => createBoard(groupUuid, boardInfo),
+    mutationFn: (boardInfo: CreateBoardInfo) =>
+      createBoard(groupUuid, boardInfo),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["groups", groupUuid, "boards"],

@@ -2,13 +2,14 @@ import Button from "@common/components/Button";
 import MultiFileUploader from "@common/components/MultiFileUploader";
 import ReactQuillEditor from "@common/components/ReactQuillEditor";
 import { useNavigate } from "@tanstack/react-router";
-import { useRef, useState } from "react";
-import type ReactQuill from "react-quill-new";
+import { useState } from "react";
+import { useCreateBoardMutation } from "../hooks/useCreateBoardMutation";
 
-function BoardCreatePage({ groupId }: { groupId: string }) {
+function BoardCreatePage({ groupUuid }: { groupUuid: string }) {
   const navigate = useNavigate();
-  const quillRef = useRef<ReactQuill>(null);
   const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const { mutateAsync: handleCreateBoard } = useCreateBoardMutation(groupUuid);
 
   return (
     <div className="w-[1600px] mx-auto flex justify-center gap-24">
@@ -26,7 +27,7 @@ function BoardCreatePage({ groupId }: { groupId: string }) {
           />
           <hr className="bg-gray-300 h-[1px] border-0 my-12" />
           <div className="px-4 write">
-            <ReactQuillEditor ref={quillRef} />
+            <ReactQuillEditor value={content} onChange={setContent} />
           </div>
           <div className="text-center mt-8">
             <MultiFileUploader />
@@ -38,8 +39,12 @@ function BoardCreatePage({ groupId }: { groupId: string }) {
               <Button
                 text="작성 완료"
                 handleButtonClick={() => {
-                  // todo
-                  // 글 작성 submit 함수
+                  handleCreateBoard({
+                    title: title,
+                    content: content,
+                    attachmentUuids: [],
+                  });
+                  navigate({ to: `/teacher/group/${groupUuid}` });
                 }}
                 xSize={8}
                 ySize={2}
@@ -50,7 +55,7 @@ function BoardCreatePage({ groupId }: { groupId: string }) {
               <Button
                 text="목록으로"
                 handleButtonClick={() => {
-                  navigate({ to: `/teacher/group/${groupId}` });
+                  navigate({ to: `/teacher/group/${groupUuid}` });
                 }}
                 xSize={8}
                 ySize={2}

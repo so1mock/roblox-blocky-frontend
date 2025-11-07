@@ -9,5 +9,5 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { groupId, boardId } = Route.useParams();
-  return <BoardDetailedPage groupId={groupId} boardId={boardId} />;
+  return <BoardDetailedPage groupUuid={groupId} boardUuid={boardId} />;
 }
