@@ -9,11 +9,13 @@ import { useEditWall } from "../hooks/useEditWall";
 function GroupWallItem({
   wallInfo,
   groupId,
-  page,
+  currentPageNumber,
+  pageSize,
 }: {
   wallInfo: WallInfo;
   groupId: string;
-  page: number;
+  currentPageNumber: number;
+  pageSize: number;
 }) {
   const { userInfo } = useAuthStore();
   const [isOptionOpen, setIsOptionOpen] = useState(false);
@@ -21,9 +23,9 @@ function GroupWallItem({
   const [editedContent, setEditedContent] = useState<string>(wallInfo.content);
   const editTextareaRef = useRef<HTMLTextAreaElement>(null);
   const { mutateAsync: deleteWallMutation, isPending: isDeletingWall } =
-    useDeleteWall(groupId);
+    useDeleteWall(groupId, currentPageNumber - 1, pageSize);
   const { mutateAsync: editWallMutation, isPending: isEditingWall } =
-    useEditWall(groupId, page);
+    useEditWall(groupId, currentPageNumber - 1, pageSize);
 
   useEffect(() => {
     if (editingMode) {

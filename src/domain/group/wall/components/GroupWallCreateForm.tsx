@@ -4,10 +4,12 @@ import { useCreateWall } from "../hooks/useCreateWall";
 
 function GroupWallCreateForm({
   groupUuid,
-  groupId,
+  currentPageNumber,
+  pageSize,
 }: {
   groupUuid: string;
-  groupId: string;
+  currentPageNumber: number;
+  pageSize: number;
 }) {
   const [content, setContent] = useState("");
   const {
@@ -15,7 +17,7 @@ function GroupWallCreateForm({
     isPending: isCreatingWall,
     isError: isCreatingError,
     error: creatingError,
-  } = useCreateWall(groupId);
+  } = useCreateWall(groupUuid, currentPageNumber - 1, pageSize);
 
   const handleSubmit = async () => {
     const body = content.trim();
@@ -27,7 +29,7 @@ function GroupWallCreateForm({
       return;
     }
 
-    await createWallMutation({ uuid: groupUuid, content: body });
+    await createWallMutation(body);
     setContent("");
   };
 

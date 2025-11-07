@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { editWall } from "../apis/wall";
 
-export const useEditWall = (groupId: string, page: number) => {
+export const useEditWall = (groupId: string, page: number, size: number) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -11,7 +11,7 @@ export const useEditWall = (groupId: string, page: number) => {
     onSuccess: () => {
       // ✅ 수정 후 벽글 리스트 캐시 갱신
       queryClient.invalidateQueries({
-        queryKey: ["group", groupId, "wall", page],
+        queryKey: ["group", groupId, "wall", page, size],
       });
     },
 
