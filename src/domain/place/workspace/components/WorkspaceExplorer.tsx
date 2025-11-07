@@ -12,7 +12,7 @@ function WorkspaceExploerer({ placeId }: { placeId: string }) {
   }
 
   return (
-    <div className="bg-white border border-gray-200">
+    <div className="bg-white border border-gray-200 flex flex-col h-screen">
       {/* 헤더 */}
       <div className="border-b border-gray-200 p-3 bg-gray-50">
         <h3 className="font-medium text-gray-900 text-sm">
@@ -24,7 +24,7 @@ function WorkspaceExploerer({ placeId }: { placeId: string }) {
       </div>
 
       {/* 트리 */}
-      <div className="overflow-auto">
+      <div className="overflow-auto flex-1">
         {workspaceData.objects.map((object) => (
           <WorkspaceTreeItem
             key={object.uuid}
