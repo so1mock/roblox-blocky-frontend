@@ -46,6 +46,7 @@ function BlockCodingHeader({
     try {
       const state = Blockly.serialization.workspaces.save(workspaceRef.current);
       const convertedScriptResponse = await saveBlockScript(
+        placeId,
         selectedScript.uuid,
         state as BlockScript,
       );
