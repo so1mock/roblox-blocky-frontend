@@ -7,7 +7,7 @@ export const getWorkspaceDataByPlaceId = async (
   placeId: string,
 ): Promise<Place> => {
   try {
-    const response = await api.get(`/place/${placeId}`);
+    const response = await api.get(`/place/me/${placeId}`);
     return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
