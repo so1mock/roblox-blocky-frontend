@@ -3,8 +3,8 @@ import GroupWallOptions from "./GroupWallOptions";
 import { useEffect, useRef, useState } from "react";
 import type { WallInfo } from "../types/wall";
 import { useAuthStore } from "@user/stores/authStore";
-import { useDeleteWall } from "../hooks/useDeleteWall";
-import { useEditWall } from "../hooks/useEditWall";
+import { useDeleteWallMutation } from "../hooks/useDeleteWallMutation";
+import { useEditWallMutation } from "../hooks/useEditWallMutation";
 
 function GroupWallItem({
   wallInfo,
@@ -23,9 +23,9 @@ function GroupWallItem({
   const [editedContent, setEditedContent] = useState<string>(wallInfo.content);
   const editTextareaRef = useRef<HTMLTextAreaElement>(null);
   const { mutateAsync: deleteWallMutation, isPending: isDeletingWall } =
-    useDeleteWall(groupId, currentPageNumber - 1, pageSize);
+    useDeleteWallMutation(groupId, currentPageNumber - 1, pageSize);
   const { mutateAsync: editWallMutation, isPending: isEditingWall } =
-    useEditWall(groupId, currentPageNumber - 1, pageSize);
+    useEditWallMutation(groupId, currentPageNumber - 1, pageSize);
 
   useEffect(() => {
     if (editingMode) {

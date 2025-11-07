@@ -1,7 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteWall } from "../apis/wall";
 
-export const useDeleteWall = (groupId: string, page: number, size: number) => {
+export const useDeleteWallMutation = (
+  groupId: string,
+  page: number,
+  size: number,
+) => {
   const queryClient = useQueryClient();
 
   return useMutation({

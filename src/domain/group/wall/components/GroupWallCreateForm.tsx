@@ -1,6 +1,6 @@
 import Button from "@common/components/Button";
 import { useState } from "react";
-import { useCreateWall } from "../hooks/useCreateWall";
+import { useCreateWallMutation } from "../hooks/useCreateWallMutation";
 
 function GroupWallCreateForm({
   groupUuid,
@@ -17,7 +17,7 @@ function GroupWallCreateForm({
     isPending: isCreatingWall,
     isError: isCreatingError,
     error: creatingError,
-  } = useCreateWall(groupUuid, currentPageNumber - 1, pageSize);
+  } = useCreateWallMutation(groupUuid, currentPageNumber - 1, pageSize);
 
   const handleSubmit = async () => {
     const body = content.trim();

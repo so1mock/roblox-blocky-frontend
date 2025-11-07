@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createWall } from "../apis/wall";
 
-export const useCreateWall = (
+export const useCreateWallMutation = (
   groupUuid: string,
   page: number,
   size: number,
