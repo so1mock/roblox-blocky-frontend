@@ -9,7 +9,7 @@ import { useWorkspaceDataStore } from "../workspace/stores/useWorkspaceDataStore
 function BlockCodingPage({ id: placeId }: { id: string }) {
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
   const { workspaceRef, loading, error } = useBlocklyUI(blocklyDivRef, {
-    useServer: false,
+    useServer: true,
   });
   const { setWorkspaceData, selectedScript } = useWorkspaceDataStore();
 
