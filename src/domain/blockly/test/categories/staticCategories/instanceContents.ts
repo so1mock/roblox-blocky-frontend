@@ -13,4 +13,8 @@ export const instanceContents: DefinitionForToolbox[] = [
     type: "wait_for_child_block",
     kind: "block",
   },
+  {
+    kind: "block",
+    type: "script",
+  },
 ];

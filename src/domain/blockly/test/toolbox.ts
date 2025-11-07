@@ -80,10 +80,6 @@ export const toolbox: Toolbox = {
           text: "새 변수 만들기",
           callbackKey: "CREATE_VARIABLE",
         },
-        {
-          kind: "block",
-          type: "script",
-        },
         ...variableContents,
       ],
     },

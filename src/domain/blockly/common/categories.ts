@@ -12,12 +12,4 @@ export const variableContents: DefinitionForToolbox[] = [
   {
     kind: "sep",
   },
-  {
-    kind: "block",
-    type: "variables_type_check",
-  },
-  {
-    kind: "block",
-    type: "variables_type_convert",
-  },
 ];

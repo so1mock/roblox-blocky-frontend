@@ -1,17 +1,44 @@
 import * as Blockly from "blockly";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useBlocklyUI } from "../hooks/useBlocklyUi";
 import WorkspaceExploerer from "../workspace/components/WorkspaceExplorer";
 import BlockCodingHeader from "./BlockCodingHeader";
 import { getWorkspaceDataByPlaceId } from "../workspace/apis/workspace";
 import { useWorkspaceDataStore } from "../workspace/stores/useWorkspaceDataStore";
+import VariableCreateModal from "./VariableCreateModal";
 
 function BlockCodingPage({ id: placeId }: { id: string }) {
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
-  const { workspaceRef, loading, error } = useBlocklyUI(blocklyDivRef, {
-    useServer: true,
-  });
+  const [isVariableModalOpen, setIsVariableModalOpen] = useState(false);
+  const { workspaceRef, loading, error } = useBlocklyUI(
+    blocklyDivRef,
+    {
+      useServer: true,
+    },
+    () => {
+      setIsVariableModalOpen(true);
+    },
+  );
   const { setWorkspaceData, selectedScript } = useWorkspaceDataStore();
+
+  const handleVariableConfirm = (variableName: string) => {
+    if (!workspaceRef.current) return;
+
+    // 변수 생성
+    const variable = workspaceRef.current
+      .getVariableMap()
+      .createVariable(variableName);
+
+    if (variable) {
+      // 툴박스 새로고침
+      workspaceRef.current.refreshToolboxSelection();
+    } else {
+      console.error("변수 생성에 실패했습니다.");
+    }
+
+    // 모달 닫기
+    setIsVariableModalOpen(false);
+  };
 
   useEffect(() => {
     if (selectedScript === undefined) return;
@@ -88,6 +115,14 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
           />
         </div>
       </div>
+      {/* 변수 생성 모달 */}
+      <VariableCreateModal
+        isOpen={isVariableModalOpen}
+        onClose={() => {
+          setIsVariableModalOpen(false);
+        }}
+        onConfirm={handleVariableConfirm}
+      />
     </div>
   );
 }
