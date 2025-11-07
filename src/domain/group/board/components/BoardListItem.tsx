@@ -1,7 +1,13 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "@user/stores/authStore";
 
-function BoardListItem({ groupId }: { groupId: string }) {
+function BoardListItem({
+  groupId,
+  // curPage, // 임시로 주석 처리
+}: {
+  groupId: string;
+  curPage: number;
+}) {
   const navigate = useNavigate();
 
   const boardId = 1; // api 연결 전 임시 id
