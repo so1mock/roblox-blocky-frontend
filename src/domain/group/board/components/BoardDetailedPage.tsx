@@ -5,6 +5,7 @@ import { formatIsoStringToDate } from "@common/utils/formatIsoStringToDate";
 import { useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "@user/stores/authStore";
 import { useBoardInfoQuery } from "../hooks/useBoardInfoQuery";
+import { useDeleteBoardMutation } from "../hooks/useDeleteBoardMutation";
 
 const mockBoardInfo = {
   title: "잼민이는 못 깨는 타워 따라 만들기",
@@ -27,6 +28,27 @@ function BoardDetailedPage({
   const { userInfo } = useAuthStore();
   // 예시 데이터
   const { data: boardInfo, error } = useBoardInfoQuery(groupUuid, boardUuid);
+
+  const deleteMutation = useDeleteBoardMutation(groupUuid, boardUuid);
+
+  const handleDelete = async () => {
+    const ok = confirm("정말 삭제하시겠습니까?");
+    if (!ok) return;
+    try {
+      await deleteMutation.mutateAsync();
+      alert("게시글이 삭제되었습니다.");
+      navigate({ to: `/teacher/group/${groupUuid}` });
+    } catch {
+      alert("삭제에 실패했습니다.");
+    }
+  };
+
+  const handleEdit = () => {
+    navigate({
+      to: `/teacher/group/${groupUuid}/board/write`,
+      search: { boardUuid },
+    });
+  };
 
   if (error) {
     alert("게시글 정보를 불러오지 못했습니다." + error.message);
@@ -55,6 +77,24 @@ function BoardDetailedPage({
           )}
         </div>
         <hr className="bg-gray-300 h-[1px] border-0 my-12" />
+        {userInfo?.role === "EDUCATOR" && (
+          <div className="flex justify-end mb-4 gap-2">
+            <Button
+              text="수정"
+              xSize={6}
+              ySize={2}
+              handleButtonClick={handleEdit}
+            />
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={deleteMutation.isPending}
+              className="px-4 py-2 rounded-2xl border border-[#DDDDDD] text-[#F05460] bg-white cursor-pointer disabled:opacity-60"
+            >
+              삭제
+            </button>
+          </div>
+        )}
         {/* 본문 */}
         <div className="bg-white rounded-2xl view mb-16">
           {boardInfo && (
