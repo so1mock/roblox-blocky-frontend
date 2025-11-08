@@ -20,7 +20,7 @@ function Board({ groupUuid }: { groupUuid: string }) {
     PAGE_SIZE,
   );
   return (
-    <div>
+    <div className="mb-8">
       <div className="flex items-center justify-between">
         <span className="font-bold text-2xl">게시판</span>
         {userInfo?.role === "EDUCATOR" && (
