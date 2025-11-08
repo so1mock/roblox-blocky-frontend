@@ -3,6 +3,7 @@ export interface PlaceSummary {
   name: string;
   description: string;
   ownerName: string;
-  lastModifiedAt: string;
   mainImageUrl: string | undefined;
+  lastModifiedAt: string;
+  createdAt: string;
 }

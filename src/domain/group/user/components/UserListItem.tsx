@@ -1,6 +1,17 @@
-function UserListItem() {
+import { useDeleteGroupMemberMutation } from "../hooks/useDeleteGroupMemberMutation";
+import type { GroupMember } from "../types/user";
+
+function UserListItem({
+  groupUuid,
+  groupMember,
+}: {
+  groupUuid: string;
+  groupMember: GroupMember;
+}) {
+  const { mutate: deleteGroupMember } = useDeleteGroupMemberMutation(groupUuid);
   function handleUserRemove() {
     // todo: 사용자 탈퇴 로직 구현
+    deleteGroupMember(groupMember.uuid);
   }
 
   return (
@@ -8,12 +19,12 @@ function UserListItem() {
       <div className="inline-block align-middle w-[300px] text-center pl-4 overflow-hidden truncate">
         <span
           className="text-md text-black font-bold whitespace-nowrap"
-          title="잼민이는 못 깨는 타워 따라 만들기"
+          title={groupMember.nickname}
         >
-          김XX
+          {groupMember.nickname}
         </span>
       </div>
-      <div className="inline-block align-middle w-[300px] text-center overflow-hidden truncate">
+      {/* <div className="inline-block align-middle w-[300px] text-center overflow-hidden truncate">
         <span
           className="text-md text-[#888888] whitespace-nowrap"
           title={"2025-10-10T09:30:00Z"}
@@ -26,15 +37,25 @@ function UserListItem() {
             })
             .replace(/\s/g, "")}
         </span>
+      </div> */}
+      <div className="inline-block align-middle w-[300px] text-center overflow-hidden truncate">
+        <span
+          className="text-md text-black whitespace-nowrap"
+          title={groupMember.role}
+        >
+          {groupMember.role === "OWNER" ? "교사" : "학생"}
+        </span>
       </div>
       <div className="inline-block align-middle w-[300px] overflow-hidden truncate text-center">
-        <button
-          type="button"
-          onClick={handleUserRemove}
-          className="bg-white rounded-2xl px-4 py-1 cursor-pointer border-solid border-1 border-rbPointColor "
-        >
-          <span className="text-rbPointColor ">탈퇴</span>
-        </button>
+        {groupMember.role === "MEMBER" && (
+          <button
+            type="button"
+            onClick={handleUserRemove}
+            className="bg-white rounded-2xl px-4 py-1 cursor-pointer border-solid border-1 border-rbPointColor "
+          >
+            <span className="text-rbPointColor ">탈퇴</span>
+          </button>
+        )}
       </div>
     </div>
   );

@@ -4,15 +4,17 @@ import UserListItem from "./UserListItem";
 import Button from "@common/components/Button";
 import { createInviteCode } from "../apis/user";
 import { AxiosError } from "axios";
+import { useGroupMembersQuery } from "../hooks/useGroupMemberQuery";
 
 function UserBoard({ groupUuid }: { groupUuid: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isCreating, setIsCreating] = useState(false);
+  const [isCreatingInviteCode, setIsCreatingInviteCode] = useState(false);
   const [inviteCode, setInviteCode] = useState<string | null>(null);
+  const { data: members } = useGroupMembersQuery(groupUuid);
 
   const handleCreateInvite = async () => {
-    if (isCreating) return;
-    setIsCreating(true);
+    if (isCreatingInviteCode) return;
+    setIsCreatingInviteCode(true);
     try {
       const code = await createInviteCode(groupUuid);
       setInviteCode(code);
@@ -22,7 +24,7 @@ function UserBoard({ groupUuid }: { groupUuid: string }) {
       setInviteCode("초대 코드 생성 실패. " + message);
     } finally {
       setIsOpen(true);
-      setIsCreating(false);
+      setIsCreatingInviteCode(false);
     }
   };
 
@@ -31,14 +33,22 @@ function UserBoard({ groupUuid }: { groupUuid: string }) {
       <div className="flex items-center justify-between">
         <span className="font-bold text-2xl">반 구성원 리스트</span>
         <Button
-          text={isCreating ? "생성 중..." : "초대 코드 생성"}
+          text={isCreatingInviteCode ? "생성 중..." : "초대 코드 생성"}
           handleButtonClick={handleCreateInvite}
         />
       </div>
 
       <hr className="h-[2px] bg-black mt-3" />
       <UserListHeader />
-      <UserListItem />
+      {members?.map((member) => {
+        return (
+          <UserListItem
+            key={member.uuid}
+            groupUuid={groupUuid}
+            groupMember={member}
+          />
+        );
+      })}
 
       {isOpen && (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
