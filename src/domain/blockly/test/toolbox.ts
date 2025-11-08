@@ -3,9 +3,12 @@ import { eventContents } from "./categories/staticCategories/eventContents";
 import { logicContents } from "./categories/staticCategories/logicContents";
 import { loopContents } from "./categories/staticCategories/loopContents";
 import { mathContents } from "./categories/staticCategories/mathContents";
-import { serviceContents } from "./categories/staticCategories/serviceContents";
 import { variableContents } from "../common/categories";
 import type { Toolbox } from "@place/types/block";
+import { instanceContents } from "./categories/staticCategories/instanceContents";
+import { colorContents } from "./categories/staticCategories/colorContents";
+import { partContents } from "./categories/staticCategories/partContents";
+import { humanoidContents } from "./categories/staticCategories/humanoidContents";
 
 export const toolbox: Toolbox = {
   kind: "categoryToolbox",
@@ -41,13 +44,31 @@ export const toolbox: Toolbox = {
       contents: eventContents,
     },
     {
-      kind: "sep",
+      kind: "category",
+      name: "인스턴스",
+      categorystyle: "roblox_instance_category",
+      contents: instanceContents,
     },
     {
       kind: "category",
-      name: "서비스",
-      categorystyle: "service_category",
-      contents: serviceContents,
+      name: "색상",
+      categorystyle: "color_category",
+      contents: colorContents,
+    },
+    {
+      kind: "category",
+      name: "파트",
+      categorystyle: "roblox_part_category",
+      contents: partContents,
+    },
+    {
+      kind: "category",
+      name: "휴머노이드",
+      categorystyle: "roblox_humanoid_category",
+      contents: humanoidContents,
+    },
+    {
+      kind: "sep",
     },
     {
       kind: "category",

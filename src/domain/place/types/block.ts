@@ -5,7 +5,11 @@ export type Category =
   | "loop_category"
   | "variable_category"
   | "event_category"
-  | "service_category";
+  | "service_category"
+  | "roblox_instance_category"
+  | "roblox_part_category"
+  | "roblox_humanoid_category"
+  | "color_category";
 
 export type CategoryName =
   | "수식"
@@ -14,8 +18,11 @@ export type CategoryName =
   | "반복"
   | "변수"
   | "이벤트"
+  | "인스턴스"
+  | "색상"
+  | "파트"
+  | "휴머노이드"
   | "서비스";
-
 export type BlockKind = "block" | "label" | "button" | "sep";
 
 export type BlockComponent =
@@ -51,6 +58,11 @@ export type BlockComponent =
         name: string;
         value: string;
       }>;
+    }
+  | {
+      componentType: "ParameterLabel";
+      name: string;
+      type: string;
     };
 
 export type BlockListByCategory = {

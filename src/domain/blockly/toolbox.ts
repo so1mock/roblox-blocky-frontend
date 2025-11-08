@@ -41,6 +41,26 @@ export const initToolbox = (
     blockListsByCategory,
     "loop_category",
   );
+  const humanoidCategory = findBlockListByCategoryName(
+    blockListsByCategory,
+    "roblox_humanoid_category",
+  );
+  const instanceCategory = findBlockListByCategoryName(
+    blockListsByCategory,
+    "roblox_instance_category",
+  );
+  const colorCategory = findBlockListByCategoryName(
+    blockListsByCategory,
+    "color_category",
+  );
+  const eventCategory = findBlockListByCategoryName(
+    blockListsByCategory,
+    "event_category",
+  );
+  const partCategory = findBlockListByCategoryName(
+    blockListsByCategory,
+    "roblox_part_category",
+  );
 
   return {
     kind: "categoryToolbox",
@@ -68,6 +88,41 @@ export const initToolbox = (
         name: "반복",
         categorystyle: loopCategory.categoryName,
         contents: getBlocksByCategory(loopCategory),
+      },
+      {
+        kind: "category",
+        name: "인스턴스",
+        categorystyle: instanceCategory.categoryName,
+        contents: getBlocksByCategory(instanceCategory),
+      },
+      {
+        kind: "category",
+        name: "이벤트",
+        categorystyle: eventCategory.categoryName,
+        contents: getBlocksByCategory({
+          ...eventCategory,
+          blocks: eventCategory.blocks.filter(
+            (block) => block.type !== "hit_constant",
+          ),
+        }),
+      },
+      {
+        kind: "category",
+        name: "색상",
+        categorystyle: colorCategory.categoryName,
+        contents: getBlocksByCategory(colorCategory),
+      },
+      {
+        kind: "category",
+        name: "휴머노이드",
+        categorystyle: humanoidCategory.categoryName,
+        contents: getBlocksByCategory(humanoidCategory),
+      },
+      {
+        kind: "category",
+        name: "파트",
+        categorystyle: partCategory.categoryName,
+        contents: getBlocksByCategory(partCategory),
       },
       {
         kind: "category",

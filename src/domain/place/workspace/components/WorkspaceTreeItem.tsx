@@ -45,6 +45,7 @@ function WorkspaceTreeItem({
     try {
       const newStatus = object.isBlockScriptEnabled ? false : true;
       await toggleBlockScriptStatus(
+        placeId,
         object.uuid,
         newStatus ? "ENABLED" : "DISABLED",
       );

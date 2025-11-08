@@ -1,8 +1,8 @@
 import type { DefinitionForToolbox } from "@place/types/block";
 
-export const eventContents: DefinitionForToolbox[] = [
+export const humanoidContents: DefinitionForToolbox[] = [
   {
-    type: "touched_block",
+    type: "set_health",
     kind: "block",
   },
 ];

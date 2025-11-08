@@ -5,7 +5,10 @@ import { initTestBlocks } from "@blockly/test/blocks/blocks";
 import { toolbox } from "@blockly/test/toolbox";
 import { customTheme } from "@blockly/theme/customTheme";
 import { registerVariableCallbacks } from "@blockly/utils/variableUtils";
-import { setupBlockInputInitializer } from "@blockly/utils/blockInputInitializer";
+import {
+  registerVariableListener,
+  setupBlockInputInitializer,
+} from "@blockly/utils/blockInputInitializer";
 import { getBlockList } from "../apis/block";
 import { initBlocks } from "@blockly/blocks";
 import { initToolbox } from "@blockly/toolbox";
@@ -15,6 +18,7 @@ import type { Toolbox } from "../types/block";
 export function useBlocklyUI(
   blocklyDivRef: React.RefObject<HTMLDivElement | null>,
   options: { useServer?: boolean } = { useServer: false },
+  onOpenVariableModal: () => void,
 ) {
   const workspaceRef = useRef<Blockly.WorkspaceSvg | null>(null);
   const [loading, setLoading] = useState(true);
@@ -38,8 +42,10 @@ export function useBlocklyUI(
         theme: customTheme,
       });
       workspaceRef.current = workspaceSvg;
-      registerVariableCallbacks(workspaceSvg);
+      // 변수 콜백 등록 (모달 열기 함수 전달)
+      registerVariableCallbacks(workspaceSvg, onOpenVariableModal);
       setupBlockInputInitializer(workspaceSvg);
+      registerVariableListener(workspaceSvg);
       setLoading(false);
     };
 

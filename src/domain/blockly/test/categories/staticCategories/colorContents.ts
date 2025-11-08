@@ -1,8 +1,8 @@
 import type { DefinitionForToolbox } from "@place/types/block";
 
-export const eventContents: DefinitionForToolbox[] = [
+export const colorContents: DefinitionForToolbox[] = [
   {
-    type: "touched_block",
+    type: "color3_from_rgb",
     kind: "block",
   },
 ];

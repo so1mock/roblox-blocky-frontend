@@ -7,7 +7,7 @@ export const getWorkspaceDataByPlaceId = async (
   placeId: string,
 ): Promise<Place> => {
   try {
-    const response = await api.get(`/place/${placeId}`);
+    const response = await api.get(`/place/me/${placeId}`);
     return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
@@ -18,11 +18,12 @@ export const getWorkspaceDataByPlaceId = async (
 };
 
 export const toggleBlockScriptStatus = async (
-  uuid: string,
+  placeUuid: string,
+  objectUuid: string,
   status: "ENABLED" | "DISABLED",
 ): Promise<void> => {
   try {
-    await api.put(`/block-script/activation/${uuid}`, {
+    await api.put(`/block-script/activation/${placeUuid}/${objectUuid}`, {
       blockScriptStatus: status,
     });
   } catch (e) {
@@ -34,11 +35,15 @@ export const toggleBlockScriptStatus = async (
 };
 
 export const saveBlockScript = async (
-  uuid: string,
+  placeUuid: string,
+  objectUuid: string,
   blockScript: BlockScript,
 ): Promise<ConvertedScript> => {
   try {
-    const response = await api.put(`/block-script/${uuid}`, blockScript);
+    const response = await api.put(
+      `/block-script/${placeUuid}/${objectUuid}`,
+      blockScript,
+    );
     return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
