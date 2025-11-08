@@ -13,7 +13,7 @@ export const useUpdateBoardMutation = (
       updateBoard(groupUuid, boardUuid, boardInfo),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["groups", groupUuid, "boards", boardUuid],
+        queryKey: ["groups", groupUuid, "boards"],
       });
     },
     onError: (error: unknown) => {
