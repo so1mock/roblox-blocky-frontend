@@ -36,7 +36,6 @@ function BoardDetailedPage({
     if (!ok) return;
     try {
       await deleteMutation.mutateAsync();
-      alert("게시글이 삭제되었습니다.");
       navigate({ to: `/teacher/group/${groupUuid}` });
     } catch {
       alert("삭제에 실패했습니다.");

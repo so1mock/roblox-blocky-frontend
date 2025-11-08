@@ -57,8 +57,8 @@ function BoardEditPage({
             <div>
               <Button
                 text="수정 완료"
-                handleButtonClick={() => {
-                  handleEditBoard({
+                handleButtonClick={async () => {
+                  await handleEditBoard({
                     title: title,
                     content: content,
                     attachmentUuids: [],

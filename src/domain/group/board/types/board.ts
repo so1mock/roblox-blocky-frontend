@@ -12,7 +12,7 @@ export type BoardInfo = BoardSummary & {
     name: string;
   };
   content: string;
-  attchments: {
+  attachments: {
     attachmentUuid: string;
     fileName: string;
     fileSrc: string;

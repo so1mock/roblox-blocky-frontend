@@ -38,8 +38,8 @@ function BoardCreatePage({ groupUuid }: { groupUuid: string }) {
             <div>
               <Button
                 text="작성 완료"
-                handleButtonClick={() => {
-                  handleCreateBoard({
+                handleButtonClick={async () => {
+                  await handleCreateBoard({
                     title: title,
                     content: content,
                     attachmentUuids: [],

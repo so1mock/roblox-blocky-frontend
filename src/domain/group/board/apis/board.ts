@@ -86,7 +86,7 @@ export const deleteBoard = async (
     const response = await api.delete(
       `/groups/${groupUuid}/boards/${boardUuid}`,
     );
-    return 200 <= response.data.status && response.data.status < 300;
+    return 200 <= response.status && response.status < 300;
   } catch (error) {
     if (error instanceof AxiosError) {
       throw error;
