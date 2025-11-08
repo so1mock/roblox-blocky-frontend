@@ -31,10 +31,6 @@ function Wall({ groupUuid }: { groupUuid: string }) {
         <div>오류: {groupwallError.message}</div>
       )}
 
-      {walls !== undefined && walls.wallMessages.length === 0 && (
-        <div>담벼락이 없습니다.</div>
-      )}
-
       {walls !== undefined &&
         walls.wallMessages.map((wall) => (
           <GroupWallItem

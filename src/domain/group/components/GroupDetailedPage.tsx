@@ -61,7 +61,7 @@ function GroupDetailedPage({ groupUuid }: { groupUuid: string }) {
           <span>{groupInfo.groupSummary.description}</span>
         </div>
         <div className=" bg-white rounded-2xl px-12 py-12 mt-8">
-          <Board groupId={groupInfo.groupSummary.uuid} />
+          <Board groupUuid={groupInfo.groupSummary.uuid} />
           <Wall groupUuid={groupInfo.groupSummary.uuid} />
         </div>
       </div>

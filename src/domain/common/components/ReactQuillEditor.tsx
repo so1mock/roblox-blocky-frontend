@@ -1,5 +1,4 @@
 // ReactQuillEditor.tsx
-import { forwardRef } from "react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 
@@ -13,34 +12,28 @@ const toolbarOptions = [
 ];
 
 interface ReactQuillEditorProps {
-  value?: string;
+  value: string;
+  onChange: (content: string) => void;
 }
 
-const ReactQuillEditor = forwardRef<ReactQuill, ReactQuillEditorProps>(
-  ({ value = "" }, ref) => {
-    const handleChange = (content: string) => {
-      console.log(content);
-    };
+function ReactQuillEditor({ value = "", onChange }: ReactQuillEditorProps) {
+  const modules = {
+    toolbar: {
+      container: toolbarOptions,
+    },
+  };
 
-    const modules = {
-      toolbar: {
-        container: toolbarOptions,
-      },
-    };
+  return (
+    <ReactQuill
+      theme="snow"
+      value={value}
+      onChange={(_html) => {
+        onChange(_html);
+      }}
+      modules={modules}
+      style={{ margin: "0 auto" }}
+    />
+  );
+}
 
-    return (
-      <ReactQuill
-        ref={ref}
-        theme="snow"
-        value={value}
-        onChange={handleChange}
-        modules={modules}
-        style={{ margin: "0 auto" }}
-      />
-    );
-  },
-);
-
-// ✅ displayName 지정
-ReactQuillEditor.displayName = "ReactQuillEditor";
 export default ReactQuillEditor;

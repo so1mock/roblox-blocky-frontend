@@ -1,15 +1,34 @@
 import Button from "@common/components/Button";
-// import MultiFileUploader from "@common/components/MultiFileUploader";
+import MultiFileUploader from "@common/components/MultiFileUploader";
 import ReactQuillEditor from "@common/components/ReactQuillEditor";
 import { useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import { useCreateBoardMutation } from "../hooks/useCreateBoardMutation";
+import { useEffect, useState } from "react";
+import { useBoardInfoQuery } from "../hooks/useBoardInfoQuery";
+import { useUpdateBoardMutation } from "../hooks/useUpdateBoardMutation";
 
-function BoardCreatePage({ groupUuid }: { groupUuid: string }) {
+function BoardEditPage({
+  groupUuid,
+  boardUuid,
+}: {
+  groupUuid: string;
+  boardUuid: string;
+}) {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const { mutateAsync: handleCreateBoard } = useCreateBoardMutation(groupUuid);
+
+  const { data: boardInfo } = useBoardInfoQuery(groupUuid, boardUuid);
+  const { mutateAsync: handleEditBoard } = useUpdateBoardMutation(
+    groupUuid,
+    boardUuid,
+  );
+
+  useEffect(() => {
+    if (boardInfo) {
+      setTitle(boardInfo.title);
+      setContent(boardInfo.content);
+    }
+  }, [boardInfo]);
 
   return (
     <div className="w-[1600px] mx-auto flex justify-center gap-24">
@@ -29,22 +48,24 @@ function BoardCreatePage({ groupUuid }: { groupUuid: string }) {
           <div className="px-4 write">
             <ReactQuillEditor value={content} onChange={setContent} />
           </div>
-          {/* <div className="text-center mt-8">
+          <div className="text-center mt-8">
             <MultiFileUploader />
-          </div> */}
+          </div>
 
           <hr className="bg-gray-300 h-[1px] border-0 mt-12" />
           <div className="flex items-center justify-end gap-4 mt-8">
             <div>
               <Button
-                text="작성 완료"
+                text="수정 완료"
                 handleButtonClick={async () => {
-                  await handleCreateBoard({
+                  await handleEditBoard({
                     title: title,
                     content: content,
                     attachmentUuids: [],
                   });
-                  navigate({ to: `/teacher/group/${groupUuid}` });
+                  navigate({
+                    to: `/teacher/group/${groupUuid}/board/${boardUuid}`,
+                  });
                 }}
                 xSize={8}
                 ySize={2}
@@ -68,4 +89,4 @@ function BoardCreatePage({ groupUuid }: { groupUuid: string }) {
   );
 }
 
-export default BoardCreatePage;
+export default BoardEditPage;
