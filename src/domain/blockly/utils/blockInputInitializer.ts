@@ -58,8 +58,8 @@ function attachCharacterConstantBlock(workspace: Blockly.WorkspaceSvg) {
  */
 function attachPartConstantBlock(workspace: Blockly.WorkspaceSvg) {
   workspace.getAllBlocks().forEach((block) => {
-    if (block.type === "touched_block") {
-      const input = block.getInput("HIT");
+    if (block.type === "touched_event") {
+      const input = block.getInput("hit");
       if (input && input.connection && !input.connection.isConnected()) {
         const hitConstBlock = workspace.newBlock("hit_constant");
         hitConstBlock.initSvg();
