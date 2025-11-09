@@ -47,8 +47,12 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
     workspaceRef.current.clear();
     let blockState;
     if (selectedScript.blockScript) {
-      blockState = selectedScript.blockScript;
-      Blockly.serialization.workspaces.load(blockState, workspaceRef.current);
+      if (typeof selectedScript.blockScript == "string") {
+        blockState = JSON.parse(selectedScript.blockScript);
+      } else {
+        blockState = selectedScript.blockScript;
+      }
+      console.log(blockState);
     } else {
       // 블록 스크립트가 존재하지 않으면 기본 상태로 렌더링한다
       blockState = {
