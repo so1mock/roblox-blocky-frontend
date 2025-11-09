@@ -42,6 +42,16 @@ export function useBlocklyUI(
         theme: customTheme,
       });
       workspaceRef.current = workspaceSvg;
+      // 주입 후 스타일 추가
+      const flyoutElement = blocklyDivRef.current?.querySelector(
+        ".blocklyFlyout.blocklyToolboxFlyout",
+      ) as HTMLElement;
+      if (flyoutElement) {
+        flyoutElement.style.border = "2px solid #ddd";
+        // 또는
+        flyoutElement.style.borderLeft = "2px solid #ddd";
+      }
+
       // 변수 콜백 등록 (모달 열기 함수 전달)
       registerVariableCallbacks(workspaceSvg, onOpenVariableModal);
       setupBlockInputInitializer(workspaceSvg);
