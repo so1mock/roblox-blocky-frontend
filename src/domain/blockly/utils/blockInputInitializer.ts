@@ -128,165 +128,165 @@ export function setupBlockInputInitializer(workspace: Blockly.WorkspaceSvg) {
   });
 }
 
-// 변수 생성/삭제 이벤트 리스너
-const updateVariableBlocks = (workspace: Blockly.WorkspaceSvg) => {
-  // 현재 툴박스 가져오기
-  const currentToolbox = workspace.getToolbox();
-  if (!currentToolbox) return;
+// // 변수 생성/삭제 이벤트 리스너
+// const updateVariableBlocks = (workspace: Blockly.WorkspaceSvg) => {
+//   // 현재 툴박스 가져오기
+//   const currentToolbox = workspace.getToolbox();
+//   if (!currentToolbox) return;
 
-  // 타입 단언을 사용해서 toolboxDef 접근
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const toolboxDef = (currentToolbox as any).toolboxDef_;
-  if (!toolboxDef) return;
+//   // 타입 단언을 사용해서 toolboxDef 접근
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   const toolboxDef = (currentToolbox as any).toolboxDef_;
+//   if (!toolboxDef) return;
 
-  const allVariables = workspace.getAllVariables();
+//   const allVariables = workspace.getAllVariables();
 
-  // 기존에 등록된 변수 블록들 추적
-  const existingBlockTypes = new Set<string>();
+//   // 기존에 등록된 변수 블록들 추적
+//   const existingBlockTypes = new Set<string>();
 
-  // 모든 변수에 대해 get/set 블록 생성
-  allVariables.forEach((variable) => {
-    const getBlockType = `variables_get_${variable.getId()}`;
-    const setBlockType = `variables_set_${variable.getId()}`;
+//   // 모든 변수에 대해 get/set 블록 생성
+//   allVariables.forEach((variable) => {
+//     const getBlockType = `variables_get_${variable.getId()}`;
+//     const setBlockType = `variables_set_${variable.getId()}`;
 
-    existingBlockTypes.add(getBlockType);
-    existingBlockTypes.add(setBlockType);
+//     existingBlockTypes.add(getBlockType);
+//     existingBlockTypes.add(setBlockType);
 
-    // Get 블록이 없으면 생성
-    if (!Blockly.Blocks[getBlockType]) {
-      Blockly.Blocks[getBlockType] = {
-        init: function () {
-          this.appendDummyInput().appendField(variable.getName());
-          this.setOutput(true, variable.getType() || null);
-          this.setStyle("variable_block");
-          this.setTooltip(
-            `${variable.getType() ? variable.getType() + " 타입 " : ""}변수 "${variable.getName()}"의 값을 가져옵니다.`,
-          );
-          this.setHelpUrl("");
-        },
-        // 컨텍스트 메뉴 추가
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        // customContextMenu: function (options: any[]) {
-        //   // 변수 삭제 옵션
-        //   options.push({
-        //     text: "변수 삭제",
-        //     enabled: true,
-        //     callback: function () {
-        //       workspace.deleteVariableById(variable.getId());
-        //     },
-        //   });
-        // },
-      };
-    }
+//     // Get 블록이 없으면 생성
+//     if (!Blockly.Blocks[getBlockType]) {
+//       Blockly.Blocks[getBlockType] = {
+//         init: function () {
+//           this.appendDummyInput().appendField(variable.getName());
+//           this.setOutput(true, variable.getType() || null);
+//           this.setStyle("variable_block");
+//           this.setTooltip(
+//             `${variable.getType() ? variable.getType() + " 타입 " : ""}변수 "${variable.getName()}"의 값을 가져옵니다.`,
+//           );
+//           this.setHelpUrl("");
+//         },
+//         // 컨텍스트 메뉴 추가
+//         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//         // customContextMenu: function (options: any[]) {
+//         //   // 변수 삭제 옵션
+//         //   options.push({
+//         //     text: "변수 삭제",
+//         //     enabled: true,
+//         //     callback: function () {
+//         //       workspace.deleteVariableById(variable.getId());
+//         //     },
+//         //   });
+//         // },
+//       };
+//     }
 
-    // Set 블록이 없으면 생성
-    if (!Blockly.Blocks[setBlockType]) {
-      Blockly.Blocks[setBlockType] = {
-        init: function () {
-          this.appendValueInput("VALUE")
-            .setCheck(variable.getType() || null)
-            .appendField(variable.getName())
-            .appendField("에");
-          this.appendDummyInput().appendField("설정");
-          this.setPreviousStatement(true, null);
-          this.setNextStatement(true, null);
-          this.setStyle("variable_block");
-          this.setTooltip(
-            `${variable.getType() ? variable.getType() + " 타입 " : ""}변수 "${variable.getName()}"에 값을 설정합니다.`,
-          );
-          this.setHelpUrl("");
-        },
-        // 컨텍스트 메뉴 추가
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        // customContextMenu: function (options: any[]) {
-        //   // 변수 이름 변경 옵션
-        //   options.push({
-        //     text: "변수 이름 바꾸기",
-        //     enabled: true,
-        //     callback: function () {
-        //       Blockly.Variables.renameVariable(workspace, variable);
-        //     },
-        //   });
+//     // Set 블록이 없으면 생성
+//     if (!Blockly.Blocks[setBlockType]) {
+//       Blockly.Blocks[setBlockType] = {
+//         init: function () {
+//           this.appendValueInput("VALUE")
+//             .setCheck(variable.getType() || null)
+//             .appendField(variable.getName())
+//             .appendField("에");
+//           this.appendDummyInput().appendField("설정");
+//           this.setPreviousStatement(true, null);
+//           this.setNextStatement(true, null);
+//           this.setStyle("variable_block");
+//           this.setTooltip(
+//             `${variable.getType() ? variable.getType() + " 타입 " : ""}변수 "${variable.getName()}"에 값을 설정합니다.`,
+//           );
+//           this.setHelpUrl("");
+//         },
+//         // 컨텍스트 메뉴 추가
+//         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//         // customContextMenu: function (options: any[]) {
+//         //   // 변수 이름 변경 옵션
+//         //   options.push({
+//         //     text: "변수 이름 바꾸기",
+//         //     enabled: true,
+//         //     callback: function () {
+//         //       Blockly.Variables.renameVariable(workspace, variable);
+//         //     },
+//         //   });
 
-        //   // 변수 삭제 옵션
-        //   options.push({
-        //     text: "변수 삭제",
-        //     enabled: true,
-        //     callback: function () {
-        //       workspace.deleteVariableById(variable.getId());
-        //     },
-        //   });
-        // },
-      };
-    }
-  });
+//         //   // 변수 삭제 옵션
+//         //   options.push({
+//         //     text: "변수 삭제",
+//         //     enabled: true,
+//         //     callback: function () {
+//         //       workspace.deleteVariableById(variable.getId());
+//         //     },
+//         //   });
+//         // },
+//       };
+//     }
+//   });
 
-  // 변수 카테고리의 contents 생성
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const variableContents: any[] = [];
+//   // 변수 카테고리의 contents 생성
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   const variableContents: any[] = [];
 
-  // 각 변수에 대한 블록 추가
-  allVariables.forEach((variable) => {
-    const getBlockType = `variables_get_${variable.getId()}`;
-    const setBlockType = `variables_set_${variable.getId()}`;
+//   // 각 변수에 대한 블록 추가
+//   allVariables.forEach((variable) => {
+//     const getBlockType = `variables_get_${variable.getId()}`;
+//     const setBlockType = `variables_set_${variable.getId()}`;
 
-    variableContents.push(
-      {
-        kind: "block",
-        type: getBlockType,
-        enabled: true,
-      },
-      {
-        kind: "block",
-        type: setBlockType,
-        enabled: true,
-      },
-    );
-  });
+//     variableContents.push(
+//       {
+//         kind: "block",
+//         type: getBlockType,
+//         enabled: true,
+//       },
+//       {
+//         kind: "block",
+//         type: setBlockType,
+//         enabled: true,
+//       },
+//     );
+//   });
 
-  // 깊은 복사를 통해 툴박스 구조 복제
-  const updatedToolbox = JSON.parse(JSON.stringify(toolboxDef));
+//   // 깊은 복사를 통해 툴박스 구조 복제
+//   const updatedToolbox = JSON.parse(JSON.stringify(toolboxDef));
 
-  // 변수 카테고리만 찾아서 업데이트
-  if (updatedToolbox.contents && Array.isArray(updatedToolbox.contents)) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    updatedToolbox.contents = updatedToolbox.contents.map((category: any) => {
-      // 변수 카테고리를 찾아서 업데이트
-      if (
-        category.name === "변수" ||
-        category.categorystyle === "variable_category"
-      ) {
-        return {
-          ...category,
-          contents: [
-            {
-              kind: "button",
-              text: "새 변수 만들기",
-              callbackKey: "CREATE_VARIABLE",
-            },
-            ...variableContents,
-          ],
-        };
-      }
-      // 다른 카테고리는 그대로 반환
-      return category;
-    });
-  }
+//   // 변수 카테고리만 찾아서 업데이트
+//   if (updatedToolbox.contents && Array.isArray(updatedToolbox.contents)) {
+//     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//     updatedToolbox.contents = updatedToolbox.contents.map((category: any) => {
+//       // 변수 카테고리를 찾아서 업데이트
+//       if (
+//         category.name === "변수" ||
+//         category.categorystyle === "variable_category"
+//       ) {
+//         return {
+//           ...category,
+//           contents: [
+//             {
+//               kind: "button",
+//               text: "새 변수 만들기",
+//               callbackKey: "CREATE_VARIABLE",
+//             },
+//             ...variableContents,
+//           ],
+//         };
+//       }
+//       // 다른 카테고리는 그대로 반환
+//       return category;
+//     });
+//   }
 
-  // 툴박스 업데이트
-  workspace.updateToolbox(updatedToolbox);
-  workspace.refreshToolboxSelection();
-};
+//   // 툴박스 업데이트
+//   workspace.updateToolbox(updatedToolbox);
+//   workspace.refreshToolboxSelection();
+// };
 
-// Workspace 변경 이벤트 리스너 등록
-export const registerVariableListener = (workspace: Blockly.WorkspaceSvg) => {
-  workspace.addChangeListener((event: Blockly.Events.Abstract) => {
-    if (
-      event.type === Blockly.Events.VAR_CREATE ||
-      event.type === Blockly.Events.VAR_DELETE ||
-      event.type === Blockly.Events.VAR_RENAME
-    ) {
-      updateVariableBlocks(workspace);
-    }
-  });
-};
+// // Workspace 변경 이벤트 리스너 등록
+// export const registerVariableListener = (workspace: Blockly.WorkspaceSvg) => {
+//   workspace.addChangeListener((event: Blockly.Events.Abstract) => {
+//     if (
+//       event.type === Blockly.Events.VAR_CREATE ||
+//       event.type === Blockly.Events.VAR_DELETE ||
+//       event.type === Blockly.Events.VAR_RENAME
+//     ) {
+//       updateVariableBlocks(workspace);
+//     }
+//   });
+// };

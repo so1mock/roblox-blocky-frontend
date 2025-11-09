@@ -6,7 +6,7 @@ import { toolbox } from "@blockly/test/toolbox";
 import { customTheme } from "@blockly/theme/customTheme";
 import { registerVariableCallbacks } from "@blockly/utils/variableUtils";
 import {
-  registerVariableListener,
+  // registerVariableListener,
   setupBlockInputInitializer,
 } from "@blockly/utils/blockInputInitializer";
 import { getBlockList } from "../apis/block";
@@ -45,7 +45,7 @@ export function useBlocklyUI(
       // 변수 콜백 등록 (모달 열기 함수 전달)
       registerVariableCallbacks(workspaceSvg, onOpenVariableModal);
       setupBlockInputInitializer(workspaceSvg);
-      registerVariableListener(workspaceSvg);
+      // registerVariableListener(workspaceSvg);
       setLoading(false);
     };
 
