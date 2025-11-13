@@ -6,6 +6,6 @@ export const Route = createFileRoute("/student/place/$placeId")({
 });
 
 function RouteComponent() {
-  const { id } = Route.useParams();
-  return <BlockCodingPage id={id} />;
+  const { placeId } = Route.useParams();
+  return <BlockCodingPage placeId={placeId} />;
 }
