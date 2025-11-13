@@ -7,7 +7,15 @@ import { getWorkspaceDataByPlaceId } from "../workspace/apis/workspace";
 import { useWorkspaceDataStore } from "../workspace/stores/useWorkspaceDataStore";
 import VariableCreateModal from "./VariableCreateModal";
 
-function BlockCodingPage({ id: placeId }: { id: string }) {
+function BlockCodingPage({
+  placeId,
+  studentId,
+  readOnly = false,
+}: {
+  placeId: string;
+  studentId?: string;
+  readOnly?: boolean;
+}) {
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
   const [isVariableModalOpen, setIsVariableModalOpen] = useState(false);
   const { workspaceRef, loading, error } = useBlocklyUI(

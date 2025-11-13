@@ -1,3 +1,4 @@
+import BlockCodingPage from "@place/components/BlockCodingPage";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/student/$studentId/place/$placeId")({
@@ -5,5 +6,8 @@ export const Route = createFileRoute("/student/$studentId/place/$placeId")({
 });
 
 function RouteComponent() {
-  return <div>Hello "/student/$studentId/place/$placeId"!</div>;
+  const { studentId, placeId } = Route.useParams();
+  return (
+    <BlockCodingPage placeId={placeId} studentId={studentId} readOnly={true} />
+  );
 }
