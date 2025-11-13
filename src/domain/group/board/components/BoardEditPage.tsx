@@ -1,5 +1,5 @@
 import Button from "@common/components/Button";
-import MultiFileUploader from "@common/components/MultiFileUploader";
+import MultiFileUploader from "@common/components/file/MultiFileUploader";
 import ReactQuillEditor from "@common/components/ReactQuillEditor";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";

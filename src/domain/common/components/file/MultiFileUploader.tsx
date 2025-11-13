@@ -1,5 +1,5 @@
-import { formatFileSizeToKB } from "@common/utils/formatFilesize";
 import { useState } from "react";
+import { AttachedFileItem } from "./AttachedFileItem";
 
 interface UploadedFile {
   id: number;
@@ -47,8 +47,9 @@ function MultiFileUploader() {
   };
 
   return (
-    <div className="mt-3 space-y-3">
-      <div>
+    <div className="mt-8 space-y-4">
+      {/* 파일 선택 버튼 */}
+      <div className="flex justify-center">
         <input
           type="file"
           accept=".pdf,.doc,.docx"
@@ -59,51 +60,48 @@ function MultiFileUploader() {
         />
         <label
           htmlFor="multiFileUpload"
-          className="px-4 py-2 bg-blue-500 text-white rounded cursor-pointer hover:bg-blue-600 transition"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-rbPrimaryColor text-white rounded-2xl cursor-pointer hover:opacity-90 transition-all shadow-sm"
         >
-          파일 선택
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+            />
+          </svg>
+          <span className="font-medium">파일 첨부</span>
         </label>
       </div>
 
       {/* 업로드된 파일 리스트 */}
       {files.length > 0 && (
-        <ul className="space-y-2">
-          {files.map(({ id, file }) => (
-            <li
-              key={id}
-              className="flex items-center justify-between bg-[#F2F9FF] rounded-xl px-4 py-2"
-            >
-              <div>
-                <span className="text-rbPrimaryColor text-md mr-8">
-                  첨부파일
-                </span>
-                <span className="text-gray-800 font-medium truncate max-w-[200px] mr-4">
-                  {file.name}
-                </span>
-                <span className="text-[#888888] font-medium truncate max-w-[200px]">
-                  {formatFileSizeToKB(file.size)}
-                </span>
-              </div>
-
-              <div className="space-x-2">
-                <button
-                  onClick={() => handleEditClick(id)}
-                  type="button"
-                  className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
-                >
-                  수정
-                </button>
-                <button
-                  onClick={() => handleDeleteClick(id)}
-                  type="button"
-                  className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
-                >
-                  삭제
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <div className="space-y-3">
+          <div className="text-sm text-gray-600 font-medium">
+            첨부된 파일 ({files.length})
+          </div>
+          <ul className="space-y-2">
+            {files.map(({ id, file }) => (
+              <li
+                key={id}
+                className="flex items-center justify-between bg-[#F2F9FF] rounded-xl px-4 py-3 border border-[#E0F0FF]"
+              >
+                <AttachedFileItem
+                  id={id}
+                  file={file}
+                  handleEditClick={handleEditClick}
+                  handleDeleteClick={handleDeleteClick}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   );
