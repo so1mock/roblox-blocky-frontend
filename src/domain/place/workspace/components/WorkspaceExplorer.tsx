@@ -1,7 +1,13 @@
 import { useWorkspaceDataStore } from "../stores/useWorkspaceDataStore";
 import WorkspaceTreeItem from "./WorkspaceTreeItem";
 
-function WorkspaceExploerer({ placeId }: { placeId: string }) {
+function WorkspaceExploerer({
+  placeId,
+  readOnly = false,
+}: {
+  placeId: string;
+  readOnly: boolean;
+}) {
   const { workspaceData } = useWorkspaceDataStore();
   if (!workspaceData) {
     return (
@@ -31,6 +37,7 @@ function WorkspaceExploerer({ placeId }: { placeId: string }) {
             placeId={placeId}
             object={object}
             level={0}
+            readOnly={readOnly}
           />
         ))}
       </div>

@@ -11,10 +11,12 @@ function WorkspaceTreeItem({
   placeId,
   object,
   level = 0,
+  readOnly = false,
 }: {
   placeId: string;
   object: WorkspaceObject;
   level: number;
+  readOnly?: boolean;
 }) {
   const { setWorkspaceData, selectedScript, setSelectedScript } =
     useWorkspaceDataStore();
@@ -87,7 +89,7 @@ function WorkspaceTreeItem({
         </span>
 
         {/* 스크립트 파일인 경우 블록 스크립트 토글 스위치 표시 */}
-        {isScript && (
+        {isScript && readOnly && (
           <div className="flex items-center space-x-2 ml-2">
             {object.isBlockScriptEnabled && (
               <span className="text-xs bg-green-100 text-green-700 px-1 rounded">
