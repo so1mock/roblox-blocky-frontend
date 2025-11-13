@@ -1,5 +1,4 @@
 import type { PlaceSummary } from "src/domain/place/types/place";
-import { useNavigate } from "@tanstack/react-router";
 import { formatIsoStringToDate } from "../../common/utils/formatIsoStringToDate";
 import Button from "@common/components/Button";
 import type { GroupMember } from "@group/user/types/user";
@@ -10,13 +9,9 @@ interface PlaceViewCardProps {
 }
 
 export function PlaceViewCard({ placeSummary, student }: PlaceViewCardProps) {
-  const navigate = useNavigate();
-
   const enterPlace = () => {
-    navigate({
-      to: "/student/$studentId/place/$placeId",
-      params: { studentId: student.uuid, placeId: placeSummary.uuid },
-    });
+    const href = `/student/${student.uuid}/place/${placeSummary.uuid}`;
+    window.location.href = href;
   };
 
   return (
