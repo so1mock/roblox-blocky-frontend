@@ -17,7 +17,10 @@ import type { Toolbox } from "../types/block";
 
 export function useBlocklyUI(
   blocklyDivRef: React.RefObject<HTMLDivElement | null>,
-  options: { useServer?: boolean } = { useServer: false },
+  options: { useServer?: boolean; readOnly?: boolean } = {
+    useServer: false,
+    readOnly: false,
+  },
   onOpenVariableModal: () => void,
 ) {
   const workspaceRef = useRef<Blockly.WorkspaceSvg | null>(null);
@@ -34,6 +37,7 @@ export function useBlocklyUI(
     const initWorkspace = (toolboxConfig: Toolbox) => {
       const workspaceSvg = Blockly.inject(blocklyDivRef.current!, {
         toolbox: toolboxConfig,
+        readOnly: options.readOnly,
         plugins: {
           flyoutsVerticalToolbox: "ContinuousFlyout",
           metricsManager: "ContinuousMetrics",

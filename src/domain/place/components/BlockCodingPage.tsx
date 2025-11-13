@@ -3,7 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import { useBlocklyUI } from "../hooks/useBlocklyUi";
 import WorkspaceExploerer from "../workspace/components/WorkspaceExplorer";
 import BlockCodingHeader from "./BlockCodingHeader";
-import { getWorkspaceDataByPlaceId } from "../workspace/apis/workspace";
+import {
+  getStudentWorkspaceDataByPlaceId,
+  getWorkspaceDataByPlaceId,
+} from "../workspace/apis/workspace";
 import { useWorkspaceDataStore } from "../workspace/stores/useWorkspaceDataStore";
 import VariableCreateModal from "./VariableCreateModal";
 
@@ -16,12 +19,14 @@ function BlockCodingPage({
   studentId?: string;
   readOnly?: boolean;
 }) {
+  console.log(placeId, studentId, readOnly);
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
   const [isVariableModalOpen, setIsVariableModalOpen] = useState(false);
   const { workspaceRef, loading, error } = useBlocklyUI(
     blocklyDivRef,
     {
       useServer: true,
+      readOnly,
     },
     () => {
       setIsVariableModalOpen(true);
@@ -60,7 +65,6 @@ function BlockCodingPage({
       } else {
         blockState = selectedScript.blockScript;
       }
-      console.log(blockState);
     } else {
       // 블록 스크립트가 존재하지 않으면 기본 상태로 렌더링한다
       blockState = {
@@ -79,8 +83,16 @@ function BlockCodingPage({
 
     const fetchWorkspaceData = async () => {
       try {
-        const data = await getWorkspaceDataByPlaceId(placeId);
-        setWorkspaceData(data);
+        if (readOnly && studentId) {
+          const data = await getStudentWorkspaceDataByPlaceId(
+            studentId,
+            placeId,
+          );
+          setWorkspaceData(data);
+        } else {
+          const data = await getWorkspaceDataByPlaceId(placeId);
+          setWorkspaceData(data);
+        }
       } catch (err) {
         console.error("Failed to fetch workspace data:", err);
       }

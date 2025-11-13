@@ -52,3 +52,18 @@ export const saveBlockScript = async (
     throw e;
   }
 };
+
+export const getStudentWorkspaceDataByPlaceId = async (
+  studentId: string,
+  placeId: string,
+): Promise<Place> => {
+  try {
+    const response = await api.get(`/place/${studentId}/${placeId}`);
+    return response.data;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw e.message;
+    }
+    throw e;
+  }
+};
