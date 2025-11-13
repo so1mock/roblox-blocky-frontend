@@ -19,7 +19,6 @@ function BlockCodingPage({
   studentId?: string;
   readOnly?: boolean;
 }) {
-  console.log(placeId, studentId, readOnly);
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
   const [isVariableModalOpen, setIsVariableModalOpen] = useState(false);
   const { workspaceRef, loading, error } = useBlocklyUI(

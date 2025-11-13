@@ -38,6 +38,11 @@ export function useBlocklyUI(
       const workspaceSvg = Blockly.inject(blocklyDivRef.current!, {
         toolbox: toolboxConfig,
         readOnly: options.readOnly,
+        move: {
+          scrollbars: true, // 스크롤바 표시
+          drag: true, // 캔버스 드래그 이동 허용
+          wheel: true, // 마우스 휠 스크롤 허용
+        },
         plugins: {
           flyoutsVerticalToolbox: "ContinuousFlyout",
           metricsManager: "ContinuousMetrics",
