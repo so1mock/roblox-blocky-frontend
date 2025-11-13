@@ -1,4 +1,4 @@
-import { uploadImage } from "@common/apis/image";
+import { uploadFile } from "@common/apis/file";
 import type { ImageFileType } from "@common/types/image";
 import { validateImageExtension } from "@common/utils/validateImageExtension";
 import { getPlaceThumbnailUploadUrl } from "@myPlace/apis/place";
@@ -15,7 +15,7 @@ export const useUploadPlaceThumbnailMutation = () => {
       validateImageExtension(file);
 
       const url = await getPlaceThumbnailUploadUrl(uuid, ext as ImageFileType);
-      await uploadImage(url, file);
+      await uploadFile(url, file);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/places/me"] });
