@@ -18,7 +18,7 @@ export function GroupUserPlacesRow({
         ) : (
           places.places.map((placeSummary) => (
             <div key={placeSummary.uuid} className="flex-shrink-0">
-              <PlaceViewCard placeSummary={placeSummary} />
+              <PlaceViewCard placeSummary={placeSummary} student={member} />
             </div>
           ))
         )}
