@@ -122,6 +122,7 @@ function BlockCodingPage({
           placeId={placeId}
           selectedScript={selectedScript}
           workspaceRef={workspaceRef}
+          readOnly={readOnly}
         />
 
         {/* 블록 조립 */}
