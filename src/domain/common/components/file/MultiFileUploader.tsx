@@ -1,49 +1,128 @@
 import { useState } from "react";
 import { AttachedFileItem } from "./AttachedFileItem";
+import { calculateSHA256 } from "@common/utils/calculatSHA256";
+import type { FileUploadInfo } from "@common/types/file";
+import { useUploadFileMutation } from "@group/board/hooks/useUploadFileMutation";
 
-interface UploadedFile {
+type FileStatus = "idle" | "loading" | "success" | "failed";
+
+export interface UploadedFile {
   id: number;
   file: File;
+  status: FileStatus;
+  attachmentUuid?: string;
 }
 
-function MultiFileUploader() {
+function MultiFileUploader({
+  setCountLoadingFile,
+  setCountFailedFile,
+  setAttachmentUuids,
+}: {
+  setCountLoadingFile: (
+    CountLoadingFile: number | ((prev: number) => number),
+  ) => void;
+  setCountFailedFile: (
+    countFailedFile: number | ((prev: number) => number),
+  ) => void;
+  setAttachmentUuids: (
+    attachmentUuids: string[] | ((prev: string[]) => string[]),
+  ) => void;
+}) {
   const [files, setFiles] = useState<UploadedFile[]>([]);
+  const { mutateAsync: handleUploadfile } = useUploadFileMutation();
+
+  // files 중에서 id가 일치하는 것을 찾아 updates 반영
+  const updateFile = (id: number, updates: Partial<UploadedFile>) => {
+    setFiles((prev) =>
+      prev.map((file) => (file.id === id ? { ...file, ...updates } : file)),
+    );
+  };
 
   /** 파일 선택 시 */
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return;
 
-    const newFiles = Array.from(e.target.files).map((file, index) => ({
-      id: Date.now() + index, // 고유 ID
-      file,
-    }));
-
+    // 추가된 파일 목록 생성
+    const newFiles: UploadedFile[] = Array.from(e.target.files).map(
+      (file, index) => ({
+        id: Date.now() + index, // 고유 ID
+        file,
+        status: "idle",
+      }),
+    );
     setFiles((prev) => [...prev, ...newFiles]);
     e.target.value = ""; // 같은 파일 다시 선택 가능하게 초기화
+
+    // newFiles에 대해서 파일 업로드 진행
+    const results = await Promise.allSettled(
+      newFiles.map(async ({ id, file }) => {
+        setCountLoadingFile((prev) => prev + 1);
+        updateFile(id, { status: "loading" });
+        try {
+          const checksum = await calculateSHA256(file);
+          const fileUploadInfo: FileUploadInfo = {
+            fileName: file.name,
+            contentLength: file.size,
+            contentType: file.type,
+            checksum,
+          };
+
+          const fileInfo = await handleUploadfile({ fileUploadInfo, file });
+          updateFile(id, {
+            status: "success",
+            attachmentUuid: fileInfo.attachmentUuid,
+          });
+          return fileInfo.attachmentUuid;
+        } catch (error) {
+          console.error(error);
+          setCountFailedFile((prev) => prev + 1);
+          updateFile(id, { status: "failed" });
+        } finally {
+          setCountLoadingFile((prev) => prev - 1);
+        }
+      }),
+    );
+
+    // attachmentUuid 배열 갱신
+    const newAttachmentUuids: string[] = results
+      .filter(
+        (result): result is PromiseFulfilledResult<string> =>
+          result.status === "fulfilled",
+      )
+      .map((result) => result.value);
+    setAttachmentUuids((prev) => [...prev, ...newAttachmentUuids]);
   };
 
   /** 파일 수정 (해당 파일만 변경) */
-  const handleEditClick = (id: number) => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".pdf,.doc,.docx";
-    input.onchange = (e: Event) => {
-      const target = e.target as HTMLInputElement;
-      const newFile = target.files?.[0];
-      if (!newFile) return;
+  // const handleEditClick = (id: number) => {
+  //   const input = document.createElement("input");
+  //   input.type = "file";
+  //   input.accept = ".pdf,.doc,.docx";
+  //   input.onchange = (e: Event) => {
+  //     const target = e.target as HTMLInputElement;
+  //     const newFile = target.files?.[0];
+  //     if (!newFile) return;
 
-      setFiles((prev) =>
-        prev.map((item) =>
-          item.id === id ? { ...item, file: newFile } : item,
-        ),
-      );
-    };
-    input.click();
-  };
+  //     setFiles((prev) =>
+  //       prev.map((item) =>
+  //         item.id === id ? { ...item, file: newFile } : item,
+  //       ),
+  //     );
+  //   };
+  //   input.click();
+  // };
 
   /** 파일 삭제 */
-  const handleDeleteClick = (id: number) => {
-    setFiles((prev) => prev.filter((item) => item.id !== id));
+  const handleDeleteClick = (uploadedFile: UploadedFile) => {
+    setFiles((prev) => prev.filter((item) => item.id !== uploadedFile.id));
+    if (uploadedFile.attachmentUuid) {
+      setAttachmentUuids((prev) =>
+        prev.filter((uuid) => uuid !== uploadedFile.attachmentUuid),
+      );
+    }
+    if (uploadedFile.status === "failed") {
+      setCountFailedFile((prev) => prev - 1);
+    }
   };
 
   return (
@@ -87,15 +166,13 @@ function MultiFileUploader() {
             첨부된 파일 ({files.length})
           </div>
           <ul className="space-y-2">
-            {files.map(({ id, file }) => (
+            {files.map((uploadedFile) => (
               <li
-                key={id}
+                key={uploadedFile.id}
                 className="flex items-center justify-between bg-[#F2F9FF] rounded-xl px-4 py-3 border border-[#E0F0FF]"
               >
                 <AttachedFileItem
-                  id={id}
-                  file={file}
-                  handleEditClick={handleEditClick}
+                  uploadedFile={uploadedFile}
                   handleDeleteClick={handleDeleteClick}
                 />
               </li>

@@ -9,6 +9,9 @@ function BoardCreatePage({ groupUuid }: { groupUuid: string }) {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [attachmentUuids, setAttachmentUuids] = useState<string[]>([]);
+  const [countFaliedFild, setCountFailedFile] = useState<number>(0);
+  const [countUploadingFile, setCountLoadingFile] = useState<number>(0);
   const { mutateAsync: handleCreateBoard } = useCreateBoardMutation(groupUuid);
 
   return (
@@ -32,19 +35,24 @@ function BoardCreatePage({ groupUuid }: { groupUuid: string }) {
 
           {/* 파일 첨부 영역 */}
           <div className="px-4">
-            <MultiFileUploader />
+            <MultiFileUploader
+              setCountLoadingFile={setCountLoadingFile}
+              setCountFailedFile={setCountFailedFile}
+              setAttachmentUuids={setAttachmentUuids}
+            />
           </div>
 
           <hr className="bg-gray-300 h-[1px] border-0 mt-12" />
           <div className="flex items-center justify-end gap-4 mt-8">
             <div>
               <Button
+                disabled={0 < countUploadingFile || 0 < countFaliedFild}
                 text="작성 완료"
                 handleButtonClick={async () => {
                   await handleCreateBoard({
                     title: title,
                     content: content,
-                    attachmentUuids: [],
+                    attachmentUuids: attachmentUuids,
                   });
                   navigate({ to: `/teacher/group/${groupUuid}` });
                 }}

@@ -1,17 +1,15 @@
 import { formatFileSizeToKB } from "@common/utils/formatFilesize";
+import type { UploadedFile } from "./MultiFileUploader";
 type AttachedFileItemProps = {
-  id: number;
-  file: File;
-  handleEditClick: (id: number) => void;
-  handleDeleteClick: (id: number) => void;
+  uploadedFile: UploadedFile;
+  handleDeleteClick: (uploadedFile: UploadedFile) => void;
 };
 
 export function AttachedFileItem({
-  id,
-  file,
-  handleEditClick,
+  uploadedFile,
   handleDeleteClick,
 }: AttachedFileItemProps) {
+  const { file, status } = uploadedFile;
   return (
     <>
       <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -30,7 +28,17 @@ export function AttachedFileItem({
           />
         </svg>
         <div className="flex-1 min-w-0">
-          <div className="text-gray-800 font-medium truncate">{file.name}</div>
+          <div
+            className={`font-medium truncate ${
+              status === "failed"
+                ? "text-red-500"
+                : status === "loading"
+                  ? "text-gray-400"
+                  : "text-gray-800"
+            }`}
+          >
+            {file.name}
+          </div>
           <div className="text-[#888888] text-sm">
             {formatFileSizeToKB(file.size)}
           </div>
@@ -38,22 +46,48 @@ export function AttachedFileItem({
       </div>
 
       <div className="flex items-center gap-2 ml-4">
-        <button
-          onClick={() => handleEditClick(id)}
+        {/* 파일 교체 버튼 */}
+        {/* <button
+          // onClick={() => handleEditClick(id, attachmentUuid)}
           type="button"
           className="p-2 rounded-lg hover:bg-white transition-colors"
           title="파일 교체"
         >
           <img src="/btnEdit.png" className="w-5 h-5" alt="수정" />
-        </button>
-        <button
-          onClick={() => handleDeleteClick(id)}
-          type="button"
-          className="p-2 rounded-lg hover:bg-white transition-colors"
-          title="파일 삭제"
-        >
-          <img src="/trashcan.png" className="w-5 h-5" alt="삭제" />
-        </button>
+        </button> */}
+        {status === "loading" ? (
+          <div className="p-2">
+            <svg
+              className="animate-spin h-5 w-5 text-rbPrimaryColor"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
+            </svg>
+          </div>
+        ) : (
+          <button
+            onClick={() => handleDeleteClick(uploadedFile)}
+            type="button"
+            className="p-2 rounded-lg hover:bg-white transition-colors"
+            title="파일 삭제"
+          >
+            <img src="/trashcan.png" className="w-5 h-5" alt="삭제" />
+          </button>
+        )}
       </div>
     </>
   );
