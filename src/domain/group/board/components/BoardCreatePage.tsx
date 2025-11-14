@@ -10,7 +10,7 @@ function BoardCreatePage({ groupUuid }: { groupUuid: string }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [attachmentUuids, setAttachmentUuids] = useState<string[]>([]);
-  const [countFaliedFild, setCountFailedFile] = useState<number>(0);
+  const [countFailedFild, setCountFailedFile] = useState<number>(0);
   const [countUploadingFile, setCountLoadingFile] = useState<number>(0);
   const { mutateAsync: handleCreateBoard } = useCreateBoardMutation(groupUuid);
 
@@ -46,7 +46,7 @@ function BoardCreatePage({ groupUuid }: { groupUuid: string }) {
           <div className="flex items-center justify-end gap-4 mt-8">
             <div>
               <Button
-                disabled={0 < countUploadingFile || 0 < countFaliedFild}
+                disabled={0 < countUploadingFile || 0 < countFailedFild}
                 text="작성 완료"
                 handleButtonClick={async () => {
                   await handleCreateBoard({

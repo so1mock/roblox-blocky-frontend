@@ -19,7 +19,7 @@ function BoardEditPage({
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [attachmentUuids, setAttachmentUuids] = useState<string[]>([]);
-  const [countFaliedFild, setCountFailedFile] = useState<number>(0);
+  const [countFailedFild, setCountFailedFile] = useState<number>(0);
   const [countUploadingFile, setCountLoadingFile] = useState<number>(0);
   const { mutateAsync: handleEditBoard } = useUpdateBoardMutation(
     groupUuid,
@@ -84,7 +84,7 @@ function BoardEditPage({
             <div>
               <Button
                 text="수정 완료"
-                disabled={0 < countUploadingFile || 0 < countFaliedFild}
+                disabled={0 < countUploadingFile || 0 < countFailedFild}
                 handleButtonClick={async () => {
                   await handleEditBoard({
                     title: title,

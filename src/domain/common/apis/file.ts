@@ -1,10 +1,5 @@
 import axios, { AxiosError } from "axios";
 
-export type ConfirmfileUploadRequest = {
-  contentLength: number;
-  contentType: string;
-};
-
 // presigned url로 파일 업로드
 export const uploadFile = async (
   url: string,
