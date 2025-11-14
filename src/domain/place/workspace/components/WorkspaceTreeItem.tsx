@@ -16,7 +16,7 @@ function WorkspaceTreeItem({
   placeId: string;
   object: WorkspaceObject;
   level: number;
-  readOnly?: boolean;
+  readOnly: boolean;
 }) {
   const { setWorkspaceData, selectedScript, setSelectedScript } =
     useWorkspaceDataStore();
@@ -42,6 +42,9 @@ function WorkspaceTreeItem({
 
   const handleToggleBlockScriptStatus = async (event: React.MouseEvent) => {
     event.stopPropagation();
+    if (readOnly) {
+      return;
+    }
     if (!isScript) return;
 
     try {
@@ -89,7 +92,7 @@ function WorkspaceTreeItem({
         </span>
 
         {/* 스크립트 파일인 경우 블록 스크립트 토글 스위치 표시 */}
-        {isScript && readOnly && (
+        {isScript && (
           <div className="flex items-center space-x-2 ml-2">
             {object.isBlockScriptEnabled && (
               <span className="text-xs bg-green-100 text-green-700 px-1 rounded">
@@ -123,6 +126,7 @@ function WorkspaceTreeItem({
               placeId={placeId}
               object={childObject}
               level={level + 1}
+              readOnly={readOnly}
             />
           ))}
         </div>
