@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AttachedFileItem } from "./AttachedFileItem";
 import { calculateSHA256 } from "@common/utils/calculatSHA256";
 import type { FileUploadInfo } from "@common/types/file";
@@ -17,6 +17,7 @@ function MultiFileUploader({
   setCountLoadingFile,
   setCountFailedFile,
   setAttachmentUuids,
+  initialFiles,
 }: {
   setCountLoadingFile: (
     CountLoadingFile: number | ((prev: number) => number),
@@ -27,9 +28,16 @@ function MultiFileUploader({
   setAttachmentUuids: (
     attachmentUuids: string[] | ((prev: string[]) => string[]),
   ) => void;
+  initialFiles?: UploadedFile[];
 }) {
   const [files, setFiles] = useState<UploadedFile[]>([]);
   const { mutateAsync: handleUploadfile } = useUploadFileMutation();
+
+  useEffect(() => {
+    if (initialFiles) {
+      setFiles(initialFiles);
+    }
+  }, [initialFiles]);
 
   // files 중에서 id가 일치하는 것을 찾아 updates 반영
   const updateFile = (id: number, updates: Partial<UploadedFile>) => {
