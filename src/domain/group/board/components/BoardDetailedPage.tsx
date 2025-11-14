@@ -1,21 +1,11 @@
 import Button from "@common/components/Button";
 import ReadOnlyReactQuillEditor from "@common/components/ReadOnlyReactQuillEditor";
-// import { formatFileSizeToKB } from "@common/utils/formatFilesize";
 import { formatIsoStringToDate } from "@common/utils/formatIsoStringToDate";
 import { useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "@user/stores/authStore";
 import { useBoardInfoQuery } from "../hooks/useBoardInfoQuery";
 import { useDeleteBoardMutation } from "../hooks/useDeleteBoardMutation";
-
-// const mockBoardInfo = {
-//   title: "잼민이는 못 깨는 타워 따라 만들기",
-//   createdAt: "2025-10-10T09:30:00Z",
-//   content: `<p>이곳은 게시글 내용이 들어가는 영역입니다.</p>`,
-//   attachedFiles: [
-//     { id: 1, name: "예시파일.pdf", size: 1024 * 100 },
-//     { id: 2, name: "이미지.png", size: 1024 * 200 },
-//   ],
-// };
+import { DownloadableFileItem } from "@common/components/file/DownloadableFileItem";
 
 function BoardDetailedPage({
   groupUuid,
@@ -101,33 +91,20 @@ function BoardDetailedPage({
         </div>
 
         {/* 첨부파일 */}
-        {/* {mockBoardInfo.attachedFiles.length > 0 && (
+        {boardInfo?.attachments && (
           <div className="">
             <ul className="flex flex-col gap-2">
-              {mockBoardInfo.attachedFiles.map((file) => (
+              {boardInfo?.attachments.map((file) => (
                 <li
-                  key={file.id}
+                  key={file.attachmentUuid}
                   className="flex items-center justify-between bg-[#F2F9FF] rounded-xl px-4 py-2"
                 >
-                  <div>
-                    <span className="text-rbPrimaryColor text-md mr-8">
-                      첨부파일
-                    </span>
-                    <span className="text-gray-800 font-medium truncate max-w-[200px] mr-4">
-                      {file.name}
-                    </span>
-                    <span className="text-[#888888] font-medium truncate max-w-[200px]">
-                      {formatFileSizeToKB(file.size)}
-                    </span>
-                  </div>
-                  <button type="button" className="cursor-pointer">
-                    <img src="/download.png" />
-                  </button>
+                  <DownloadableFileItem fileInfo={file} />
                 </li>
               ))}
             </ul>
           </div>
-        )} */}
+        )}
         <hr className="bg-gray-300 h-[1px] border-0 my-12" />
         {/* 버튼 */}
         <div className="text-center">
