@@ -1,5 +1,5 @@
 import { api } from "@common/apis/axios";
-import type { FileInfo, FileUploadInfo } from "../types/file";
+import type { FileInfo, FileUploadInfo } from "../../../common/types/file";
 import { AxiosError } from "axios";
 
 export const getAttachmentUploadUrl = async (
