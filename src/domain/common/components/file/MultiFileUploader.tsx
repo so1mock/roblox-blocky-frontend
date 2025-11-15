@@ -6,9 +6,11 @@ import { useUploadFileMutation } from "@group/board/hooks/useUploadFileMutation"
 
 type FileStatus = "idle" | "loading" | "success" | "failed";
 
-export interface UploadedFile {
+export interface UploadedFileInfo {
   id: number;
   file: File;
+  fileName: string;
+  fileSize: number;
   status: FileStatus;
   attachmentUuid?: string;
 }
@@ -28,9 +30,9 @@ function MultiFileUploader({
   setAttachmentUuids: (
     attachmentUuids: string[] | ((prev: string[]) => string[]),
   ) => void;
-  initialFiles?: UploadedFile[];
+  initialFiles?: UploadedFileInfo[];
 }) {
-  const [files, setFiles] = useState<UploadedFile[]>([]);
+  const [files, setFiles] = useState<UploadedFileInfo[]>([]);
   const { mutateAsync: handleUploadfile } = useUploadFileMutation();
 
   useEffect(() => {
@@ -40,7 +42,7 @@ function MultiFileUploader({
   }, [initialFiles]);
 
   // files 중에서 id가 일치하는 것을 찾아 updates 반영
-  const updateFile = (id: number, updates: Partial<UploadedFile>) => {
+  const updateFile = (id: number, updates: Partial<UploadedFileInfo>) => {
     setFiles((prev) =>
       prev.map((file) => (file.id === id ? { ...file, ...updates } : file)),
     );
@@ -51,10 +53,12 @@ function MultiFileUploader({
     if (!e.target.files?.length) return;
 
     // 추가된 파일 목록 생성
-    const newFiles: UploadedFile[] = Array.from(e.target.files).map(
+    const newFiles: UploadedFileInfo[] = Array.from(e.target.files).map(
       (file, index) => ({
         id: Date.now() + index, // 고유 ID
         file,
+        fileName: file.name,
+        fileSize: file.size,
         status: "idle",
       }),
     );
@@ -121,7 +125,7 @@ function MultiFileUploader({
   // };
 
   /** 파일 삭제 */
-  const handleDeleteClick = (uploadedFile: UploadedFile) => {
+  const handleDeleteClick = (uploadedFile: UploadedFileInfo) => {
     setFiles((prev) => prev.filter((item) => item.id !== uploadedFile.id));
     if (uploadedFile.attachmentUuid) {
       setAttachmentUuids((prev) =>

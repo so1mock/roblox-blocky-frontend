@@ -1,15 +1,14 @@
 import { formatFileSizeToKB } from "@common/utils/formatFilesize";
-import type { UploadedFile } from "./MultiFileUploader";
+import type { UploadedFileInfo } from "./MultiFileUploader";
 type AttachedFileItemProps = {
-  uploadedFile: UploadedFile;
-  handleDeleteClick: (uploadedFile: UploadedFile) => void;
+  uploadedFile: UploadedFileInfo;
+  handleDeleteClick: (uploadedFile: UploadedFileInfo) => void;
 };
 
 export function AttachedFileItem({
   uploadedFile,
   handleDeleteClick,
 }: AttachedFileItemProps) {
-  const { file, status } = uploadedFile;
   return (
     <>
       <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -30,17 +29,17 @@ export function AttachedFileItem({
         <div className="flex-1 min-w-0">
           <div
             className={`font-medium truncate ${
-              status === "failed"
+              uploadedFile.status === "failed"
                 ? "text-red-500"
-                : status === "loading"
+                : uploadedFile.status === "loading"
                   ? "text-gray-400"
                   : "text-gray-800"
             }`}
           >
-            {file.name}
+            {uploadedFile.fileName}
           </div>
           <div className="text-[#888888] text-sm">
-            {formatFileSizeToKB(file.size)}
+            {formatFileSizeToKB(uploadedFile.fileSize)}
           </div>
         </div>
       </div>

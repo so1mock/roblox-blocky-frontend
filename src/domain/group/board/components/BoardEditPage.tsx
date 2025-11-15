@@ -1,6 +1,6 @@
 import Button from "@common/components/Button";
 import MultiFileUploader, {
-  type UploadedFile,
+  type UploadedFileInfo,
 } from "@common/components/file/MultiFileUploader";
 import ReactQuillEditor from "@common/components/ReactQuillEditor";
 import { useNavigate } from "@tanstack/react-router";
@@ -25,7 +25,7 @@ function BoardEditPage({
     groupUuid,
     boardUuid,
   );
-  const [initialFiles, setInitialFiles] = useState<UploadedFile[]>([]);
+  const [initialFiles, setInitialFiles] = useState<UploadedFileInfo[]>([]);
 
   const { data: boardInfo } = useBoardInfoQuery(groupUuid, boardUuid);
 
@@ -39,10 +39,9 @@ function BoardEditPage({
       setInitialFiles(
         boardInfo.attachments.map((attachment, index) => ({
           id: Date.now() + index,
-          file: new File(
-            [new ArrayBuffer(attachment.fileSize)],
-            attachment.fileName,
-          ),
+          file: new File([], attachment.fileName),
+          fileName: attachment.fileName,
+          fileSize: attachment.fileSize,
           status: "success",
           attachmentUuid: attachment.attachmentUuid,
         })),
