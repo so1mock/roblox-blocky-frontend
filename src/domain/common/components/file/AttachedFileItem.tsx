@@ -54,7 +54,7 @@ export function AttachedFileItem({
         >
           <img src="/btnEdit.png" className="w-5 h-5" alt="수정" />
         </button> */}
-        {status === "loading" ? (
+        {uploadedFile.status === "loading" ? (
           <div className="p-2">
             <svg
               className="animate-spin h-5 w-5 text-rbPrimaryColor"

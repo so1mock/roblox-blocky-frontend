@@ -19,13 +19,13 @@ function BoardDetailedPage({
   // 예시 데이터
   const { data: boardInfo, error } = useBoardInfoQuery(groupUuid, boardUuid);
 
-  const deleteMutation = useDeleteBoardMutation(groupUuid, boardUuid);
+  const deleteMutation = useDeleteBoardMutation(groupUuid);
 
   const handleDelete = async () => {
     const ok = confirm("정말 삭제하시겠습니까?");
     if (!ok) return;
     try {
-      await deleteMutation.mutateAsync();
+      await deleteMutation.mutateAsync(boardUuid);
       navigate({ to: `/teacher/group/${groupUuid}` });
     } catch {
       alert("삭제에 실패했습니다.");
