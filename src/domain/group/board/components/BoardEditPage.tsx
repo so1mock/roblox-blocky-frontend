@@ -1,12 +1,11 @@
 import Button from "@common/components/Button";
-import MultiFileUploader, {
-  type UploadedFileInfo,
-} from "@common/components/file/MultiFileUploader";
+import MultiFileUploader from "@common/components/file/MultiFileUploader";
 import ReactQuillEditor from "@common/components/ReactQuillEditor";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useBoardInfoQuery } from "../hooks/useBoardInfoQuery";
 import { useUpdateBoardMutation } from "../hooks/useUpdateBoardMutation";
+import type { UploadedFileInfo } from "@common/types/file";
 
 function BoardEditPage({
   groupUuid,

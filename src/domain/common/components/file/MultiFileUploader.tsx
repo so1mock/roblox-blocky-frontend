@@ -1,19 +1,8 @@
 import { useEffect, useState } from "react";
 import { AttachedFileItem } from "./AttachedFileItem";
 import { calculateSHA256 } from "@common/utils/calculatSHA256";
-import type { FileUploadInfo } from "@common/types/file";
+import type { FileUploadInfo, UploadedFileInfo } from "@common/types/file";
 import { useUploadFileMutation } from "@group/board/hooks/useUploadFileMutation";
-
-type FileStatus = "idle" | "loading" | "success" | "failed";
-
-export interface UploadedFileInfo {
-  id: number;
-  file: File;
-  fileName: string;
-  fileSize: number;
-  status: FileStatus;
-  attachmentUuid?: string;
-}
 
 function MultiFileUploader({
   setCountLoadingFile,

@@ -1,5 +1,5 @@
 import { formatFileSizeToKB } from "@common/utils/formatFilesize";
-import type { UploadedFileInfo } from "./MultiFileUploader";
+import type { UploadedFileInfo } from "@common/types/file";
 type AttachedFileItemProps = {
   uploadedFile: UploadedFileInfo;
   handleDeleteClick: (uploadedFile: UploadedFileInfo) => void;

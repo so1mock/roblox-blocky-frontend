@@ -1,3 +1,5 @@
+export type FileStatus = "idle" | "loading" | "success" | "failed";
+
 export type FileInfo = {
   attachmentUuid: string;
   fileName: string;
@@ -12,3 +14,13 @@ export type FileUploadInfo = {
   contentType: string;
   checksum: string;
 };
+
+// 첨부된 파일 정보
+export interface UploadedFileInfo {
+  id: number;
+  file: File;
+  fileName: string;
+  fileSize: number;
+  status: FileStatus;
+  attachmentUuid?: string;
+}
