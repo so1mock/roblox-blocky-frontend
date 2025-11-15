@@ -1,4 +1,4 @@
-import { formatFileSizeToKB } from "@common/utils/formatFilesize";
+import { formatFileSize } from "@common/utils/formatFilesize";
 import type { UploadedFileInfo } from "@common/types/file";
 type AttachedFileItemProps = {
   uploadedFile: UploadedFileInfo;
@@ -39,7 +39,7 @@ export function AttachedFileItem({
             {uploadedFile.fileName}
           </div>
           <div className="text-[#888888] text-sm">
-            {formatFileSizeToKB(uploadedFile.fileSize)}
+            {formatFileSize(uploadedFile.fileSize)}
           </div>
         </div>
       </div>
