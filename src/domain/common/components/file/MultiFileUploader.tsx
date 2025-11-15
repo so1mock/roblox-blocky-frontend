@@ -42,15 +42,16 @@ function MultiFileUploader({
     if (!e.target.files?.length) return;
 
     // 추가된 파일 목록 생성
-    const newFiles: UploadedFileInfo[] = Array.from(e.target.files).map(
-      (file, index) => ({
+    const newFiles: UploadedFileInfo[] = Array.from(e.target.files)
+      .filter((file) => file.name.trim() !== "") // 파일 이름이 빈칸이면 제외
+      .map((file, index) => ({
         id: Date.now() + index, // 고유 ID
         file,
         fileName: file.name,
         fileSize: file.size,
         status: "idle",
-      }),
-    );
+      }));
+
     setFiles((prev) => [...prev, ...newFiles]);
     e.target.value = ""; // 같은 파일 다시 선택 가능하게 초기화
 
