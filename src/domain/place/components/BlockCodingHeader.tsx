@@ -17,10 +17,12 @@ function BlockCodingHeader({
   placeId,
   selectedScript,
   workspaceRef,
+  readOnly = false,
 }: {
   placeId: string;
   selectedScript: WorkspaceObject | undefined;
   workspaceRef: React.RefObject<Blockly.Workspace | null>;
+  readOnly?: boolean;
 }) {
   const { setWorkspaceData } = useWorkspaceDataStore();
   const { isOpen, config, showAlert, closeAlert } = useAlertModal();
@@ -28,7 +30,11 @@ function BlockCodingHeader({
 
   const handleBackToList = () => {
     // Blockly 정리를 위해 하드 네비게이션 사용
-    window.location.href = "/student/my-places";
+    if (readOnly) {
+      window.history.back();
+    } else {
+      window.location.href = "/student/my-places";
+    }
   };
 
   const handleSave = async () => {
@@ -97,16 +103,19 @@ function BlockCodingHeader({
           </span>
         )}
       </div>
-      <div className="relative ">
-        <button
-          type="button"
-          onClick={handleSave}
-          className="relative px-4 py-2 font-semibold rounded transition-colors bg-blue-600 text-rbHoverText hover:bg-blue-700 cursor-pointer"
-        >
-          <span>저장</span>
-        </button>
-        <BlockScriptToast convertedScript={convertedScript} />
-      </div>
+      {!readOnly && (
+        <div className="relative ">
+          <button
+            type="button"
+            onClick={handleSave}
+            className="relative px-4 py-2 font-semibold rounded transition-colors bg-blue-600 text-rbHoverText hover:bg-blue-700 cursor-pointer"
+          >
+            <span>저장</span>
+          </button>
+          <BlockScriptToast convertedScript={convertedScript} />
+        </div>
+      )}
+
       <AlertModal
         isOpen={isOpen}
         onClose={closeAlert}

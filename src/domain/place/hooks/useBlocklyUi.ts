@@ -17,7 +17,10 @@ import type { Toolbox } from "../types/block";
 
 export function useBlocklyUI(
   blocklyDivRef: React.RefObject<HTMLDivElement | null>,
-  options: { useServer?: boolean } = { useServer: false },
+  options: { useServer?: boolean; readOnly?: boolean } = {
+    useServer: false,
+    readOnly: false,
+  },
   onOpenVariableModal: () => void,
 ) {
   const workspaceRef = useRef<Blockly.WorkspaceSvg | null>(null);
@@ -34,6 +37,12 @@ export function useBlocklyUI(
     const initWorkspace = (toolboxConfig: Toolbox) => {
       const workspaceSvg = Blockly.inject(blocklyDivRef.current!, {
         toolbox: toolboxConfig,
+        readOnly: options.readOnly,
+        move: {
+          scrollbars: true, // 스크롤바 표시
+          drag: true, // 캔버스 드래그 이동 허용
+          wheel: true, // 마우스 휠 스크롤 허용
+        },
         plugins: {
           flyoutsVerticalToolbox: "ContinuousFlyout",
           metricsManager: "ContinuousMetrics",

@@ -11,10 +11,12 @@ function WorkspaceTreeItem({
   placeId,
   object,
   level = 0,
+  readOnly = false,
 }: {
   placeId: string;
   object: WorkspaceObject;
   level: number;
+  readOnly: boolean;
 }) {
   const { setWorkspaceData, selectedScript, setSelectedScript } =
     useWorkspaceDataStore();
@@ -40,6 +42,9 @@ function WorkspaceTreeItem({
 
   const handleToggleBlockScriptStatus = async (event: React.MouseEvent) => {
     event.stopPropagation();
+    if (readOnly) {
+      return;
+    }
     if (!isScript) return;
 
     try {
@@ -121,6 +126,7 @@ function WorkspaceTreeItem({
               placeId={placeId}
               object={childObject}
               level={level + 1}
+              readOnly={readOnly}
             />
           ))}
         </div>

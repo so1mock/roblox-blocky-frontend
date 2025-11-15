@@ -3,17 +3,29 @@ import { useEffect, useRef, useState } from "react";
 import { useBlocklyUI } from "../hooks/useBlocklyUi";
 import WorkspaceExploerer from "../workspace/components/WorkspaceExplorer";
 import BlockCodingHeader from "./BlockCodingHeader";
-import { getWorkspaceDataByPlaceId } from "../workspace/apis/workspace";
+import {
+  getStudentWorkspaceDataByPlaceId,
+  getWorkspaceDataByPlaceId,
+} from "../workspace/apis/workspace";
 import { useWorkspaceDataStore } from "../workspace/stores/useWorkspaceDataStore";
 import VariableCreateModal from "./VariableCreateModal";
 
-function BlockCodingPage({ id: placeId }: { id: string }) {
+function BlockCodingPage({
+  placeId,
+  studentId,
+  readOnly = false,
+}: {
+  placeId: string;
+  studentId?: string;
+  readOnly?: boolean;
+}) {
   const blocklyDivRef = useRef<HTMLDivElement | null>(null);
   const [isVariableModalOpen, setIsVariableModalOpen] = useState(false);
   const { workspaceRef, loading, error } = useBlocklyUI(
     blocklyDivRef,
     {
       useServer: true,
+      readOnly,
     },
     () => {
       setIsVariableModalOpen(true);
@@ -52,7 +64,6 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
       } else {
         blockState = selectedScript.blockScript;
       }
-      console.log(blockState);
     } else {
       // 블록 스크립트가 존재하지 않으면 기본 상태로 렌더링한다
       blockState = {
@@ -71,8 +82,16 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
 
     const fetchWorkspaceData = async () => {
       try {
-        const data = await getWorkspaceDataByPlaceId(placeId);
-        setWorkspaceData(data);
+        if (readOnly && studentId) {
+          const data = await getStudentWorkspaceDataByPlaceId(
+            studentId,
+            placeId,
+          );
+          setWorkspaceData(data);
+        } else {
+          const data = await getWorkspaceDataByPlaceId(placeId);
+          setWorkspaceData(data);
+        }
       } catch (err) {
         console.error("Failed to fetch workspace data:", err);
       }
@@ -92,7 +111,7 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
     <div className="flex bg-gray-100 h-screen">
       {/* 왼쪽 사이드바 - 워크스페이스 탐색기 */}
       <aside className="w-80 bg-white border-r border-gray-200">
-        <WorkspaceExploerer placeId={placeId} />
+        <WorkspaceExploerer placeId={placeId} readOnly={readOnly} />
       </aside>
       {/* 메인 영역 */}
       <div className="flex-1 flex flex-col">
@@ -102,6 +121,7 @@ function BlockCodingPage({ id: placeId }: { id: string }) {
           placeId={placeId}
           selectedScript={selectedScript}
           workspaceRef={workspaceRef}
+          readOnly={readOnly}
         />
 
         {/* 블록 조립 */}
