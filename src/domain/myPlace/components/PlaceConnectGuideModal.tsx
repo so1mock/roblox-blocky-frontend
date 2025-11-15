@@ -41,7 +41,7 @@ function PlaceConnectGuideModal({
       <div className="w-full aspect-video rounded-xl overflow-hidden shadow-md mb-6">
         <iframe
           className="w-full h-full"
-          src="https://www.youtube.com/embed/uzJrc3FsDr8?autoplay=0&mute=0&rel=0&modestbranding=1"
+          src="https://www.youtube.com/embed/JdFjn9EWnzg?si=segdDJPjdByKatGs"
           title="새 플레이스 연결 방법 안내 영상"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen

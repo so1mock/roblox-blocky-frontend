@@ -23,19 +23,17 @@ function RouteComponent() {
         {/* 영상 영역 */}
         <section className="flex flex-col items-center gap-4">
           <span className="bg-rbBackground text-rbBlueText px-8 py-2 rounded-3xl font-bold">
-            튜토리얼
+            수업 영상
           </span>
-
-          <video
-            className="rounded-xl shadow-lg w-[640px] border-solid border-8 border-rbBorder"
-            controls
-          >
-            <source
-              src="https://www.w3schools.com/html/mov_bbb.mp4"
-              type="video/mp4"
-            />
-            브라우저가 video 태그를 지원하지 않습니다.
-          </video>
+          <div className="w-[640px] aspect-video rounded-xl overflow-hidden shadow-md mb-6">
+            <iframe
+              className="w-full h-full"
+              src="https://www.youtube.com/embed/J_P8y_IJGWk?si=ZLndK_Tmcx5Lx_uu"
+              title="새 플레이스 연결 방법 안내 영상"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
         </section>
         <div className="absolute bottom-26 bg-rbPointColor w-full text-center py-2 animate-[marquee] overflow-x-hidden">
           <span className="text-rbHoverText text-lg font-bold animate-marquee">
