@@ -13,10 +13,10 @@ export function TeacherHeader() {
 
       <nav className="flex gap-12 justify-center">
         <LinkNavButton to="/teacher/group" title="반" />
-        <LinkNavButton to="/teacher/resources" title="자료실" />
+        {/* <LinkNavButton to="/teacher/resources" title="자료실" /> */}
         <LinkNavButton to="/teacher/about" title="소개" />
-        <LinkNavButton to="/teacher/inquiry" title="문의" />
-        <LinkNavButton to="/teacher/payment" title="결제" />
+        {/* <LinkNavButton to="/teacher/inquiry" title="문의" />
+        <LinkNavButton to="/teacher/payment" title="결제" /> */}
       </nav>
 
       {isLogin ? (
