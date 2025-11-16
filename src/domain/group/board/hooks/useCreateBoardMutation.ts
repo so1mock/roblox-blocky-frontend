@@ -10,7 +10,7 @@ export const useCreateBoardMutation = (groupUuid: string) => {
       createBoard(groupUuid, boardInfo),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["groups", groupUuid, "boards"],
+        queryKey: ["groups", groupUuid, "boards", 0],
       });
     },
     onError: (error: unknown) => {

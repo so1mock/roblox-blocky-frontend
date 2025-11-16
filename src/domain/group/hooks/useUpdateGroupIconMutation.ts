@@ -1,4 +1,4 @@
-import { uploadImage } from "@common/apis/image";
+import { uploadFile } from "@common/apis/file";
 import type { ImageFileType } from "@common/types/image";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getGroupIconUploadUrl } from "../apis/group";
@@ -15,7 +15,7 @@ export const useUpdateGroupIconMutation = (uuid: string) => {
       validateImageExtension(file);
 
       const url = await getGroupIconUploadUrl(uuid, ext as ImageFileType);
-      await uploadImage(url, file);
+      await uploadFile(url, file);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["group", uuid] });
