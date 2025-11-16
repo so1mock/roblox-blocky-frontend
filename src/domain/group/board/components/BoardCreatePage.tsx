@@ -49,6 +49,10 @@ function BoardCreatePage({ groupUuid }: { groupUuid: string }) {
                 disabled={0 < countUploadingFile || 0 < countFailedFild}
                 text="작성 완료"
                 handleButtonClick={async () => {
+                  if (title.length === 0) {
+                    alert("게시글의 제목은 빈 값일 수 없습니다.");
+                    return;
+                  }
                   await handleCreateBoard({
                     title: title,
                     content: content,

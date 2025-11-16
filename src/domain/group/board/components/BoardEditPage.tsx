@@ -84,6 +84,10 @@ function BoardEditPage({
                 text="수정 완료"
                 disabled={0 < countUploadingFile || 0 < countFailedFild}
                 handleButtonClick={async () => {
+                  if (title.length === 0) {
+                    alert("게시글의 제목은 빈 값일 수 없습니다.");
+                    return;
+                  }
                   await handleEditBoard({
                     title: title,
                     content: content,
