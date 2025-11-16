@@ -1,10 +1,11 @@
 import Button from "@common/components/Button";
-import MultiFileUploader from "@common/components/MultiFileUploader";
+import MultiFileUploader from "@common/components/file/MultiFileUploader";
 import ReactQuillEditor from "@common/components/ReactQuillEditor";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useBoardInfoQuery } from "../hooks/useBoardInfoQuery";
 import { useUpdateBoardMutation } from "../hooks/useUpdateBoardMutation";
+import type { UploadedFileInfo } from "@common/types/file";
 
 function BoardEditPage({
   groupUuid,
@@ -16,17 +17,34 @@ function BoardEditPage({
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-
-  const { data: boardInfo } = useBoardInfoQuery(groupUuid, boardUuid);
+  const [attachmentUuids, setAttachmentUuids] = useState<string[]>([]);
+  const [countFailedFild, setCountFailedFile] = useState<number>(0);
+  const [countUploadingFile, setCountLoadingFile] = useState<number>(0);
   const { mutateAsync: handleEditBoard } = useUpdateBoardMutation(
     groupUuid,
     boardUuid,
   );
+  const [initialFiles, setInitialFiles] = useState<UploadedFileInfo[]>([]);
+
+  const { data: boardInfo } = useBoardInfoQuery(groupUuid, boardUuid);
 
   useEffect(() => {
     if (boardInfo) {
+      setAttachmentUuids(
+        boardInfo.attachments.map((attachment) => attachment.attachmentUuid),
+      );
       setTitle(boardInfo.title);
       setContent(boardInfo.content);
+      setInitialFiles(
+        boardInfo.attachments.map((attachment, index) => ({
+          id: Date.now() + index,
+          file: new File([], attachment.fileName),
+          fileName: attachment.fileName,
+          fileSize: attachment.fileSize,
+          status: "success",
+          attachmentUuid: attachment.attachmentUuid,
+        })),
+      );
     }
   }, [boardInfo]);
 
@@ -48,8 +66,15 @@ function BoardEditPage({
           <div className="px-4 write">
             <ReactQuillEditor value={content} onChange={setContent} />
           </div>
-          <div className="text-center mt-8">
-            <MultiFileUploader />
+
+          {/* 파일 첨부 영역 */}
+          <div className="px-4">
+            <MultiFileUploader
+              setCountLoadingFile={setCountLoadingFile}
+              setCountFailedFile={setCountFailedFile}
+              setAttachmentUuids={setAttachmentUuids}
+              initialFiles={initialFiles}
+            />
           </div>
 
           <hr className="bg-gray-300 h-[1px] border-0 mt-12" />
@@ -57,11 +82,16 @@ function BoardEditPage({
             <div>
               <Button
                 text="수정 완료"
+                disabled={0 < countUploadingFile || 0 < countFailedFild}
                 handleButtonClick={async () => {
+                  if (title.length === 0) {
+                    alert("게시글의 제목은 빈 값일 수 없습니다.");
+                    return;
+                  }
                   await handleEditBoard({
                     title: title,
                     content: content,
-                    attachmentUuids: [],
+                    attachmentUuids: attachmentUuids,
                   });
                   navigate({
                     to: `/teacher/group/${groupUuid}/board/${boardUuid}`,

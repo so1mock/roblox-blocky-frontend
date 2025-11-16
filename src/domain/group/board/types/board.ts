@@ -16,6 +16,7 @@ export type BoardInfo = BoardSummary & {
     attachmentUuid: string;
     fileName: string;
     fileSrc: string;
+    fileSize: number;
   }[];
 };
 

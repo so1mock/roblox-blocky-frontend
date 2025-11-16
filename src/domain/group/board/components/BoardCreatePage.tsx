@@ -1,5 +1,5 @@
 import Button from "@common/components/Button";
-// import MultiFileUploader from "@common/components/MultiFileUploader";
+import MultiFileUploader from "@common/components/file/MultiFileUploader";
 import ReactQuillEditor from "@common/components/ReactQuillEditor";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
@@ -9,6 +9,9 @@ function BoardCreatePage({ groupUuid }: { groupUuid: string }) {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [attachmentUuids, setAttachmentUuids] = useState<string[]>([]);
+  const [countFailedFild, setCountFailedFile] = useState<number>(0);
+  const [countUploadingFile, setCountLoadingFile] = useState<number>(0);
   const { mutateAsync: handleCreateBoard } = useCreateBoardMutation(groupUuid);
 
   return (
@@ -29,20 +32,31 @@ function BoardCreatePage({ groupUuid }: { groupUuid: string }) {
           <div className="px-4 write">
             <ReactQuillEditor value={content} onChange={setContent} />
           </div>
-          {/* <div className="text-center mt-8">
-            <MultiFileUploader />
-          </div> */}
+
+          {/* 파일 첨부 영역 */}
+          <div className="px-4">
+            <MultiFileUploader
+              setCountLoadingFile={setCountLoadingFile}
+              setCountFailedFile={setCountFailedFile}
+              setAttachmentUuids={setAttachmentUuids}
+            />
+          </div>
 
           <hr className="bg-gray-300 h-[1px] border-0 mt-12" />
           <div className="flex items-center justify-end gap-4 mt-8">
             <div>
               <Button
+                disabled={0 < countUploadingFile || 0 < countFailedFild}
                 text="작성 완료"
                 handleButtonClick={async () => {
+                  if (title.length === 0) {
+                    alert("게시글의 제목은 빈 값일 수 없습니다.");
+                    return;
+                  }
                   await handleCreateBoard({
                     title: title,
                     content: content,
-                    attachmentUuids: [],
+                    attachmentUuids: attachmentUuids,
                   });
                   navigate({ to: `/teacher/group/${groupUuid}` });
                 }}
