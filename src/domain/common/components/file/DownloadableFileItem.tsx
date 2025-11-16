@@ -1,5 +1,5 @@
 import type { FileInfo } from "@common/types/file";
-import { formatFileSizeToKB } from "@common/utils/formatFilesize";
+import { formatFileSize } from "@common/utils/formatFilesize";
 
 export function DownloadableFileItem({ fileInfo }: { fileInfo: FileInfo }) {
   const handleDownload = () => {
@@ -35,7 +35,7 @@ export function DownloadableFileItem({ fileInfo }: { fileInfo: FileInfo }) {
             {fileInfo.fileName}
           </div>
           <div className="text-[#888888] text-sm">
-            {formatFileSizeToKB(fileInfo.fileSize)}
+            {formatFileSize(fileInfo.fileSize)}
           </div>
         </div>
       </div>
