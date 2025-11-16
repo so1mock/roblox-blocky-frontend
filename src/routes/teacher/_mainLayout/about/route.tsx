@@ -1,10 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/teacher/_mainLayout/about")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* 히어로 섹션 */}
