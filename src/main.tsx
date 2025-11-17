@@ -6,7 +6,12 @@ import "./index.css";
 import { routeTree } from "./routeTree.gen";
 
 // Create a new router instance
-const router = createRouter({ routeTree });
+const router = createRouter({
+  routeTree,
+  parseSearch: (searchStr: string) => {
+    return Object.fromEntries(new URLSearchParams(searchStr));
+  },
+});
 
 // Register the router instance for type safety
 declare module "@tanstack/react-router" {
