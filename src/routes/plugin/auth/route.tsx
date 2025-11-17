@@ -13,6 +13,11 @@ type SearchParams = {
 };
 
 export const Route = createFileRoute("/plugin/auth")({
+  validateSearch: (search: Record<string, unknown>): SearchParams => {
+    return {
+      user_code: search.user_code as string,
+    };
+  },
   beforeLoad: ({ search }: { search: SearchParams }) => {
     verifyAuth();
 
