@@ -18,11 +18,5 @@ export const useEditWallMutation = (
         queryKey: ["group", groupUuid, "wall", page, size],
       });
     },
-
-    onError: (error: unknown) => {
-      if (error instanceof Error) {
-        alert(error.message);
-      }
-    },
   });
 };

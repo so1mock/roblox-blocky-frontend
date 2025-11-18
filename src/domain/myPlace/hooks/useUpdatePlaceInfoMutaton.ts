@@ -21,10 +21,5 @@ export const useUpdatePlaceInfoMutaton = () => {
       // 플레이스 정보 수정 후, 플레이스 목록 자동 갱신
       queryClient.invalidateQueries({ queryKey: ["/places/me"] });
     },
-    onError: (error: unknown) => {
-      if (error instanceof Error) {
-        alert("업데이트 실패: " + error.message);
-      }
-    },
   });
 };

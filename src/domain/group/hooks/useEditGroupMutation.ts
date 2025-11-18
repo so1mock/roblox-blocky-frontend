@@ -12,10 +12,5 @@ export const useEditGroupMutation = (id: string) => {
       // 그룹 생성 후, 그룹 목록 자동 갱신
       queryClient.invalidateQueries({ queryKey: ["group", id] });
     },
-    onError: (error: unknown) => {
-      if (error instanceof Error) {
-        alert(error.message);
-      }
-    },
   });
 };

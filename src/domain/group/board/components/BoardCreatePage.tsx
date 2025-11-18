@@ -4,8 +4,11 @@ import ReactQuillEditor from "@common/components/ReactQuillEditor";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useCreateBoardMutation } from "../hooks/useCreateBoardMutation";
+import { useAlertModal } from "@common/hooks/useAlertModal";
+import AlertModal from "@common/components/AlertModal";
 
 function BoardCreatePage({ groupUuid }: { groupUuid: string }) {
+  const { isOpen, config, showAlert, closeAlert } = useAlertModal();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -50,7 +53,12 @@ function BoardCreatePage({ groupUuid }: { groupUuid: string }) {
                 text="작성 완료"
                 handleButtonClick={async () => {
                   if (title.length === 0) {
-                    alert("게시글의 제목은 빈 값일 수 없습니다.");
+                    showAlert({
+                      title: "게시글 작성 실패",
+                      message: "게시글의 제목은 빈 값일 수 없습니다.",
+                      type: "warning",
+                    });
+
                     return;
                   }
                   await handleCreateBoard({
@@ -78,6 +86,13 @@ function BoardCreatePage({ groupUuid }: { groupUuid: string }) {
           </div>
         </form>
       </div>
+      <AlertModal
+        isOpen={isOpen}
+        onClose={closeAlert}
+        title={config.title}
+        message={config.message}
+        type={config.type}
+      />
     </div>
   );
 }

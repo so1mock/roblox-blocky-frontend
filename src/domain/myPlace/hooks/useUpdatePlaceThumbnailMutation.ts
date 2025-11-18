@@ -20,10 +20,5 @@ export const useUploadPlaceThumbnailMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/places/me"] });
     },
-    onError: (error: unknown) => {
-      if (error instanceof Error) {
-        alert(error.message);
-      }
-    },
   });
 };

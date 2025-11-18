@@ -19,11 +19,5 @@ export const useUpdateBoardMutation = (
         queryKey: ["groups", groupUuid, "boards", boardUuid],
       });
     },
-
-    onError: (error: unknown) => {
-      if (error instanceof Error) {
-        alert(error.message);
-      }
-    },
   });
 };

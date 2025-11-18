@@ -20,10 +20,5 @@ export const useUpdateGroupIconMutation = (uuid: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["group", uuid] });
     },
-    onError: (error: unknown) => {
-      if (error instanceof Error) {
-        alert(error.message);
-      }
-    },
   });
 };

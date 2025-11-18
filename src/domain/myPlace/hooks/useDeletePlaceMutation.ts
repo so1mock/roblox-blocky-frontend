@@ -10,10 +10,5 @@ export const useDeletePlaceMutation = () => {
       // 플레이스 삭제 후, 플레이스 목록 자동 갱신
       queryClient.invalidateQueries({ queryKey: ["/places/me"] });
     },
-    onError: (error: unknown) => {
-      if (error instanceof Error) {
-        alert("삭제 실패: " + error.message);
-      }
-    },
   });
 };

@@ -6,6 +6,8 @@ import { useNavigate } from "@tanstack/react-router";
 import type { GroupSummary } from "../types/group";
 import { useEditGroupMutation } from "../hooks/useEditGroupMutation";
 import { useUpdateGroupIconMutation } from "../hooks/useUpdateGroupIconMutation";
+import { useAlertModal } from "@common/hooks/useAlertModal";
+import AlertModal from "@common/components/AlertModal";
 
 function GroupEditPage({ id }: { id: string }) {
   const navigate = useNavigate();
@@ -16,6 +18,7 @@ function GroupEditPage({ id }: { id: string }) {
     isError: isGroupInfoError,
     error: groupInfoError,
   } = useGroupDetailQuery(id);
+  const { isOpen, config, showAlert, closeAlert } = useAlertModal();
   const inputNameRef = useRef<HTMLInputElement>(null);
   const inputDescriptionRef = useRef<HTMLTextAreaElement>(null);
 
@@ -120,7 +123,11 @@ function GroupEditPage({ id }: { id: string }) {
   };
 
   if (isGroupInfoError) {
-    alert("유효하지 않은 반입니다. " + groupInfoError.message);
+    showAlert({
+      title: "반 정보 불러오기 실패",
+      message: "유효하지 않은 반입니다. " + groupInfoError.message,
+      type: "error",
+    });
     navigate({
       to: `/${userInfo?.role === "EDUCATOR" ? "teacher" : "student"}/group`,
     });
@@ -266,6 +273,13 @@ function GroupEditPage({ id }: { id: string }) {
           </div>
         </div>
       )}
+      <AlertModal
+        isOpen={isOpen}
+        onClose={closeAlert}
+        title={config.title}
+        message={config.message}
+        type={config.type}
+      />
     </div>
   );
 }

@@ -1,6 +1,8 @@
 import Button from "@common/components/Button";
 import { useState } from "react";
 import { useCreateWallMutation } from "../hooks/useCreateWallMutation";
+import { useAlertModal } from "@common/hooks/useAlertModal";
+import AlertModal from "@common/components/AlertModal";
 
 function GroupWallCreateForm({
   groupUuid,
@@ -18,11 +20,16 @@ function GroupWallCreateForm({
     isError: isCreatingError,
     error: creatingError,
   } = useCreateWallMutation(groupUuid, currentPageNumber - 1, pageSize);
+  const { isOpen, config, showAlert, closeAlert } = useAlertModal();
 
   const handleSubmit = async () => {
     const body = content.trim();
     if (!body) {
-      alert("내용을 입력해주세요.");
+      showAlert({
+        title: "담벼락작성 실패",
+        message: "내용을 입력해주세요.",
+        type: "warning",
+      });
       return;
     }
     if (isCreatingWall) {
@@ -59,6 +66,13 @@ function GroupWallCreateForm({
           {creatingError.message}
         </div>
       )}
+      <AlertModal
+        isOpen={isOpen}
+        onClose={closeAlert}
+        title={config.title}
+        message={config.message}
+        type={config.type}
+      />
     </form>
   );
 }

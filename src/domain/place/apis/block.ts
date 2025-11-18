@@ -43,11 +43,10 @@ export const getBlockList = async (): Promise<BlockListByCategory[]> => {
     );
 
     for (const categoryResponse of categoryListResponse.categories) {
-      console.log(categoryResponse);
       const { data: category } = await api.get<ServerBlockListByCategory>(
         `/block/list/${categoryResponse.name}`,
       );
-      console.log(category);
+
       data.push(category);
     }
 

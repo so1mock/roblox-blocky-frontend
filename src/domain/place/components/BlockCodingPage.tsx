@@ -44,8 +44,6 @@ function BlockCodingPage({
     if (variable) {
       // 툴박스 새로고침
       workspaceRef.current.refreshToolboxSelection();
-    } else {
-      console.error("변수 생성에 실패했습니다.");
     }
 
     // 모달 닫기
@@ -92,9 +90,7 @@ function BlockCodingPage({
           const data = await getWorkspaceDataByPlaceId(placeId);
           setWorkspaceData(data);
         }
-      } catch (err) {
-        console.error("Failed to fetch workspace data:", err);
-      }
+      } catch (err) {}
     };
 
     if (placeId) {

@@ -57,9 +57,7 @@ function WorkspaceTreeItem({
 
       const data = await getWorkspaceDataByPlaceId(placeId);
       setWorkspaceData(data);
-    } catch (error) {
-      console.error("Failed to toggle block script status:", error);
-    }
+    } catch (error) {}
   };
 
   return (

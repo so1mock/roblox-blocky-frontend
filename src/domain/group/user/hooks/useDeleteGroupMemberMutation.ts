@@ -12,10 +12,5 @@ export const useDeleteGroupMemberMutation = (groupUuid: string) => {
         queryKey: ["groups", groupUuid, "members"],
       });
     },
-    onError: (error: unknown) => {
-      if (error instanceof Error) {
-        alert("사용자 탈퇴 실패: " + error.message);
-      }
-    },
   });
 };

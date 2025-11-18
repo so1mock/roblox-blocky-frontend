@@ -4,6 +4,9 @@ import { useUser } from "@user/hooks/useUser";
 import { useAuthStore } from "@user/stores/authStore";
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import AlertModal from "@common/components/AlertModal";
+import { useAlertModal } from "@common/hooks/useAlertModal";
+import { AxiosError } from "axios";
 
 export const Route = createFileRoute("/")({
   beforeLoad: () => {
@@ -18,6 +21,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const { isOpen, config, showAlert, closeAlert } = useAlertModal();
   const [isTeacherLoginOpen, setTeacherLoginOpen] = useState(false);
   const [isTeacherLoggingIn, setIsTeacherLoggingIn] = useState(false);
   const [teacherId, setTeacherId] = useState("");
@@ -40,10 +44,22 @@ function Index() {
       } else if (role === "LEARNER") {
         navigate({ to: "/student" });
       } else {
-        alert("사용자 역할을 찾지 못했습니다. 메인 페이지로 이동합니다.");
+        showAlert({
+          title: "사용자 정보 오류",
+          message: "사용자 역할을 찾지 못했습니다. 메인 페이지로 이동합니다.",
+          type: "error",
+        });
       }
     } catch (error) {
-      throw error;
+      if (error instanceof AxiosError) {
+        if (error.response?.data.errorCode === "M101") {
+          showAlert({
+            title: "사용자 정보 오류",
+            message: "사용자 역할을 찾지 못했습니다. 메인 페이지로 이동합니다.",
+            type: "error",
+          });
+        }
+      }
     } finally {
       setIsTeacherLoggingIn(false);
     }
@@ -130,6 +146,13 @@ function Index() {
           </div>
         </div>
       )}
+      <AlertModal
+        isOpen={isOpen}
+        onClose={closeAlert}
+        title={config.title}
+        message={config.message}
+        type={config.type}
+      />
     </div>
   );
 }

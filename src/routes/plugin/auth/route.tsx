@@ -1,3 +1,5 @@
+import AlertModal from "@common/components/AlertModal";
+import { useAlertModal } from "@common/hooks/useAlertModal";
 import {
   createFileRoute,
   useSearch,
@@ -27,7 +29,7 @@ export const Route = createFileRoute("/plugin/auth")({
     // 쿼리 파라미터 유효성 검사
     if (!search.user_code) {
       // 근데 어떻게 처리하지?
-      alert("유효한 url이 아닙니다."); // user_code가 없는 경우
+      // alert("유효한 url이 아닙니다."); // user_code가 없는 경우
       throw redirect({ to: "/", search: { next: "/plugin/auth" } });
     }
   },
@@ -41,6 +43,7 @@ function RouteComponent() {
     from: "/plugin/auth",
   }) as SearchParams;
   const navigate = useNavigate();
+  const { isOpen, config, showAlert, closeAlert } = useAlertModal();
 
   useEffect(() => {
     const fetchPluginAuth = async () => {
@@ -51,10 +54,26 @@ function RouteComponent() {
         navigate({ to: "/student/my-places" });
       } catch (error: any) {
         alert("api 요청 실패" + error.message);
+        showAlert({
+          title: "플레이스 연동 실패",
+          message: "네트워크 및 서버 오류 발생",
+          type: "warning",
+        });
         navigate({ to: "/" });
       }
     };
     fetchPluginAuth();
   }, [userCode]);
-  return <div>"플러그인과 인증을 진행 중이에요~"</div>;
+  return (
+    <div>
+      "플러그인과 인증을 진행 중이에요~"
+      <AlertModal
+        isOpen={isOpen}
+        onClose={closeAlert}
+        title={config.title}
+        message={config.message}
+        type={config.type}
+      />
+    </div>
+  );
 }

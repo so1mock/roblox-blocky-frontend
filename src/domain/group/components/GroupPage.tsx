@@ -5,6 +5,8 @@ import { useAuthStore } from "@user/stores/authStore";
 import { useMyGroupsQuery } from "../hooks/useMyGroupsQuery";
 import { useCreateGroupMutation } from "../hooks/useCreateGroupMutation";
 import { useJoinGroupMutation } from "../hooks/useJoinGroupMutation";
+import AlertModal from "@common/components/AlertModal";
+import { useAlertModal } from "@common/hooks/useAlertModal";
 
 const sortOptions = [
   { name: "최신 순", key: "new" },
@@ -13,6 +15,7 @@ const sortOptions = [
 
 function GroupPage() {
   const { userInfo } = useAuthStore();
+  const { isOpen, config, showAlert, closeAlert } = useAlertModal();
   const [selectedSort, setSelectedSort] = useState({
     name: "최신 순",
     key: "new",
@@ -48,9 +51,11 @@ function GroupPage() {
       setNewGroupName("");
       setNewGroupDescription("");
     } catch (e) {
-      if (e instanceof Error) {
-        alert(e.message);
-      }
+      showAlert({
+        title: "그룹",
+        message: "그룹생성에 실패했습니다.",
+        type: "warning",
+      });
     }
   };
 
@@ -62,9 +67,11 @@ function GroupPage() {
       setIsJoinOpen(false);
       setInviteCodeInput("");
     } catch (e) {
-      if (e instanceof Error) {
-        alert(e.message);
-      }
+      showAlert({
+        title: "그룹",
+        message: "그룹가입에 실패했습니다.",
+        type: "warning",
+      });
     }
   };
 
@@ -217,6 +224,13 @@ function GroupPage() {
           </div>
         </div>
       )}
+      <AlertModal
+        isOpen={isOpen}
+        onClose={closeAlert}
+        title={config.title}
+        message={config.message}
+        type={config.type}
+      />
     </div>
   );
 }

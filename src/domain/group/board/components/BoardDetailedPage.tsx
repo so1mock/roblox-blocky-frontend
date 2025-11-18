@@ -6,6 +6,8 @@ import { useAuthStore } from "@user/stores/authStore";
 import { useBoardInfoQuery } from "../hooks/useBoardInfoQuery";
 import { useDeleteBoardMutation } from "../hooks/useDeleteBoardMutation";
 import { DownloadableFileItem } from "@common/components/file/DownloadableFileItem";
+import { useAlertModal } from "@common/hooks/useAlertModal";
+import AlertModal from "@common/components/AlertModal";
 
 function BoardDetailedPage({
   groupUuid,
@@ -16,10 +18,9 @@ function BoardDetailedPage({
 }) {
   const navigate = useNavigate();
   const { userInfo } = useAuthStore();
-  // 예시 데이터
   const { data: boardInfo, error } = useBoardInfoQuery(groupUuid, boardUuid);
-
   const deleteMutation = useDeleteBoardMutation(groupUuid);
+  const { isOpen, config, showAlert, closeAlert } = useAlertModal();
 
   const handleDelete = async () => {
     const ok = confirm("정말 삭제하시겠습니까?");
@@ -28,7 +29,11 @@ function BoardDetailedPage({
       await deleteMutation.mutateAsync(boardUuid);
       navigate({ to: `/teacher/group/${groupUuid}` });
     } catch {
-      alert("삭제에 실패했습니다.");
+      showAlert({
+        title: "게시글",
+        message: "게시글 삭제에 실패했습니다.",
+        type: "warning",
+      });
     }
   };
 
@@ -39,7 +44,11 @@ function BoardDetailedPage({
   };
 
   if (error) {
-    alert("게시글 정보를 불러오지 못했습니다." + error.message);
+    showAlert({
+      title: "게시글",
+      message: "게시글 정보를 불러오지 못했습니다.",
+      type: "warning",
+    });
     navigate({ to: `/teacher/group/${groupUuid}/` });
   }
 
@@ -123,6 +132,13 @@ function BoardDetailedPage({
           />
         </div>
       </div>
+      <AlertModal
+        isOpen={isOpen}
+        onClose={closeAlert}
+        title={config.title}
+        message={config.message}
+        type={config.type}
+      />
     </div>
   );
 }

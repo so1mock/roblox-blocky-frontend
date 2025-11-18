@@ -76,7 +76,6 @@ function MultiFileUploader({
           });
           return fileInfo.attachmentUuid;
         } catch (error) {
-          console.error(error);
           setCountFailedFile((prev) => prev + 1);
           updateFile(id, { status: "failed" });
         } finally {

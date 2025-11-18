@@ -70,7 +70,6 @@ function BlockCodingHeader({
         message: "잘못된 블록 조립은 저장되지 않습니다.",
         type: "error",
       });
-      console.log(e);
     }
   };
   return (

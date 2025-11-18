@@ -77,8 +77,7 @@ export function useBlocklyUI(
           defineVariableBlocks(); // 변수 블록은 로컬에서 정의
           initWorkspace(initToolbox(blockListsByCategory));
         })
-        .catch((e) => {
-          console.error("서버 블록 로딩 실패:", e);
+        .catch(() => {
           setError("서버 블록 로딩 실패.");
         });
     } else {

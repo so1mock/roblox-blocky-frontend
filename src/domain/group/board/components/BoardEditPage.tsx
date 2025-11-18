@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { useBoardInfoQuery } from "../hooks/useBoardInfoQuery";
 import { useUpdateBoardMutation } from "../hooks/useUpdateBoardMutation";
 import type { UploadedFileInfo } from "@common/types/file";
+import AlertModal from "@common/components/AlertModal";
+import { useAlertModal } from "@common/hooks/useAlertModal";
 
 function BoardEditPage({
   groupUuid,
@@ -15,6 +17,7 @@ function BoardEditPage({
   boardUuid: string;
 }) {
   const navigate = useNavigate();
+  const { isOpen, config, showAlert, closeAlert } = useAlertModal();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [attachmentUuids, setAttachmentUuids] = useState<string[]>([]);
@@ -85,7 +88,11 @@ function BoardEditPage({
                 disabled={0 < countUploadingFile || 0 < countFailedFild}
                 handleButtonClick={async () => {
                   if (title.length === 0) {
-                    alert("게시글의 제목은 빈 값일 수 없습니다.");
+                    showAlert({
+                      title: "게시글 수정 실패",
+                      message: "게시글의 제목은 빈 값일 수 없습니다.",
+                      type: "warning",
+                    });
                     return;
                   }
                   await handleEditBoard({
@@ -115,6 +122,13 @@ function BoardEditPage({
           </div>
         </form>
       </div>
+      <AlertModal
+        isOpen={isOpen}
+        onClose={closeAlert}
+        title={config.title}
+        message={config.message}
+        type={config.type}
+      />
     </div>
   );
 }

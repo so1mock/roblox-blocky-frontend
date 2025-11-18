@@ -2,10 +2,13 @@ import { useNavigate } from "@tanstack/react-router";
 import Button from "@common/components/Button";
 import type { GroupSummary } from "../types/group";
 import { useAuthStore } from "@user/stores/authStore";
+import { useAlertModal } from "@common/hooks/useAlertModal";
+import AlertModal from "@common/components/AlertModal";
 
 export function GroupCard({ groupSummary }: { groupSummary: GroupSummary }) {
   const navigate = useNavigate();
   const { userInfo } = useAuthStore();
+  const { isOpen, config, showAlert, closeAlert } = useAlertModal();
 
   const enterGroup = () => {
     if (userInfo?.role === "LEARNER") {
@@ -19,7 +22,11 @@ export function GroupCard({ groupSummary }: { groupSummary: GroupSummary }) {
         params: { groupId: groupSummary.uuid },
       });
     } else {
-      alert("역할 정보가 없습니다. 로그인을 해주십시요");
+      showAlert({
+        title: "로그인",
+        message: "역할 정보가 없습니다. 로그인을 해주십시요.",
+        type: "error",
+      });
     }
   };
 
@@ -45,6 +52,13 @@ export function GroupCard({ groupSummary }: { groupSummary: GroupSummary }) {
           <Button handleButtonClick={enterGroup} text="입장" />
         </div>
       </div>
+      <AlertModal
+        isOpen={isOpen}
+        onClose={closeAlert}
+        title={config.title}
+        message={config.message}
+        type={config.type}
+      />
     </div>
   );
 }

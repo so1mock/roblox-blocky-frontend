@@ -12,42 +12,28 @@ export const useUser = () => {
   const handleSocialLogin = useMutation({
     mutationFn: socialLogin,
     onSuccess: async (data) => {
-      console.log("소셜 로그인 성공" + JSON.stringify(data));
-
       api.defaults.headers.common["Authorization"] =
         `Bearer ${data.auth.accessToken}`;
       try {
         const user = await getUserInfo();
         setAuth(user);
       } catch (error) {
-        console.log(error);
         clearAuth();
       }
-    },
-    onError: (error) => {
-      console.log("소셜 로그인 오류" + error.message);
-      alert("소셜 로그인 오류" + error.message);
     },
   });
 
   const handleLogin = useMutation({
     mutationFn: login,
     onSuccess: async (data) => {
-      console.log("로그인 성공" + JSON.stringify(data));
-
       api.defaults.headers.common["Authorization"] =
         `Bearer ${data.auth.accessToken}`;
       try {
         const user = await getUserInfo();
         setAuth(user);
       } catch (error) {
-        console.log(error);
         clearAuth();
       }
-    },
-    onError: (error) => {
-      console.log("로그인 오류" + error.message);
-      alert("로그인 오류" + error.message);
     },
   });
 
@@ -56,10 +42,6 @@ export const useUser = () => {
     onSuccess: () => {
       clearAuth();
       navigate({ to: "/" });
-    },
-    onError: (error) => {
-      console.log("로그아웃 오류" + error.message);
-      alert("로그아웃 오류" + error.message);
     },
   });
 

@@ -4,10 +4,13 @@ import GroupNav from "./GroupNav";
 import { useAuthStore } from "@user/stores/authStore";
 import { useNavigate } from "@tanstack/react-router";
 import { useGroupDetailQuery } from "../hooks/useGroupDetailQuery";
+import { useAlertModal } from "@common/hooks/useAlertModal";
+import AlertModal from "@common/components/AlertModal";
 
 function GroupDetailedPage({ groupUuid }: { groupUuid: string }) {
   const navigate = useNavigate();
   const { userInfo } = useAuthStore();
+  const { isOpen, config, showAlert, closeAlert } = useAlertModal();
 
   const {
     data: groupInfo,
@@ -17,7 +20,11 @@ function GroupDetailedPage({ groupUuid }: { groupUuid: string }) {
   } = useGroupDetailQuery(groupUuid);
 
   if (isGroupInfoError) {
-    alert("유효하지 않은 반입니다. " + groupInfoError.message);
+    showAlert({
+      title: "반 정보 불러오기 실패",
+      message: "유효하지 않은 반입니다." + groupInfoError.message,
+      type: "error",
+    });
     navigate({
       to: `/${userInfo?.role === "EDUCATOR" ? "teacher" : "student"}/group`,
     });
@@ -65,6 +72,13 @@ function GroupDetailedPage({ groupUuid }: { groupUuid: string }) {
           <Wall groupUuid={groupInfo.groupSummary.uuid} />
         </div>
       </div>
+      <AlertModal
+        isOpen={isOpen}
+        onClose={closeAlert}
+        title={config.title}
+        message={config.message}
+        type={config.type}
+      />
     </div>
   );
 }

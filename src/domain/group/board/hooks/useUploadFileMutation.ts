@@ -22,7 +22,6 @@ export function useUploadFileMutation() {
     },
     onError: (error: unknown) => {
       if (error instanceof Error) {
-        // alert(error.message);
         throw error;
       }
     },

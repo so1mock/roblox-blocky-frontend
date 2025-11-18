@@ -9,7 +9,6 @@ import type { UserRole } from "@user/types/user";
 export const verifyAuth = (requiredRoles: UserRole[] = []) => {
   const { isLogin, userInfo } = useAuthStore.getState();
   if (!isLogin) {
-    alert("로그인이 필요합니다");
     throw redirect({ to: "/", search: { redirect: window.location.pathname } });
   }
 

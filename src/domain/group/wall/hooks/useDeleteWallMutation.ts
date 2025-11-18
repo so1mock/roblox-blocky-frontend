@@ -16,10 +16,5 @@ export const useDeleteWallMutation = (
         queryKey: ["group", groupId, "wall", page, size],
       });
     },
-    onError: (error: unknown) => {
-      if (error instanceof Error) {
-        alert(error.message);
-      }
-    },
   });
 };

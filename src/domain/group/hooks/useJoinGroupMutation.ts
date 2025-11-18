@@ -10,10 +10,5 @@ export const useJoinGroupMutation = () => {
       // 그룹 가입 후, 그룹 목록 자동 갱신
       queryClient.invalidateQueries({ queryKey: ["/groups/me"] });
     },
-    onError: (error: unknown) => {
-      if (error instanceof Error) {
-        alert(error.message);
-      }
-    },
   });
 };
