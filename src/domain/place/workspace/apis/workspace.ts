@@ -67,3 +67,17 @@ export const getStudentWorkspaceDataByPlaceId = async (
     throw e;
   }
 };
+
+export const getLastUpdatedPlaceTime = async (
+  placeId: string,
+): Promise<string> => {
+  try {
+    const response = await api.get(`/place/me/${placeId}/update-time`);
+    return response.data.lastUpdateTime;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw e.message;
+    }
+    throw e;
+  }
+};

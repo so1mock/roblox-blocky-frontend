@@ -4,11 +4,14 @@ import { useBlocklyUI } from "../hooks/useBlocklyUi";
 import WorkspaceExploerer from "../workspace/components/WorkspaceExplorer";
 import BlockCodingHeader from "./BlockCodingHeader";
 import {
+  getLastUpdatedPlaceTime,
   getStudentWorkspaceDataByPlaceId,
   getWorkspaceDataByPlaceId,
 } from "../workspace/apis/workspace";
 import { useWorkspaceDataStore } from "../workspace/stores/useWorkspaceDataStore";
 import VariableCreateModal from "./VariableCreateModal";
+import { useAlertModal } from "@common/hooks/useAlertModal";
+import AlertModal from "@common/components/AlertModal";
 
 function BlockCodingPage({
   placeId,
@@ -32,6 +35,7 @@ function BlockCodingPage({
     },
   );
   const { setWorkspaceData, selectedScript } = useWorkspaceDataStore();
+  const { isOpen, config, showAlert, closeAlert } = useAlertModal();
 
   const handleVariableConfirm = (variableName: string) => {
     if (!workspaceRef.current) return;
@@ -80,17 +84,34 @@ function BlockCodingPage({
 
     const fetchWorkspaceData = async () => {
       try {
-        if (readOnly && studentId) {
-          const data = await getStudentWorkspaceDataByPlaceId(
-            studentId,
-            placeId,
-          );
-          setWorkspaceData(data);
-        } else {
-          const data = await getWorkspaceDataByPlaceId(placeId);
-          setWorkspaceData(data);
-        }
-      } catch (err) {}
+        const currentWorkspaceData =
+          useWorkspaceDataStore.getState().workspaceData;
+        const lastUpdatedTime = await getLastUpdatedPlaceTime(placeId);
+        console.log(lastUpdatedTime);
+        console.log(currentWorkspaceData);
+
+        if (
+          !currentWorkspaceData ||
+          new Date(currentWorkspaceData.placeSummary.lastModifiedAt) <
+            new Date(lastUpdatedTime)
+        )
+          if (readOnly && studentId) {
+            const data = await getStudentWorkspaceDataByPlaceId(
+              studentId,
+              placeId,
+            );
+            setWorkspaceData(data);
+          } else {
+            const data = await getWorkspaceDataByPlaceId(placeId);
+            setWorkspaceData(data);
+          }
+      } catch (err) {
+        showAlert({
+          title: "플레이스 정보 받아오기 실패",
+          message: "플레이스 정보 받아오기 실패하였습니다",
+          type: "warning",
+        });
+      }
     };
 
     if (placeId) {
@@ -149,6 +170,13 @@ function BlockCodingPage({
           setIsVariableModalOpen(false);
         }}
         onConfirm={handleVariableConfirm}
+      />
+      <AlertModal
+        isOpen={isOpen}
+        onClose={closeAlert}
+        title={config.title}
+        message={config.message}
+        type={config.type}
       />
     </div>
   );
