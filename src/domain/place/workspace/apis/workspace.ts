@@ -68,11 +68,28 @@ export const getStudentWorkspaceDataByPlaceId = async (
   }
 };
 
-export const getLastUpdatedPlaceTime = async (
+export const getLastUpdatedMyPlaceTime = async (
   placeId: string,
 ): Promise<string> => {
   try {
     const response = await api.get(`/place/me/${placeId}/update-time`);
+    return response.data.lastUpdateTime;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw e.message;
+    }
+    throw e;
+  }
+};
+
+export const getLastUpdatedPlaceTime = async (
+  studentId: string,
+  placeId: string,
+): Promise<string> => {
+  try {
+    const response = await api.get(
+      `/place/${studentId}/${placeId}/update-time`,
+    );
     return response.data.lastUpdateTime;
   } catch (e) {
     if (e instanceof AxiosError) {

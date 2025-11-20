@@ -4,6 +4,7 @@ import { useBlocklyUI } from "../hooks/useBlocklyUi";
 import WorkspaceExploerer from "../workspace/components/WorkspaceExplorer";
 import BlockCodingHeader from "./BlockCodingHeader";
 import {
+  getLastUpdatedMyPlaceTime,
   getLastUpdatedPlaceTime,
   getStudentWorkspaceDataByPlaceId,
   getWorkspaceDataByPlaceId,
@@ -84,27 +85,37 @@ function BlockCodingPage({
 
     const fetchWorkspaceData = async () => {
       try {
-        const currentWorkspaceData =
-          useWorkspaceDataStore.getState().workspaceData;
-        const lastUpdatedTime = await getLastUpdatedPlaceTime(placeId);
-        console.log(lastUpdatedTime);
-        console.log(currentWorkspaceData);
-
-        if (
-          !currentWorkspaceData ||
-          new Date(currentWorkspaceData.placeSummary.lastModifiedAt) <
-            new Date(lastUpdatedTime)
-        )
-          if (readOnly && studentId) {
+        if (readOnly && studentId) {
+          const currentWorkspaceData =
+            useWorkspaceDataStore.getState().workspaceData;
+          const lastUpdatedTime = await getLastUpdatedPlaceTime(
+            studentId,
+            placeId,
+          );
+          if (
+            !currentWorkspaceData ||
+            new Date(currentWorkspaceData.placeSummary.lastModifiedAt) <
+              new Date(lastUpdatedTime)
+          ) {
             const data = await getStudentWorkspaceDataByPlaceId(
               studentId,
               placeId,
             );
             setWorkspaceData(data);
-          } else {
+          }
+        } else {
+          const currentWorkspaceData =
+            useWorkspaceDataStore.getState().workspaceData;
+          const lastUpdatedTime = await getLastUpdatedMyPlaceTime(placeId);
+          if (
+            !currentWorkspaceData ||
+            new Date(currentWorkspaceData.placeSummary.lastModifiedAt) <
+              new Date(lastUpdatedTime)
+          ) {
             const data = await getWorkspaceDataByPlaceId(placeId);
             setWorkspaceData(data);
           }
+        }
       } catch (err) {
         showAlert({
           title: "플레이스 정보 받아오기 실패",
