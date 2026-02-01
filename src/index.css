@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --color-rbBackground: #fff;
+  --color-rbText: #000;
+  --color-rbHoverText: #fff;
+  --color-rbBlueText: #68a0e9;
+  --color-rbGrayText: #666;
+  --color-rbDeepGrayText: #333;
+  --color-rbBorder: #000;
+
+  --color-rbPointColor: #e63c7a;
+  --color-rbPrimaryColor: #61c1fd;
+  --color-rbDeepPrimaryColor: #4dade3;
+}
+
+/* 다크모드 색상 정의 */
+[data-theme="dark"] {
+}
+
+@keyframes fade-in-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-down {
+  animation: fade-in-down 0.3s ease-out forwards;
+}
+
+/* 마퀴 (오른쪽 → 왼쪽 무한 반복) */
+@keyframes marquee {
+  0% {
+    transform: translateX(180%);
+  }
+  100% {
+    transform: translateX(-180%);
+  }
+}
+
+.animate-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 13s linear infinite;
+}
+
+.write .ql-container .ql-editor {
+  min-height: 400px;
+}
+
+.view .ql-container.ql-snow {
+  border: 0;
+}
