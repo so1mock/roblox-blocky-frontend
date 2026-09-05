@@ -1,0 +1,68 @@
+name: 롤백
+
+# 특정 이미지 버전으로 되돌린다. Actions 화면에서 수동 실행한다.
+#
+# 이미지에는 push 마다 두 종류의 태그가 붙는다.
+#   :dev / :main   최신을 가리키며 push 할 때마다 이동한다
+#   :sha-<7자>     그 커밋의 이미지에 고정된다  <- 롤백 대상
+#
+# 사용 가능한 태그는 아래에서 확인한다.
+#   https://github.com/orgs/so1mock/packages/container/package/coblocks-frontend
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 대상 환경
+        type: choice
+        options: [dev, prod]
+        required: true
+      image_tag:
+        description: "되돌릴 태그 (예: sha-9499900). 최신으로 복귀하려면 dev 또는 main"
+        type: string
+        required: true
+
+jobs:
+  rollback:
+    name: ${{ inputs.environment }} 를 ${{ inputs.image_tag }} 로 전환
+    runs-on: ubuntu-latest
+    concurrency:
+      group: nas-deploy-${{ inputs.environment == 'prod' && 'main' || 'dev' }}
+      cancel-in-progress: false
+
+    steps:
+      - name: NAS 에서 이미지 교체
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.NAS_HOST }}
+          port: ${{ secrets.NAS_PORT }}
+          username: ${{ secrets.NAS_USER }}
+          key: ${{ secrets.NAS_SSH_KEY }}
+          command_timeout: 15m
+          script: |
+            set -e
+            ENV=${{ inputs.environment }}
+            IMG=ghcr.io/so1mock/coblocks-frontend:${{ inputs.image_tag }}
+            DIR=/volume1/docker/coblocks-$ENV
+
+            if [ ! -d "$DIR" ]; then
+              echo "::error::$DIR 가 없습니다."
+              exit 1
+            fi
+
+            if command -v flock >/dev/null 2>&1; then
+              exec 9>"/tmp/coblocks-deploy-$ENV.lock"
+              flock -w 600 9
+            fi
+
+            cd "$DIR"
+            echo "현재: $(grep '^FRONTEND_IMAGE=' .env)"
+
+            # 먼저 받아본다. 없는 태그면 여기서 멈추므로 .env 는 그대로 남는다.
+            sudo /usr/local/bin/docker pull "$IMG"
+
+            sed -i "s|^FRONTEND_IMAGE=.*|FRONTEND_IMAGE=$IMG|" .env
+            echo "변경: $(grep '^FRONTEND_IMAGE=' .env)"
+
+            sudo /usr/local/bin/docker-compose up -d
+            sudo /usr/local/bin/docker-compose ps
