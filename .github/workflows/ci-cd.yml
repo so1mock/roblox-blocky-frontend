@@ -64,3 +64,36 @@ jobs:
             VITE_CLIENT_ID=${{ secrets.VITE_CLIENT_ID }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  deploy:
+    name: NAS 배포
+    needs: image
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    # 같은 스택에 배포가 겹치지 않게 직렬화한다.
+    concurrency:
+      group: nas-deploy-${{ github.ref_name }}
+      cancel-in-progress: false
+
+    steps:
+      - name: NAS에서 이미지 교체
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.NAS_HOST }}
+          port: ${{ secrets.NAS_PORT }}
+          username: ${{ secrets.NAS_USER }}
+          key: ${{ secrets.NAS_SSH_KEY }}
+          # sudo 는 /etc/sudoers.d/coblocks-deploy 에서 docker, docker-compose
+          # 두 실행 파일에만 NOPASSWD 로 허용되어 있다. 규칙과 정확히 일치하도록
+          # 절대 경로로 호출한다 (비대화형 셸은 PATH 가 다를 수 있다).
+          script: |
+            set -e
+            DIR=/volume1/docker/coblocks-${{ github.ref_name == 'main' && 'prod' || 'dev' }}
+            if [ ! -d "$DIR" ]; then
+              echo "::error::$DIR 가 없습니다. 해당 스택을 먼저 구성해야 합니다."
+              exit 1
+            fi
+            cd "$DIR"
+            sudo /usr/local/bin/docker-compose pull
+            sudo /usr/local/bin/docker-compose up -d
+            sudo /usr/local/bin/docker-compose ps
