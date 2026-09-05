@@ -18,15 +18,15 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # 빌드 타임 환경변수 (Vite는 빌드 시점에 값을 번들에 인라인함)
-# VITE_API_BASEURL: nginx가 /api/ 를 backend로 프록시하므로 상대경로 사용 (환경 무관)
-ARG VITE_API_BASEURL=/api
+# VITE_API_BASEURL: 상대경로라 도메인·포트에 의존하지 않는다.
+# 백엔드 매핑이 /api/v1/** 이고 nginx가 경로를 그대로 넘기므로 이 값을 쓴다.
+# 덕분에 같은 이미지를 dev / prod 에 그대로 배포할 수 있다.
+ARG VITE_API_BASEURL=/api/v1
 ARG VITE_AUTHORIZATION_URL=
 ARG VITE_CLIENT_ID=
-ARG VITE_FRONTEND_URL=
 ENV VITE_API_BASEURL=$VITE_API_BASEURL \
     VITE_AUTHORIZATION_URL=$VITE_AUTHORIZATION_URL \
-    VITE_CLIENT_ID=$VITE_CLIENT_ID \
-    VITE_FRONTEND_URL=$VITE_FRONTEND_URL
+    VITE_CLIENT_ID=$VITE_CLIENT_ID
 
 # 프로덕션 빌드
 RUN pnpm run build
