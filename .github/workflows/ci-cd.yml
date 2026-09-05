@@ -58,10 +58,12 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           # VITE_API_BASEURL 은 Dockerfile 기본값(/api/v1)을 그대로 쓴다.
-          # 아래 둘은 공개 정보이며, 비어 있으면 소셜 로그인 버튼만 동작하지 않는다.
+          # Client ID 는 Roblox 앱을 dev/prod 로 나눠 등록했으므로 브랜치에 따라
+          # 다른 값을 넣는다. 브라우저 번들에 노출되는 공개 정보이며,
+          # 비밀에 해당하는 Client Secret 은 백엔드(.env)에서만 다룬다.
           build-args: |
             VITE_AUTHORIZATION_URL=${{ secrets.VITE_AUTHORIZATION_URL }}
-            VITE_CLIENT_ID=${{ secrets.VITE_CLIENT_ID }}
+            VITE_CLIENT_ID=${{ github.ref_name == 'main' && secrets.VITE_CLIENT_ID_PROD || secrets.VITE_CLIENT_ID_DEV }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
