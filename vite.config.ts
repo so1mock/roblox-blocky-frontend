@@ -19,10 +19,12 @@ export default defineConfig({
   ],
   server: {
     proxy: {
+      // NAS dev 서버로 프록시한다. 배포 환경의 nginx와 동일하게 경로를
+      // 그대로 넘기므로(rewrite 없음), VITE_API_BASEURL 은 로컬과 배포가
+      // 모두 /api/v1 로 같다.
       "/api": {
-        target: "https://api.coblocks.net/api/v1",
+        target: "http://183.103.166.253:18000",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
         configure: (proxy) => {
           proxy.on("proxyRes", (proxyRes, req, res) => {
             // 1. 기존 응답 헤더를 가져옵니다.
