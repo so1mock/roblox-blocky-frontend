@@ -90,10 +90,18 @@ jobs:
           # 절대 경로로 호출한다 (비대화형 셸은 PATH 가 다를 수 있다).
           script: |
             set -e
-            DIR=/volume1/docker/coblocks-${{ github.ref_name == 'main' && 'prod' || 'dev' }}
+            ENV=${{ github.ref_name == 'main' && 'prod' || 'dev' }}
+            DIR=/volume1/docker/coblocks-$ENV
             if [ ! -d "$DIR" ]; then
               echo "::error::$DIR 가 없습니다. 해당 스택을 먼저 구성해야 합니다."
               exit 1
+            fi
+            # 백엔드와 프론트엔드 저장소가 같은 스택에 동시에 배포하면
+            # compose 가 컨테이너를 재생성하는 도중 이름이 겹쳐 실패한다.
+            # 스택 단위로 잠금을 걸어 순서대로 처리한다.
+            if command -v flock >/dev/null 2>&1; then
+              exec 9>"/tmp/coblocks-deploy-$ENV.lock"
+              flock -w 600 9
             fi
             cd "$DIR"
             sudo /usr/local/bin/docker-compose pull
