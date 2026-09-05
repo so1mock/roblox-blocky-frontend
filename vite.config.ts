@@ -23,7 +23,7 @@ export default defineConfig({
       // 그대로 넘기므로(rewrite 없음), VITE_API_BASEURL 은 로컬과 배포가
       // 모두 /api/v1 로 같다.
       "/api": {
-        target: "http://183.103.166.253:18000",
+        target: "https://dev.coblocks.net",
         changeOrigin: true,
         configure: (proxy) => {
           proxy.on("proxyRes", (proxyRes, req, res) => {
