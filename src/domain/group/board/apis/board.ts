@@ -5,6 +5,7 @@ import type {
   CreateBoardInfo,
   UpdateBoardInfo,
 } from "../types/board";
+import { BOARD_ENDPOINT } from "../constants/endpoint";
 
 // 게시글 생성
 export const createBoard = async (
@@ -12,7 +13,7 @@ export const createBoard = async (
   boardInfo: CreateBoardInfo,
 ): Promise<boolean> => {
   try {
-    const response = await api.post(`/groups/${groupUuid}/boards`, boardInfo);
+    const response = await api.post(BOARD_ENDPOINT.LIST(groupUuid), boardInfo);
     return 200 <= response.status && response.status < 300;
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -29,9 +30,9 @@ export const getGroupBoards = async (
   size: number = 10,
 ) => {
   try {
-    const response = await api.get(
-      `/groups/${groupUuid}/boards?page=${page}&size=${size}`,
-    );
+    const response = await api.get(BOARD_ENDPOINT.LIST(groupUuid), {
+      params: { page, size },
+    });
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -47,7 +48,7 @@ export const getBoardInfo = async (
   boardUuid: string,
 ): Promise<BoardInfo> => {
   try {
-    const response = await api.get(`/groups/${groupUuid}/boards/${boardUuid}`);
+    const response = await api.get(BOARD_ENDPOINT.DETAIL(groupUuid, boardUuid));
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -65,7 +66,7 @@ export const updateBoard = async (
 ) => {
   try {
     const response = await api.patch(
-      `/groups/${groupUuid}/boards/${boardUuid}`,
+      BOARD_ENDPOINT.DETAIL(groupUuid, boardUuid),
       boardInfo,
     );
     return 200 <= response.status && response.status < 300;
@@ -84,7 +85,7 @@ export const deleteBoard = async (
 ): Promise<boolean> => {
   try {
     const response = await api.delete(
-      `/groups/${groupUuid}/boards/${boardUuid}`,
+      BOARD_ENDPOINT.DETAIL(groupUuid, boardUuid),
     );
     return 200 <= response.status && response.status < 300;
   } catch (error) {

@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 import { api } from "../../common/apis/axios";
+import { BLOCK_ENDPOINT } from "@place/constants/endpoint";
 import type {
   BlockComponent,
   BlockListByCategory,
@@ -37,14 +38,16 @@ export type ServerBlockListByCategory = {
 
 export const getBlockList = async (): Promise<BlockListByCategory[]> => {
   try {
-    const { data } = await api.get<ServerBlockListByCategory[]>("/block/list");
+    const { data } = await api.get<ServerBlockListByCategory[]>(
+      BLOCK_ENDPOINT.LIST,
+    );
     const { data: categoryListResponse } = await api.get(
-      "/block/custom/categories",
+      BLOCK_ENDPOINT.CUSTOM_CATEGORIES,
     );
 
     for (const categoryResponse of categoryListResponse.categories) {
       const { data: category } = await api.get<ServerBlockListByCategory>(
-        `/block/list/${categoryResponse.name}`,
+        BLOCK_ENDPOINT.LIST_BY_CATEGORY(categoryResponse.name),
       );
 
       data.push(category);
