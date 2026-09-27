@@ -3,13 +3,9 @@ import type {
   BlockScript,
   WorkspaceObject,
 } from "../workspace/types/workspace";
-import {
-  getWorkspaceDataByPlaceId,
-  saveBlockScript,
-} from "../workspace/apis/workspace";
+import { useSaveBlockScriptMutation } from "../workspace/hooks/useSaveBlockScriptMutation";
 import { useState } from "react";
 import BlockScriptToast from "./BlockScriptToast";
-import { useWorkspaceDataStore } from "../workspace/stores/useWorkspaceDataStore";
 import { useAlertModal } from "@common/hooks/useAlertModal";
 import AlertModal from "@common/components/AlertModal";
 
@@ -24,7 +20,7 @@ function BlockCodingHeader({
   workspaceRef: React.RefObject<Blockly.Workspace | null>;
   readOnly?: boolean;
 }) {
-  const { setWorkspaceData } = useWorkspaceDataStore();
+  const { mutateAsync: saveBlockScript } = useSaveBlockScriptMutation();
   const { isOpen, config, showAlert, closeAlert } = useAlertModal();
   const [convertedScript, setConvertedScript] = useState<string | null>(null);
 
@@ -51,14 +47,11 @@ function BlockCodingHeader({
     }
     try {
       const state = Blockly.serialization.workspaces.save(workspaceRef.current);
-      const convertedScriptResponse = await saveBlockScript(
-        placeId,
-        selectedScript.uuid,
-        state as BlockScript,
-      );
-
-      const data = await getWorkspaceDataByPlaceId(placeId);
-      setWorkspaceData(data);
+      const convertedScriptResponse = await saveBlockScript({
+        placeUuid: placeId,
+        objectUuid: selectedScript.uuid,
+        blockScript: state as BlockScript,
+      });
 
       setConvertedScript(convertedScriptResponse.content);
       setTimeout(() => {
