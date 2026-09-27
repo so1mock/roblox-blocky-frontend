@@ -3,8 +3,8 @@ import type { PlaceSummary } from "@place/types/place";
 import { PlaceEditingOption } from "./PlaceEditingOption";
 import { formatIsoStringToDate } from "../../common/utils/formatIsoStringToDate";
 import Button from "@common/components/Button";
-import { useUploadPlaceThumbnailMutation } from "@myPlace/hooks/useUpdatePlaceThumbnailMutation";
-import { useUpdatePlaceInfoMutaton } from "@myPlace/hooks/useUpdatePlaceInfoMutaton";
+import { useUploadPlaceThumbnailMutation } from "@myPlace/hooks/useUploadPlaceThumbnailMutation";
+import { useUpdatePlaceInfoMutation } from "@myPlace/hooks/useUpdatePlaceInfoMutation";
 import { useDeletePlaceMutation } from "@myPlace/hooks/useDeletePlaceMutation";
 
 interface PlaceCardProps {
@@ -19,7 +19,7 @@ export function PlaceCard({ place }: PlaceCardProps) {
   const {
     mutateAsync: updatePlaceInfoMutation,
     isPending: isUpdatingPlaceInfo,
-  } = useUpdatePlaceInfoMutaton();
+  } = useUpdatePlaceInfoMutation();
   const { mutateAsync: deletePlaceMutation, isPending: isDeletingPlace } =
     useDeletePlaceMutation();
 

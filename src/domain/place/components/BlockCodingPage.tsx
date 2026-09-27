@@ -1,7 +1,7 @@
 import * as Blockly from "blockly";
 import { useEffect, useRef, useState } from "react";
-import { useBlocklyUI } from "../hooks/useBlocklyUi";
-import WorkspaceExploerer from "../workspace/components/WorkspaceExplorer";
+import { useBlocklyUI } from "../hooks/useBlocklyUI";
+import WorkspaceExplorer from "../workspace/components/WorkspaceExplorer";
 import BlockCodingHeader from "./BlockCodingHeader";
 import { useWorkspaceData } from "../workspace/hooks/useWorkspaceData";
 import { useWorkspaceDataStore } from "../workspace/stores/useWorkspaceDataStore";
@@ -99,7 +99,7 @@ function BlockCodingPage({
     <div className="flex bg-gray-100 h-screen">
       {/* 왼쪽 사이드바 - 워크스페이스 탐색기 */}
       <aside className="w-80 bg-white border-r border-gray-200">
-        <WorkspaceExploerer placeId={placeId} readOnly={readOnly} />
+        <WorkspaceExplorer placeId={placeId} readOnly={readOnly} />
       </aside>
       {/* 메인 영역 */}
       <div className="flex-1 flex flex-col">

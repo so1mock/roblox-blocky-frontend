@@ -1,7 +1,7 @@
 import { useWorkspaceDataStore } from "../stores/useWorkspaceDataStore";
 import WorkspaceTreeItem from "./WorkspaceTreeItem";
 
-function WorkspaceExploerer({
+function WorkspaceExplorer({
   placeId,
   readOnly = false,
 }: {
@@ -53,4 +53,4 @@ function WorkspaceExploerer({
   );
 }
 
-export default WorkspaceExploerer;
+export default WorkspaceExplorer;

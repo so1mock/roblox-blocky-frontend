@@ -4,7 +4,7 @@ import UserListItem from "./UserListItem";
 import Button from "@common/components/Button";
 import { useCreateInviteCodeMutation } from "../hooks/useCreateInviteCodeMutation";
 import { AxiosError } from "axios";
-import { useGroupMembersQuery } from "../hooks/useGroupMemberQuery";
+import { useGroupMembersQuery } from "../hooks/useGroupMembersQuery";
 
 function UserBoard({ groupUuid }: { groupUuid: string }) {
   const [isOpen, setIsOpen] = useState(false);

@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updatePlace } from "@myPlace/apis/place";
 import { MY_PLACE_QUERY_KEY } from "@myPlace/constants/queryKey";
 
-export const useUpdatePlaceInfoMutaton = () => {
+export const useUpdatePlaceInfoMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
