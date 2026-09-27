@@ -3,6 +3,7 @@ import type { ImageFileType } from "@common/types/image";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getGroupIconUploadUrl } from "../apis/group";
 import { validateImageExtension } from "@common/utils/validateImageExtension";
+import { GROUP_QUERY_KEY } from "../constants/queryKey";
 
 export const useUpdateGroupIconMutation = (uuid: string) => {
   const queryClient = useQueryClient();
@@ -18,7 +19,9 @@ export const useUpdateGroupIconMutation = (uuid: string) => {
       await uploadFile(url, file);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["group", uuid] });
+      // 아이콘은 상세 화면과 내 그룹 목록 양쪽에 보인다
+      queryClient.invalidateQueries({ queryKey: GROUP_QUERY_KEY.detail(uuid) });
+      queryClient.invalidateQueries({ queryKey: GROUP_QUERY_KEY.myList() });
     },
   });
 };

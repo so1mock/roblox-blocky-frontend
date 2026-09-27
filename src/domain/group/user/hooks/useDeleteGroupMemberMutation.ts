@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteGroupMember } from "../apis/user";
+import { GROUP_MEMBER_QUERY_KEY } from "../constants/queryKey";
 
 export const useDeleteGroupMemberMutation = (groupUuid: string) => {
   const queryClient = useQueryClient();
@@ -9,7 +10,7 @@ export const useDeleteGroupMemberMutation = (groupUuid: string) => {
       deleteGroupMember(groupUuid, memberUuid),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["groups", groupUuid, "members"],
+        queryKey: GROUP_MEMBER_QUERY_KEY.all(groupUuid),
       });
     },
   });

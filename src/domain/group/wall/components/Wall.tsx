@@ -19,11 +19,7 @@ function Wall({ groupUuid }: { groupUuid: string }) {
   return (
     <div>
       <span className="font-bold text-2xl">담벼락</span>
-      <GroupWallCreateForm
-        groupUuid={groupUuid}
-        currentPageNumber={(walls?.currentPageNumber ?? 0) + 1}
-        pageSize={PAGE_SIZE}
-      />
+      <GroupWallCreateForm groupUuid={groupUuid} />
 
       {isGroupWallLoading && <div>로딩 중...</div>}
 
@@ -33,13 +29,7 @@ function Wall({ groupUuid }: { groupUuid: string }) {
 
       {walls !== undefined &&
         walls.wallMessages.map((wall) => (
-          <GroupWallItem
-            key={wall.uuid}
-            wallInfo={wall}
-            groupId={groupUuid}
-            currentPageNumber={walls.currentPageNumber + 1}
-            pageSize={PAGE_SIZE}
-          />
+          <GroupWallItem key={wall.uuid} wallInfo={wall} groupId={groupUuid} />
         ))}
 
       {walls !== undefined && walls.totalPages > 1 && (

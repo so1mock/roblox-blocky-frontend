@@ -1,19 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteWall } from "../apis/wall";
+import { WALL_QUERY_KEY } from "../constants/queryKey";
 
-export const useDeleteWallMutation = (
-  groupId: string,
-  page: number,
-  size: number,
-) => {
+export const useDeleteWallMutation = (groupUuid: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (uuid: string) => deleteWall(uuid),
     onSuccess: () => {
-      // 그룹 가입 후, 그룹 목록 자동 갱신
+      // 글이 줄면 페이지 구성이 통째로 밀리므로 모든 페이지를 무효화한다
       queryClient.invalidateQueries({
-        queryKey: ["group", groupId, "wall", page, size],
+        queryKey: WALL_QUERY_KEY.all(groupUuid),
       });
     },
   });
