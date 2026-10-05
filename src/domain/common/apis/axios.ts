@@ -1,5 +1,6 @@
-import axios from "axios";
-import { refreshToken } from "@user/apis/user.ts";
+import axios, { type InternalAxiosRequestConfig } from "axios";
+import { refreshToken } from "@user/apis/refresh";
+import { USER_ENDPOINT } from "@user/constants/endpoint";
 import { useAuthStore } from "@user/stores/authStore";
 
 export const api = axios.create({
@@ -11,6 +12,30 @@ export const api = axios.create({
   },
 });
 
+// 액세스 토큰은 메모리(인스턴스 기본 헤더)에만 둔다.
+// null 을 넘기면 헤더를 지운다 — 로그아웃 후에도 옛 토큰이 실려 나가지 않게 한다.
+export const setAccessToken = (token: string | null) => {
+  if (token) {
+    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  } else {
+    delete api.defaults.headers.common["Authorization"];
+  }
+};
+
+// 인증 자체를 수행하는 요청들. 여기서 401 은 "토큰 만료" 가 아니라
+// "자격 증명이 틀렸다" 는 뜻이므로 토큰 갱신 흐름을 타면 안 된다.
+// (비밀번호 오타에 로그아웃되는 문제를 막는다)
+const AUTH_REQUEST_PATHS: string[] = [
+  USER_ENDPOINT.LOCAL_LOGIN,
+  USER_ENDPOINT.SOCIAL_LOGIN,
+  USER_ENDPOINT.LOGOUT,
+];
+
+const isAuthRequest = (url?: string) =>
+  !!url && AUTH_REQUEST_PATHS.some((path) => url.startsWith(path));
+
+type RetriableRequest = InternalAxiosRequestConfig & { _retry?: boolean };
+
 interface FailedRequest {
   resolve: (token: string) => void;
   reject: (error: unknown) => void;
@@ -19,79 +44,69 @@ interface FailedRequest {
 let isRefreshing: boolean = false;
 let failedQueue: FailedRequest[] = [];
 
-// // failedQueue 에 있는 요청을 현재 토큰 상태에 따라 처리?
-// // 원래는 진작에 reject 했어야 하는 걸 일단은 토큰때문일 수 있으까 잠시 미뤄뒀던 것들
+// 갱신이 끝날 때까지 미뤄둔 요청들을 결과에 따라 처리한다
 const processQueue = (error: unknown, token: string | null = null) => {
   failedQueue.forEach((request) => {
-    if (error || token === null)
-      request.reject(error); // 이제 진짜로 reject 처리
+    if (error || token === null) request.reject(error);
     else request.resolve(token);
   });
   failedQueue = [];
 };
 
-// api.interceptors.request.use((config) => {
-//   console.log(
-//     "[API Request] ",
-//     config.method,
-//     config.url,
-//     config.headers.Authorization,
-//   );
-//   return config;
-// });
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const originalRequest = error.config;
+    const originalRequest = error.config as RetriableRequest | undefined;
 
-    if (error.response.status == 401) {
-      if (originalRequest._retry) {
-        // 이미 리프레시 토큰을 통한 재요청을 시도해본 경우 -> 리프레시 토큰이 만료됐다는 뜻
-        // _retry는 원래는 존재하지 않고 우리가 추가한 프로퍼티 이다.
-        useAuthStore.getState().clearAuth(); // 로그인 상태 false로 변경
-        setTimeout(() => window.location.reload(), 0);
-        return Promise.reject(error);
-      }
+    // 네트워크 오류·타임아웃이면 response 자체가 없다.
+    // 토큰 만료가 아닌 에러는 전부 그대로 호출부로 넘긴다.
+    // (여기서 반환값 없이 끝내면 Promise 가 undefined 로 resolve 되어
+    //  서버가 보낸 에러 메시지가 통째로 사라진다)
+    if (
+      error.response?.status !== 401 ||
+      !originalRequest ||
+      isAuthRequest(originalRequest.url)
+    ) {
+      return Promise.reject(error);
+    }
 
-      // _retry 가 존재하지 않는다면 refresh 토큰을 사용해 새로운 토큰을 발급받는다.
-      originalRequest._retry = true;
+    if (originalRequest._retry) {
+      // 갱신 후 재요청했는데 또 401 -> 리프레시 토큰도 만료됐다
+      setAccessToken(null);
+      useAuthStore.getState().clearAuth();
+      setTimeout(() => window.location.reload(), 0);
+      return Promise.reject(error);
+    }
+    originalRequest._retry = true;
 
-      // 이미 리프레시 토큰을 통한 재요청이 진행 중이라면 그냥 failedQueue에 추가
-      if (isRefreshing) {
-        // processQueue가 이미 호출 중인 경우
-
-        // 지연된 요청들은 처음부터 큐에 이런 방식으로 호출된다.
-        return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject });
-        })
-          .then((token) => {
-            // processQueue 에서 매개변수로 쓰는 토큰
-            originalRequest.headers["Authorization"] = `Bearer ${token}`; // 이미 요청된 요청이기 때문에 토큰을 직접 수정해 줘야 함
-            return api(originalRequest);
-          })
-          .catch((error) => Promise.reject(error));
-      }
-
-      // 리프레시 요청이 진행 중이 아니라면 본격적으로 리프레시 요청 진행
-      isRefreshing = true;
-      try {
-        const response = await refreshToken();
-        // console.log("성공");
-        const newToken = response.auth.accessToken;
-        api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
-        // data에서 받아온 데이터로 유저 정보 다시 초기화 시키기
-        useAuthStore.getState().setAuth(response.info);
-        processQueue(null, newToken); // 전역에 토큰이 있는데 굳이 매개변수로 전달해야 할까에 대한 고민
-
-        originalRequest.headers["Authorization"] = `Bearer ${newToken}`; // 이미 요청된 요청이기 때문에 토큰을 직접 수정해 줘야 함
+    // 이미 갱신이 진행 중이면 끝날 때까지 기다렸다가 재요청한다
+    if (isRefreshing) {
+      return new Promise<string>((resolve, reject) => {
+        failedQueue.push({ resolve, reject });
+      }).then((token) => {
+        originalRequest.headers["Authorization"] = `Bearer ${token}`;
         return api(originalRequest);
-      } catch (error) {
-        processQueue(error, null);
-        useAuthStore.getState().clearAuth(); // 로그인 상태 false로 변경
-        return Promise.reject(error);
-      } finally {
-        isRefreshing = false;
-      }
+      });
+    }
+
+    isRefreshing = true;
+    try {
+      const response = await refreshToken();
+      const newToken = response.auth.accessToken;
+
+      setAccessToken(newToken);
+      useAuthStore.getState().setAuth(response.info);
+      processQueue(null, newToken);
+
+      originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+      return api(originalRequest);
+    } catch (refreshError) {
+      processQueue(refreshError, null);
+      setAccessToken(null);
+      useAuthStore.getState().clearAuth();
+      return Promise.reject(refreshError);
+    } finally {
+      isRefreshing = false;
     }
   },
 );

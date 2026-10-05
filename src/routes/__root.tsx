@@ -1,8 +1,8 @@
-import { api } from "@common/apis/axios";
+import { setAccessToken } from "@common/apis/axios";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { refreshToken } from "@user/apis/user";
+import { refreshToken } from "@user/apis/refresh";
 import { useAuthStore } from "@user/stores/authStore";
 
 const queryClient = new QueryClient({
@@ -19,10 +19,10 @@ export const Route = createRootRoute({
 
     try {
       const response = await refreshToken();
-      api.defaults.headers.common["Authorization"] =
-        `Bearer ${response.auth.accessToken}`;
+      setAccessToken(response.auth.accessToken);
       setAuth(response.info);
-    } catch (error) {
+    } catch {
+      setAccessToken(null);
       clearAuth();
     }
   },

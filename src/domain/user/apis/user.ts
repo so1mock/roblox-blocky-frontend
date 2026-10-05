@@ -1,14 +1,9 @@
 import { type UserInfo, type Auth } from "../types/user.ts";
 import { api } from "../../common/apis/axios.ts";
 import { USER_ENDPOINT } from "../constants/endpoint.ts";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 
 export type LoginResponse = {
-  info: UserInfo;
-  auth: Auth;
-};
-
-export type RefreshTokenResponse = {
   info: UserInfo;
   auth: Auth;
 };
@@ -78,35 +73,6 @@ export const getUserInfo = async (): Promise<UserInfo> => {
 export const logout = async (): Promise<void> => {
   try {
     await api.post(USER_ENDPOINT.LOGOUT);
-  } catch (e) {
-    if (e instanceof AxiosError) {
-      throw e;
-    }
-    throw e;
-  }
-};
-
-// refreshApi.ts 요청 전용 axios 인스턴스
-const refreshApi = axios.create({
-  baseURL: import.meta.env.VITE_API_BASEURL,
-  withCredentials: true,
-  timeout: 10000,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-// 토큰 리프레시 요청
-export const refreshToken = async () => {
-  try {
-    const response = await refreshApi.post(USER_ENDPOINT.REFRESH);
-    const { token, info } = response.data;
-    return {
-      info: info,
-      auth: {
-        accessToken: token,
-      },
-    };
   } catch (e) {
     if (e instanceof AxiosError) {
       throw e;
