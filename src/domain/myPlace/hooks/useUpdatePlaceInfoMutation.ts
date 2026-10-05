@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updatePlace } from "@myPlace/apis/place";
+import { MY_PLACE_QUERY_KEY } from "@myPlace/constants/queryKey";
 
-export const useUpdatePlaceInfoMutaton = () => {
+export const useUpdatePlaceInfoMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -19,7 +20,7 @@ export const useUpdatePlaceInfoMutaton = () => {
       }),
     onSuccess: () => {
       // 플레이스 정보 수정 후, 플레이스 목록 자동 갱신
-      queryClient.invalidateQueries({ queryKey: ["/places/me"] });
+      queryClient.invalidateQueries({ queryKey: MY_PLACE_QUERY_KEY.list() });
     },
   });
 };

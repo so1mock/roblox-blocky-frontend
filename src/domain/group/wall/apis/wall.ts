@@ -2,6 +2,7 @@ import { api } from "@common/apis/axios";
 import type { WallInfoPagination } from "../types/wall";
 import { AxiosError } from "axios";
 import type { UserRole } from "@user/types/user";
+import { WALL_ENDPOINT } from "../constants/endpoint";
 
 // 그룹 내 담벼락 목록 조회
 // Backend returns a wrapper with paging. Map to WallInfo[].
@@ -24,9 +25,9 @@ export const getGroupWalls = async (
   size: number = 10,
 ): Promise<WallInfoPagination> => {
   try {
-    const response = await api.get(
-      `/groups/${groupUuid}/wall/messages?page=${page}&size=${size}`,
-    );
+    const response = await api.get(WALL_ENDPOINT.MESSAGES(groupUuid), {
+      params: { page, size },
+    });
     const data = response.data;
     return {
       ...data,
@@ -58,7 +59,7 @@ export const createWall = async ({
   content: string;
 }) => {
   try {
-    const response = await api.post(`/groups/${groupUuid}/wall/messages`, {
+    const response = await api.post(WALL_ENDPOINT.MESSAGES(groupUuid), {
       content,
     });
     return 200 <= response.status && response.status < 300;
@@ -79,7 +80,7 @@ export const editWall = async ({
   content: string;
 }) => {
   try {
-    const response = await api.patch(`/groups/wall/message/${messageUuid}`, {
+    const response = await api.patch(WALL_ENDPOINT.MESSAGE(messageUuid), {
       content,
     });
     return 200 <= response.status && response.status < 300;
@@ -94,7 +95,7 @@ export const editWall = async ({
 // 담벼락 삭제
 export const deleteWall = async (messageId: string) => {
   try {
-    const response = await api.delete(`groups/wall/message/${messageId}`);
+    const response = await api.delete(WALL_ENDPOINT.MESSAGE(messageId));
     return 200 <= response.data.status && response.data.status < 300;
   } catch (e) {
     if (e instanceof AxiosError) {

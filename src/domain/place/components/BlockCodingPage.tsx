@@ -1,14 +1,9 @@
 import * as Blockly from "blockly";
 import { useEffect, useRef, useState } from "react";
-import { useBlocklyUI } from "../hooks/useBlocklyUi";
-import WorkspaceExploerer from "../workspace/components/WorkspaceExplorer";
+import { useBlocklyUI } from "../hooks/useBlocklyUI";
+import WorkspaceExplorer from "../workspace/components/WorkspaceExplorer";
 import BlockCodingHeader from "./BlockCodingHeader";
-import {
-  getLastUpdatedMyPlaceTime,
-  getLastUpdatedPlaceTime,
-  getStudentWorkspaceDataByPlaceId,
-  getWorkspaceDataByPlaceId,
-} from "../workspace/apis/workspace";
+import { useWorkspaceData } from "../workspace/hooks/useWorkspaceData";
 import { useWorkspaceDataStore } from "../workspace/stores/useWorkspaceDataStore";
 import VariableCreateModal from "./VariableCreateModal";
 import { useAlertModal } from "@common/hooks/useAlertModal";
@@ -37,6 +32,12 @@ function BlockCodingPage({
   );
   const { setWorkspaceData, selectedScript } = useWorkspaceDataStore();
   const { isOpen, config, showAlert, closeAlert } = useAlertModal();
+
+  const { workspaceData, isError: isWorkspaceError } = useWorkspaceData(
+    placeId,
+    studentId,
+    readOnly,
+  );
 
   const handleVariableConfirm = (variableName: string) => {
     if (!workspaceRef.current) return;
@@ -80,66 +81,25 @@ function BlockCodingPage({
     Blockly.serialization.workspaces.load(blockState, workspaceRef.current);
   }, [selectedScript]);
 
+  // 쿼리 결과를 스토어로 넘겨, 하위 컴포넌트는 기존처럼 스토어만 바라보게 한다
   useEffect(() => {
-    let intervalId: number;
+    if (workspaceData) setWorkspaceData(workspaceData);
+  }, [workspaceData, setWorkspaceData]);
 
-    const fetchWorkspaceData = async () => {
-      try {
-        if (readOnly && studentId) {
-          const currentWorkspaceData =
-            useWorkspaceDataStore.getState().workspaceData;
-          const lastUpdatedTime = await getLastUpdatedPlaceTime(
-            studentId,
-            placeId,
-          );
-          if (
-            !currentWorkspaceData ||
-            new Date(currentWorkspaceData.placeSummary.lastModifiedAt) <
-              new Date(lastUpdatedTime)
-          ) {
-            const data = await getStudentWorkspaceDataByPlaceId(
-              studentId,
-              placeId,
-            );
-            setWorkspaceData(data);
-          }
-        } else {
-          const currentWorkspaceData =
-            useWorkspaceDataStore.getState().workspaceData;
-          const lastUpdatedTime = await getLastUpdatedMyPlaceTime(placeId);
-          if (
-            !currentWorkspaceData ||
-            new Date(currentWorkspaceData.placeSummary.lastModifiedAt) <
-              new Date(lastUpdatedTime)
-          ) {
-            const data = await getWorkspaceDataByPlaceId(placeId);
-            setWorkspaceData(data);
-          }
-        }
-      } catch (err) {
-        showAlert({
-          title: "플레이스 정보 받아오기 실패",
-          message: "플레이스 정보 받아오기 실패하였습니다",
-          type: "warning",
-        });
-      }
-    };
-
-    if (placeId) {
-      fetchWorkspaceData();
-      intervalId = setInterval(fetchWorkspaceData, 5000);
-    }
-
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [placeId]);
+  useEffect(() => {
+    if (!isWorkspaceError) return;
+    showAlert({
+      title: "플레이스 정보 받아오기 실패",
+      message: "플레이스 정보 받아오기 실패하였습니다",
+      type: "warning",
+    });
+  }, [isWorkspaceError]);
 
   return (
     <div className="flex bg-gray-100 h-screen">
       {/* 왼쪽 사이드바 - 워크스페이스 탐색기 */}
       <aside className="w-80 bg-white border-r border-gray-200">
-        <WorkspaceExploerer placeId={placeId} readOnly={readOnly} />
+        <WorkspaceExplorer placeId={placeId} readOnly={readOnly} />
       </aside>
       {/* 메인 영역 */}
       <div className="flex-1 flex flex-col">

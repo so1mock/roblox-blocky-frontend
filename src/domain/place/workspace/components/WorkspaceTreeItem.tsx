@@ -1,10 +1,7 @@
 import { useState } from "react";
 import type { WorkspaceObject } from "../types/workspace";
 import { getIcon } from "../utils/getIcon";
-import {
-  getWorkspaceDataByPlaceId,
-  toggleBlockScriptStatus,
-} from "../apis/workspace";
+import { useToggleBlockScriptStatusMutation } from "../hooks/useToggleBlockScriptStatusMutation";
 import { useWorkspaceDataStore } from "../stores/useWorkspaceDataStore";
 
 function WorkspaceTreeItem({
@@ -18,8 +15,9 @@ function WorkspaceTreeItem({
   level: number;
   readOnly: boolean;
 }) {
-  const { setWorkspaceData, selectedScript, setSelectedScript } =
-    useWorkspaceDataStore();
+  const { selectedScript, setSelectedScript } = useWorkspaceDataStore();
+  const { mutate: toggleBlockScriptStatus } =
+    useToggleBlockScriptStatusMutation();
   const [isExpanded, setIsExpanded] = useState(level < 2);
 
   const hasChildren = object.children && object.children.length > 0;
@@ -40,24 +38,18 @@ function WorkspaceTreeItem({
     else setSelectedScript(object);
   };
 
-  const handleToggleBlockScriptStatus = async (event: React.MouseEvent) => {
+  const handleToggleBlockScriptStatus = (event: React.MouseEvent) => {
     event.stopPropagation();
     if (readOnly) {
       return;
     }
     if (!isScript) return;
 
-    try {
-      const newStatus = object.isBlockScriptEnabled ? false : true;
-      await toggleBlockScriptStatus(
-        placeId,
-        object.uuid,
-        newStatus ? "ENABLED" : "DISABLED",
-      );
-
-      const data = await getWorkspaceDataByPlaceId(placeId);
-      setWorkspaceData(data);
-    } catch (error) {}
+    toggleBlockScriptStatus({
+      placeUuid: placeId,
+      objectUuid: object.uuid,
+      status: object.isBlockScriptEnabled ? "DISABLED" : "ENABLED",
+    });
   };
 
   return (

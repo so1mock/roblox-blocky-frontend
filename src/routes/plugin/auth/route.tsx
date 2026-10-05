@@ -6,7 +6,7 @@ import {
   redirect,
   useNavigate,
 } from "@tanstack/react-router";
-import { getPluginAuth } from "@user/apis/auth";
+import { usePluginAuthMutation } from "@user/hooks/usePluginAuthMutation";
 import { verifyAuth } from "@user/utils/authGuard";
 import { useEffect } from "react";
 
@@ -44,16 +44,14 @@ function RouteComponent() {
   }) as SearchParams;
   const navigate = useNavigate();
   const { isOpen, config, showAlert, closeAlert } = useAlertModal();
+  const { mutateAsync: verifyPluginAuth } = usePluginAuthMutation();
 
   useEffect(() => {
     const fetchPluginAuth = async () => {
       try {
-        // const response = await getPluginAuth(String(userCode));
-        // alert("인증에 성공했어요~" + JSON.stringify(response));
-        await getPluginAuth(String(userCode));
+        await verifyPluginAuth(String(userCode));
         navigate({ to: "/student/my-places" });
-      } catch (error: any) {
-        alert("api 요청 실패" + error.message);
+      } catch {
         showAlert({
           title: "플레이스 연동 실패",
           message: "네트워크 및 서버 오류 발생",

@@ -1,5 +1,6 @@
 import { type UserInfo, type Auth } from "../types/user.ts";
 import { api } from "../../common/apis/axios.ts";
+import { USER_ENDPOINT } from "../constants/endpoint.ts";
 import axios, { AxiosError } from "axios";
 
 export type LoginResponse = {
@@ -15,7 +16,7 @@ export type RefreshTokenResponse = {
 // 소셜로그인에서 얻은 코드를 통해서 소셜 로그인 진행
 export const socialLogin = async (code: string): Promise<LoginResponse> => {
   try {
-    const response = await api.post("/oauth2/roblox/callback", { code: code });
+    const response = await api.post(USER_ENDPOINT.SOCIAL_LOGIN, { code: code });
     const { token, info } = response.data;
     return {
       info: info,
@@ -40,7 +41,7 @@ export const login = async ({
   password: string;
 }) => {
   try {
-    const response = await api.post("local-auth", {
+    const response = await api.post(USER_ENDPOINT.LOCAL_LOGIN, {
       username: username,
       password: password,
     });
@@ -62,7 +63,7 @@ export const login = async ({
 // 사용자 정보 조회
 export const getUserInfo = async (): Promise<UserInfo> => {
   try {
-    const response = await api.get("/member/me");
+    const response = await api.get(USER_ENDPOINT.ME);
     const info: UserInfo = response.data;
     return info;
   } catch (e) {
@@ -76,7 +77,7 @@ export const getUserInfo = async (): Promise<UserInfo> => {
 // 로그아웃
 export const logout = async (): Promise<void> => {
   try {
-    await api.post("/member/logout");
+    await api.post(USER_ENDPOINT.LOGOUT);
   } catch (e) {
     if (e instanceof AxiosError) {
       throw e;
@@ -98,7 +99,7 @@ const refreshApi = axios.create({
 // 토큰 리프레시 요청
 export const refreshToken = async () => {
   try {
-    const response = await refreshApi.post("/member/refresh");
+    const response = await refreshApi.post(USER_ENDPOINT.REFRESH);
     const { token, info } = response.data;
     return {
       info: info,

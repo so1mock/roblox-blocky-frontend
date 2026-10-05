@@ -1,0 +1,1 @@
+export const WORKSPACE_POLLING_INTERVAL = 5000;

@@ -4,22 +4,14 @@ import { useCreateWallMutation } from "../hooks/useCreateWallMutation";
 import { useAlertModal } from "@common/hooks/useAlertModal";
 import AlertModal from "@common/components/AlertModal";
 
-function GroupWallCreateForm({
-  groupUuid,
-  currentPageNumber,
-  pageSize,
-}: {
-  groupUuid: string;
-  currentPageNumber: number;
-  pageSize: number;
-}) {
+function GroupWallCreateForm({ groupUuid }: { groupUuid: string }) {
   const [content, setContent] = useState("");
   const {
     mutateAsync: createWallMutation,
     isPending: isCreatingWall,
     isError: isCreatingError,
     error: creatingError,
-  } = useCreateWallMutation(groupUuid, currentPageNumber - 1, pageSize);
+  } = useCreateWallMutation(groupUuid);
   const { isOpen, config, showAlert, closeAlert } = useAlertModal();
 
   const handleSubmit = async () => {

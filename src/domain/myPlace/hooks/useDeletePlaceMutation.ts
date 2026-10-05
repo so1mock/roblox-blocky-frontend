@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deletePlace } from "@myPlace/apis/place";
+import { MY_PLACE_QUERY_KEY } from "@myPlace/constants/queryKey";
 
 export const useDeletePlaceMutation = () => {
   const queryClient = useQueryClient();
@@ -8,7 +9,7 @@ export const useDeletePlaceMutation = () => {
     mutationFn: (uuid: string) => deletePlace(uuid),
     onSuccess: () => {
       // 플레이스 삭제 후, 플레이스 목록 자동 갱신
-      queryClient.invalidateQueries({ queryKey: ["/places/me"] });
+      queryClient.invalidateQueries({ queryKey: MY_PLACE_QUERY_KEY.list() });
     },
   });
 };

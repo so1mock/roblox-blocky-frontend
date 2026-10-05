@@ -2,6 +2,7 @@ import { api } from "@common/apis/axios";
 import { AxiosError } from "axios";
 import type { GroupInfo, GroupSummary } from "../types/group";
 import type { ImageFileType } from "@common/types/image";
+import { GROUP_ENDPOINT } from "../constants/endpoint";
 
 export type CreateGroupRequest = {
   name: string;
@@ -13,7 +14,7 @@ export const createGroup = async (
   groupInfo: CreateGroupRequest,
 ): Promise<GroupSummary> => {
   try {
-    const response = await api.post("/groups", groupInfo);
+    const response = await api.post(GROUP_ENDPOINT.ROOT, groupInfo);
     return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {
@@ -26,7 +27,7 @@ export const createGroup = async (
 // 그룹 삭제
 export const deleteGroup = async (uuid: string) => {
   try {
-    const response = await api.delete(`groups/${uuid}`);
+    const response = await api.delete(GROUP_ENDPOINT.DETAIL(uuid));
     return 200 <= response.data.status && response.data.status < 300;
   } catch (e) {
     if (e instanceof AxiosError) {
@@ -39,7 +40,7 @@ export const deleteGroup = async (uuid: string) => {
 // 내가 속한 그룹 목록 조회
 export const getMyGroups = async (): Promise<GroupSummary[]> => {
   try {
-    const response = await api.get("groups/me");
+    const response = await api.get(GROUP_ENDPOINT.MY_LIST);
     return response.data.groups;
   } catch (e) {
     if (e instanceof AxiosError) {
@@ -52,7 +53,7 @@ export const getMyGroups = async (): Promise<GroupSummary[]> => {
 // 그룹 상세 정보 조회
 export const getGroupInfo = async (groupId: string): Promise<GroupInfo> => {
   try {
-    const response = await api.get(`/groups/${groupId}`);
+    const response = await api.get(GROUP_ENDPOINT.DETAIL(groupId));
     return {
       groupSummary: response.data.group,
       ownerNickname: response.data.ownerNickname,
@@ -69,10 +70,13 @@ export const getGroupInfo = async (groupId: string): Promise<GroupInfo> => {
 // 그룹 정보 수정(반 이름, 반 설명))
 export const updateGroupInfo = async (editedGroupInformation: GroupSummary) => {
   try {
-    const response = await api.put(`groups/${editedGroupInformation.uuid}`, {
-      name: editedGroupInformation.name,
-      description: editedGroupInformation.description,
-    });
+    const response = await api.put(
+      GROUP_ENDPOINT.DETAIL(editedGroupInformation.uuid),
+      {
+        name: editedGroupInformation.name,
+        description: editedGroupInformation.description,
+      },
+    );
     return 200 <= response.data.status && response.data.status < 300;
   } catch (e) {
     if (e instanceof AxiosError) {
@@ -88,11 +92,15 @@ export const getGroupIconUploadUrl = async (
   type: ImageFileType,
 ): Promise<string> => {
   try {
-    const response = await api.post(`/groups/${uuid}/icon-upload-url`, null, {
-      params: {
-        type,
+    const response = await api.post(
+      GROUP_ENDPOINT.ICON_UPLOAD_URL(uuid),
+      null,
+      {
+        params: {
+          type,
+        },
       },
-    });
+    );
     return response.data.uploadUrl;
   } catch (error) {
     if (error instanceof AxiosError) {

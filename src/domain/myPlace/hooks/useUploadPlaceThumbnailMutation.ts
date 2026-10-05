@@ -3,6 +3,7 @@ import type { ImageFileType } from "@common/types/image";
 import { validateImageExtension } from "@common/utils/validateImageExtension";
 import { getPlaceThumbnailUploadUrl } from "@myPlace/apis/place";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { MY_PLACE_QUERY_KEY } from "@myPlace/constants/queryKey";
 
 export const useUploadPlaceThumbnailMutation = () => {
   const queryClient = useQueryClient();
@@ -18,7 +19,7 @@ export const useUploadPlaceThumbnailMutation = () => {
       await uploadFile(url, file);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/places/me"] });
+      queryClient.invalidateQueries({ queryKey: MY_PLACE_QUERY_KEY.list() });
     },
   });
 };

@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateBoard } from "../apis/board";
+import { BOARD_QUERY_KEY } from "../constants/queryKey";
 import type { UpdateBoardInfo } from "../types/board";
 
 export const useUpdateBoardMutation = (
@@ -12,11 +13,9 @@ export const useUpdateBoardMutation = (
     mutationFn: (boardInfo: UpdateBoardInfo) =>
       updateBoard(groupUuid, boardUuid, boardInfo),
     onSuccess: () => {
+      // 목록과 상세를 함께 무효화한다 (boards 접두사가 둘 다 덮는다)
       queryClient.invalidateQueries({
-        queryKey: ["groups", groupUuid, "boards", 0],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["groups", groupUuid, "boards", boardUuid],
+        queryKey: BOARD_QUERY_KEY.all(groupUuid),
       });
     },
   });

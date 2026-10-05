@@ -9,7 +9,7 @@ import {
   // registerVariableListener,
   setupBlockInputInitializer,
 } from "@blockly/utils/blockInputInitializer";
-import { getBlockList } from "../apis/block";
+import { useBlockListQuery } from "./useBlockListQuery";
 import { initBlocks } from "@blockly/blocks";
 import { initToolbox } from "@blockly/toolbox";
 import { defineVariableBlocks } from "src/domain/blockly/common/blocks";
@@ -25,14 +25,18 @@ export function useBlocklyUI(
 ) {
   const workspaceRef = useRef<Blockly.WorkspaceSvg | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+
+  const { data: blockListsByCategory, isError } = useBlockListQuery({
+    enabled: !!options.useServer,
+  });
+  const error = isError ? "서버 블록 로딩 실패." : null;
 
   useEffect(() => {
     if (!blocklyDivRef.current) return;
+    // Blockly 주입은 한 번만 한다 (블록 목록을 다시 받아도 작업 중인 워크스페이스를 날리지 않는다)
+    if (workspaceRef.current) return;
 
     registerContinuousToolbox();
-    setLoading(true);
-    setError(null);
 
     const initWorkspace = (toolboxConfig: Toolbox) => {
       const workspaceSvg = Blockly.inject(blocklyDivRef.current!, {
@@ -69,22 +73,18 @@ export function useBlocklyUI(
     };
 
     if (options.useServer) {
-      getBlockList()
-        .then((blockListsByCategory) => {
-          for (const blockListByCategory of blockListsByCategory) {
-            initBlocks(blockListByCategory.blocks);
-          }
-          defineVariableBlocks(); // 변수 블록은 로컬에서 정의
-          initWorkspace(initToolbox(blockListsByCategory));
-        })
-        .catch(() => {
-          setError("서버 블록 로딩 실패.");
-        });
+      if (!blockListsByCategory) return;
+
+      for (const blockListByCategory of blockListsByCategory) {
+        initBlocks(blockListByCategory.blocks);
+      }
+      defineVariableBlocks(); // 변수 블록은 로컬에서 정의
+      initWorkspace(initToolbox(blockListsByCategory));
     } else {
       initTestBlocks();
       initWorkspace(toolbox);
     }
-  }, [blocklyDivRef]);
+  }, [blocklyDivRef, blockListsByCategory]);
 
   return { workspaceRef, loading, error };
 }

@@ -2,19 +2,19 @@ import { useState } from "react";
 import UserListHeader from "./UserListHeader";
 import UserListItem from "./UserListItem";
 import Button from "@common/components/Button";
-import { createInviteCode } from "../apis/user";
+import { useCreateInviteCodeMutation } from "../hooks/useCreateInviteCodeMutation";
 import { AxiosError } from "axios";
-import { useGroupMembersQuery } from "../hooks/useGroupMemberQuery";
+import { useGroupMembersQuery } from "../hooks/useGroupMembersQuery";
 
 function UserBoard({ groupUuid }: { groupUuid: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isCreatingInviteCode, setIsCreatingInviteCode] = useState(false);
   const [inviteCode, setInviteCode] = useState<string | null>(null);
   const { data: members } = useGroupMembersQuery(groupUuid);
+  const { mutateAsync: createInviteCode, isPending: isCreatingInviteCode } =
+    useCreateInviteCodeMutation();
 
   const handleCreateInvite = async () => {
     if (isCreatingInviteCode) return;
-    setIsCreatingInviteCode(true);
     try {
       const code = await createInviteCode(groupUuid);
       setInviteCode(code);
@@ -24,7 +24,6 @@ function UserBoard({ groupUuid }: { groupUuid: string }) {
       setInviteCode("초대 코드 생성 실패. " + message);
     } finally {
       setIsOpen(true);
-      setIsCreatingInviteCode(false);
     }
   };
 

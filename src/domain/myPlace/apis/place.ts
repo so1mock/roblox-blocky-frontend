@@ -2,6 +2,8 @@ import { api } from "@common/apis/axios";
 import { AxiosError } from "axios";
 import type { PlaceSummary } from "@place/types/place";
 import type { ImageFileType } from "@common/types/image";
+import { MY_PLACE_ENDPOINT } from "../constants/endpoint";
+import { PLACE_ENDPOINT } from "@place/constants/endpoint";
 
 type PlaceInfo = {
   uuid: string;
@@ -11,7 +13,7 @@ type PlaceInfo = {
 
 export const getMyPlaces = async (): Promise<PlaceSummary[]> => {
   try {
-    const response = await api.get("/places/me");
+    const response = await api.get(MY_PLACE_ENDPOINT.LIST);
     return response.data.places;
   } catch (e) {
     if (e instanceof AxiosError) {
@@ -23,7 +25,7 @@ export const getMyPlaces = async (): Promise<PlaceSummary[]> => {
 
 export const updatePlace = async (placeInfo: PlaceInfo) => {
   try {
-    const response = await api.put(`/place/me/${placeInfo.uuid}`, {
+    const response = await api.put(PLACE_ENDPOINT.MY_DETAIL(placeInfo.uuid), {
       name: placeInfo.name,
       description: placeInfo.description,
     });
@@ -38,7 +40,7 @@ export const updatePlace = async (placeInfo: PlaceInfo) => {
 
 export const deletePlace = async (placeUuid: string): Promise<boolean> => {
   try {
-    const response = await api.delete(`/place/me/${placeUuid}`);
+    const response = await api.delete(PLACE_ENDPOINT.MY_DETAIL(placeUuid));
     return 200 <= response.status && response.status < 300;
   } catch (e) {
     if (e instanceof AxiosError) {
@@ -55,7 +57,7 @@ export const getPlaceThumbnailUploadUrl = async (
 ): Promise<string> => {
   try {
     const response = await api.post(
-      `/place/${uuid}/thumbnail-upload-url`,
+      MY_PLACE_ENDPOINT.THUMBNAIL_UPLOAD_URL(uuid),
       null,
       {
         params: {
