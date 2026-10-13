@@ -1,5 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Modal from "react-modal";
+import { variableSchema, type VariableForm } from "@place/constants/schema";
 
 interface VariableCreateModalProps {
   isOpen: boolean;
@@ -17,39 +20,23 @@ function VariableCreateModal({
   onClose,
   onConfirm,
 }: VariableCreateModalProps) {
-  const [variableName, setVariableName] = useState("");
-  const [error, setError] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setFocus,
+    formState: { errors },
+  } = useForm<VariableForm>({
+    resolver: zodResolver(variableSchema),
+    defaultValues: { name: "" },
+  });
 
   useEffect(() => {
-    if (isOpen) {
-      setVariableName("");
-      setError("");
-      // 모달이 열리면 input에 자동 포커스
-      setTimeout(() => inputRef.current?.focus(), 100);
-    }
-  }, [isOpen]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const trimmedName = variableName.trim();
-
-    if (!trimmedName) {
-      setError("변수 이름을 입력해주세요");
-      return;
-    }
-
-    // 변수명 유효성 검사 (영문, 숫자, 언더스코어만 허용)
-    if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(trimmedName)) {
-      setError(
-        "변수 이름은 영문자, 숫자, 언더스코어만 사용 가능하며 숫자로 시작할 수 없습니다",
-      );
-      return;
-    }
-
-    onConfirm(trimmedName);
-  };
+    if (!isOpen) return;
+    reset();
+    // 모달이 열리면 input 에 자동 포커스
+    setTimeout(() => setFocus("name"), 100);
+  }, [isOpen, reset, setFocus]);
 
   return (
     <Modal
@@ -64,7 +51,7 @@ function VariableCreateModal({
       </div>
 
       {/* 본문 */}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(({ name }) => onConfirm(name))}>
         <div className="px-6 py-4">
           <label
             htmlFor="variableName"
@@ -73,18 +60,15 @@ function VariableCreateModal({
             변수 이름
           </label>
           <input
-            ref={inputRef}
             id="variableName"
             type="text"
-            value={variableName}
-            onChange={(e) => {
-              setVariableName(e.target.value);
-              setError("");
-            }}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             placeholder="예: myVariable"
+            {...register("name")}
           />
-          {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+          {errors.name && (
+            <p className="mt-2 text-sm text-red-600">{errors.name.message}</p>
+          )}
           <p className="mt-2 text-xs text-gray-500">
             영문자, 숫자, 언더스코어(_)를 사용할 수 있습니다
           </p>

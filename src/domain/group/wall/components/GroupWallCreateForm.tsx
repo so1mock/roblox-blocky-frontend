@@ -1,70 +1,56 @@
 import Button from "@common/components/Button";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ApiError } from "@common/apis/ApiError";
 import { useCreateWallMutation } from "../hooks/useCreateWallMutation";
-import { useAlertModal } from "@common/hooks/useAlertModal";
-import AlertModal from "@common/components/AlertModal";
+import { wallMessageSchema, type WallMessageForm } from "../constants/schema";
 
 function GroupWallCreateForm({ groupUuid }: { groupUuid: string }) {
-  const [content, setContent] = useState("");
+  const { mutateAsync: createWallMutation } = useCreateWallMutation(groupUuid);
+
   const {
-    mutateAsync: createWallMutation,
-    isPending: isCreatingWall,
-    isError: isCreatingError,
-    error: creatingError,
-  } = useCreateWallMutation(groupUuid);
-  const { isOpen, config, showAlert, closeAlert } = useAlertModal();
+    register,
+    handleSubmit,
+    setError,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<WallMessageForm>({
+    resolver: zodResolver(wallMessageSchema),
+    defaultValues: { content: "" },
+  });
 
-  const handleSubmit = async () => {
-    const body = content.trim();
-    if (!body) {
-      showAlert({
-        title: "담벼락작성 실패",
-        message: "내용을 입력해주세요.",
-        type: "warning",
+  const onSubmit = async ({ content }: WallMessageForm) => {
+    try {
+      await createWallMutation(content);
+      reset();
+    } catch (error) {
+      setError("root", {
+        message:
+          error instanceof ApiError ? error.message : "게시에 실패했습니다.",
       });
-      return;
     }
-    if (isCreatingWall) {
-      return;
-    }
-
-    await createWallMutation(body);
-    setContent("");
   };
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit();
-      }}
-      className="w-full relative"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full relative">
       <textarea
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
         placeholder="내용을 입력하세요"
-        disabled={isCreatingWall}
+        disabled={isSubmitting}
         className="w-full m-4 ml-0 p-6 min-h-[120px] bg-[#F9F9F9] rounded-2xl disabled:opacity-60"
+        {...register("content")}
       />
       <div className="absolute bottom-10 right-8">
         <Button
-          text={isCreatingWall ? "게시 중..." : "게시하기"}
-          handleButtonClick={handleSubmit}
+          text={isSubmitting ? "게시 중..." : "게시하기"}
+          type="submit"
+          disabled={isSubmitting}
         />
       </div>
-      {isCreatingError && creatingError instanceof Error && (
+      {(errors.content || errors.root) && (
         <div className="text-sm text-red-500 mt-2 ml-1">
-          {creatingError.message}
+          {errors.content?.message ?? errors.root?.message}
         </div>
       )}
-      <AlertModal
-        isOpen={isOpen}
-        onClose={closeAlert}
-        title={config.title}
-        message={config.message}
-        type={config.type}
-      />
     </form>
   );
 }
