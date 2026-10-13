@@ -8,6 +8,8 @@ import {
   type CreateGroupForm,
   type JoinGroupForm,
 } from "../constants/schema";
+import Spinner from "@common/components/Spinner";
+import ErrorState from "@common/components/ErrorState";
 import { GroupCard } from "./GroupCard";
 import Dropdown from "@common/components/Dropdown";
 import { useAuthStore } from "@user/stores/authStore";
@@ -31,6 +33,7 @@ function GroupPage() {
     isLoading: isMyGroupsLoading,
     isError: isMyGroupsError,
     error: myGroupsError,
+    refetch: refetchMyGroups,
   } = useMyGroupsQuery();
   const { mutateAsync: createGroupMutation } = useCreateGroupMutation();
   const { mutateAsync: joinGroupMutation } = useJoinGroupMutation();
@@ -126,9 +129,12 @@ function GroupPage() {
           />
         </div>
       </div>
-      {isMyGroupsLoading && <div>로딩 중...</div>}
+      {isMyGroupsLoading && <Spinner label="반 목록을 불러오는 중..." />}
       {!isMyGroupsLoading && isMyGroupsError && (
-        <div>오류: {myGroupsError.message}</div>
+        <ErrorState
+          message={myGroupsError.message}
+          onRetry={() => refetchMyGroups()}
+        />
       )}
       {!isMyGroupsLoading && !isMyGroupsError && myGroups.length === 0 && (
         <div>그룹이 없습니다.</div>

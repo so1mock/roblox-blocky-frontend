@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import Board from "../board/components/Board";
+import Spinner from "@common/components/Spinner";
 import Wall from "../wall/components/Wall";
 import GroupNav from "./GroupNav";
 import { useAuthStore } from "@user/stores/authStore";
@@ -19,20 +21,24 @@ function GroupDetailedPage({ groupUuid }: { groupUuid: string }) {
     error: groupInfoError,
   } = useGroupDetailQuery(groupUuid);
 
-  if (isGroupInfoError) {
+  // 반 정보가 없으면 이 화면 자체가 성립하지 않는다.
+  // 빈 화면을 남기는 대신 알린 뒤 목록으로 돌려보낸다.
+  useEffect(() => {
+    if (!isGroupInfoError) return;
     showAlert({
       title: "반 정보 불러오기 실패",
-      message: "유효하지 않은 반입니다." + groupInfoError.message,
+      message: groupInfoError.message,
       type: "error",
     });
     navigate({
       to: `/${userInfo?.role === "EDUCATOR" ? "teacher" : "student"}/group`,
     });
-    return null;
-  }
+  }, [isGroupInfoError]);
+
+  if (isGroupInfoError) return null;
 
   if (isGroupInfoLoading || groupInfo === undefined)
-    return <div>Loading...</div>;
+    return <Spinner label="반 정보를 불러오는 중..." />;
 
   return (
     <div className="w-[1600px] mx-auto flex justify-center gap-24">

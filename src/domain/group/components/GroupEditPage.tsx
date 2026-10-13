@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import Spinner from "@common/components/Spinner";
 import GroupNav from "./GroupNav";
 import { useAuthStore } from "@user/stores/authStore";
 import { useGroupDetailQuery } from "../hooks/useGroupDetailQuery";
@@ -127,30 +128,45 @@ function GroupEditPage({ id }: { id: string }) {
       return;
     }
 
-    await editGroupMutation(editedGroupInformation);
-    setIsEditingMode((prev) => ({
-      ...prev,
-      [fieldName]: false,
-    }));
+    try {
+      await editGroupMutation(editedGroupInformation);
+      setIsEditingMode((prev) => ({
+        ...prev,
+        [fieldName]: false,
+      }));
+    } catch (error) {
+      showAlert({
+        title: "반 정보 수정 실패",
+        message:
+          error instanceof ApiError
+            ? error.message
+            : "반 정보를 수정하지 못했습니다.",
+        type: "error",
+      });
+    }
   };
 
-  if (isGroupInfoError) {
+  // 반 정보가 없으면 이 화면 자체가 성립하지 않는다.
+  // 빈 화면을 남기는 대신 알린 뒤 목록으로 돌려보낸다.
+  useEffect(() => {
+    if (!isGroupInfoError) return;
     showAlert({
       title: "반 정보 불러오기 실패",
-      message: "유효하지 않은 반입니다. " + groupInfoError.message,
+      message: groupInfoError.message,
       type: "error",
     });
     navigate({
       to: `/${userInfo?.role === "EDUCATOR" ? "teacher" : "student"}/group`,
     });
-    return null;
-  }
+  }, [isGroupInfoError]);
+
+  if (isGroupInfoError) return null;
 
   return (
     <div className="w-[1600px] mx-auto flex justify-center gap-24">
       {userInfo?.role === "EDUCATOR" && <GroupNav id={id} />}
       {isGroupInfoLoading || groupInfo === undefined ? (
-        <div>Loading...</div>
+        <Spinner label="반 정보를 불러오는 중..." />
       ) : (
         <div className="w-[1200px] flex flex-col items-center gap-12">
           {/* 이미지 업로드 */}
