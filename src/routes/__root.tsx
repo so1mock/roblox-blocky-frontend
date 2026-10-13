@@ -1,4 +1,5 @@
 import { setAccessToken } from "@common/apis/axios";
+import { ErrorBoundary } from "@common/components/ErrorBoundary";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
@@ -36,7 +37,10 @@ export const Route = createRootRoute({
   component: () => {
     return (
       <QueryClientProvider client={queryClient}>
-        <Outlet />
+        {/* 어느 화면에서든 렌더링 예외가 새어나오면 여기서 잡는다 */}
+        <ErrorBoundary name="root">
+          <Outlet />
+        </ErrorBoundary>
         <TanStackRouterDevtools />
       </QueryClientProvider>
     );
