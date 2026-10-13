@@ -30,11 +30,14 @@ function BoardDetailedPage({
     try {
       await deleteMutation.mutateAsync(boardUuid);
       navigate({ to: `/teacher/group/${groupUuid}` });
-    } catch {
+    } catch (error) {
       showAlert({
-        title: "게시글",
-        message: "게시글 삭제에 실패했습니다.",
-        type: "warning",
+        title: "게시글 삭제 실패",
+        message:
+          error instanceof ApiError
+            ? error.message
+            : "게시글을 삭제하지 못했습니다.",
+        type: "error",
       });
     }
   };
