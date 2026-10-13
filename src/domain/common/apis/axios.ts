@@ -1,4 +1,5 @@
 import axios, { type InternalAxiosRequestConfig } from "axios";
+import { ApiError } from "./ApiError";
 import { refreshToken } from "@user/apis/refresh";
 import { USER_ENDPOINT } from "@user/constants/endpoint";
 import { useAuthStore } from "@user/stores/authStore";
@@ -50,7 +51,7 @@ api.interceptors.response.use(
       !originalRequest ||
       isAuthRequest(originalRequest.url)
     ) {
-      return Promise.reject(error);
+      return Promise.reject(ApiError.from(error));
     }
 
     if (originalRequest._retry) {
@@ -58,7 +59,7 @@ api.interceptors.response.use(
       setAccessToken(null);
       useAuthStore.getState().clearAuth();
       setTimeout(() => window.location.reload(), 0);
-      return Promise.reject(error);
+      return Promise.reject(ApiError.from(error));
     }
     originalRequest._retry = true;
 
@@ -75,7 +76,7 @@ api.interceptors.response.use(
     } catch (refreshError) {
       setAccessToken(null);
       useAuthStore.getState().clearAuth();
-      return Promise.reject(refreshError);
+      return Promise.reject(ApiError.from(refreshError));
     }
   },
 );

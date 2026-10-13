@@ -6,7 +6,7 @@ import { useState, type FormEvent } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import AlertModal from "@common/components/AlertModal";
 import { useAlertModal } from "@common/hooks/useAlertModal";
-import { AxiosError } from "axios";
+import { ApiError } from "@common/apis/ApiError";
 
 export const Route = createFileRoute("/")({
   beforeLoad: () => {
@@ -51,15 +51,13 @@ function Index() {
         });
       }
     } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response?.data.errorCode === "M101") {
-          showAlert({
-            title: "사용자 정보 오류",
-            message: "사용자 역할을 찾지 못했습니다. 메인 페이지로 이동합니다.",
-            type: "error",
-          });
-        }
-      }
+      // 서버가 준 문구를 그대로 보여준다 (예: M400 "올바르지 않은 아이디 혹은 비밀번호입니다.")
+      showAlert({
+        title: "로그인 실패",
+        message:
+          error instanceof ApiError ? error.message : "로그인에 실패했습니다.",
+        type: "error",
+      });
     } finally {
       setIsTeacherLoggingIn(false);
     }
