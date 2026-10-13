@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Button from "@common/components/Button";
 import ReadOnlyReactQuillEditor from "@common/components/ReadOnlyReactQuillEditor";
 import { formatIsoStringToDate } from "@common/utils/formatIsoStringToDate";
@@ -8,6 +9,7 @@ import { useDeleteBoardMutation } from "../hooks/useDeleteBoardMutation";
 import { DownloadableFileItem } from "@common/components/file/DownloadableFileItem";
 import { useAlertModal } from "@common/hooks/useAlertModal";
 import AlertModal from "@common/components/AlertModal";
+import { ApiError } from "@common/apis/ApiError";
 
 function BoardDetailedPage({
   groupUuid,
@@ -43,14 +45,19 @@ function BoardDetailedPage({
     });
   };
 
-  if (error) {
+  // 렌더링 도중 상태를 바꾸면 안 되므로 effect 에서 처리한다
+  useEffect(() => {
+    if (!error) return;
     showAlert({
       title: "게시글",
-      message: "게시글 정보를 불러오지 못했습니다.",
+      message:
+        error instanceof ApiError
+          ? error.message
+          : "게시글 정보를 불러오지 못했습니다.",
       type: "warning",
     });
     navigate({ to: `/teacher/group/${groupUuid}/` });
-  }
+  }, [error]);
 
   return (
     <div className="w-[1600px] mx-auto flex justify-center gap-24 py-10">

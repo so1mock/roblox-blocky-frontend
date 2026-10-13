@@ -1,5 +1,8 @@
 import { useDeleteGroupMemberMutation } from "../hooks/useDeleteGroupMemberMutation";
 import type { GroupMember } from "../types/user";
+import { useAlertModal } from "@common/hooks/useAlertModal";
+import AlertModal from "@common/components/AlertModal";
+import { ApiError } from "@common/apis/ApiError";
 
 function UserListItem({
   groupUuid,
@@ -8,11 +11,24 @@ function UserListItem({
   groupUuid: string;
   groupMember: GroupMember;
 }) {
-  const { mutate: deleteGroupMember } = useDeleteGroupMemberMutation(groupUuid);
-  function handleUserRemove() {
-    // todo: 사용자 탈퇴 로직 구현
-    deleteGroupMember(groupMember.uuid);
-  }
+  const { mutateAsync: deleteGroupMember } =
+    useDeleteGroupMemberMutation(groupUuid);
+  const { isOpen, config, showAlert, closeAlert } = useAlertModal();
+
+  const handleUserRemove = async () => {
+    try {
+      await deleteGroupMember(groupMember.uuid);
+    } catch (error) {
+      showAlert({
+        title: "멤버 제거 실패",
+        message:
+          error instanceof ApiError
+            ? error.message
+            : "멤버를 제거하지 못했습니다.",
+        type: "error",
+      });
+    }
+  };
 
   return (
     <div className="whitespace-nowrap py-3 border-solid border-[#DEDEDE] border-b-2 bg-white">
@@ -57,6 +73,13 @@ function UserListItem({
           </button>
         )}
       </div>
+      <AlertModal
+        isOpen={isOpen}
+        onClose={closeAlert}
+        title={config.title}
+        message={config.message}
+        type={config.type}
+      />
     </div>
   );
 }

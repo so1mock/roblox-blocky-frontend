@@ -7,6 +7,7 @@ import type { GroupSummary } from "../types/group";
 import { useEditGroupMutation } from "../hooks/useEditGroupMutation";
 import { useUpdateGroupIconMutation } from "../hooks/useUpdateGroupIconMutation";
 import { useAlertModal } from "@common/hooks/useAlertModal";
+import { ApiError } from "@common/apis/ApiError";
 import AlertModal from "@common/components/AlertModal";
 
 function GroupEditPage({ id }: { id: string }) {
@@ -71,7 +72,18 @@ function GroupEditPage({ id }: { id: string }) {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
 
-      await uploadGroupIconMutation({ file });
+      try {
+        await uploadGroupIconMutation({ file });
+      } catch (error) {
+        showAlert({
+          title: "아이콘 변경 실패",
+          message:
+            error instanceof ApiError
+              ? error.message
+              : "아이콘을 변경하지 못했습니다.",
+          type: "error",
+        });
+      }
     }
   };
 

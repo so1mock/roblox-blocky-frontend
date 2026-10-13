@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ApiError } from "@common/apis/ApiError";
+import { useAlertModal } from "@common/hooks/useAlertModal";
+import AlertModal from "@common/components/AlertModal";
 import type { WallInfo } from "../types/wall";
 import { useAuthStore } from "@user/stores/authStore";
 import { useDeleteWallMutation } from "../hooks/useDeleteWallMutation";
@@ -20,6 +22,7 @@ function GroupWallItem({
   const { userInfo } = useAuthStore();
   const [isOptionOpen, setIsOptionOpen] = useState(false);
   const [editingMode, setEditingMode] = useState<boolean>(false);
+  const { isOpen, config, showAlert, closeAlert } = useAlertModal();
   const { mutateAsync: deleteWallMutation, isPending: isDeletingWall } =
     useDeleteWallMutation(groupId);
   const { mutateAsync: editWallMutation } = useEditWallMutation(groupId);
@@ -45,7 +48,16 @@ function GroupWallItem({
 
   const handleDelete = async () => {
     if (isDeletingWall) return;
-    await deleteWallMutation(wallInfo.uuid);
+    try {
+      await deleteWallMutation(wallInfo.uuid);
+    } catch (error) {
+      showAlert({
+        title: "삭제 실패",
+        message:
+          error instanceof ApiError ? error.message : "삭제에 실패했습니다.",
+        type: "error",
+      });
+    }
   };
 
   const handleEdit = () => {
@@ -151,6 +163,13 @@ function GroupWallItem({
           </div>
         </div>
       )}
+      <AlertModal
+        isOpen={isOpen}
+        onClose={closeAlert}
+        title={config.title}
+        message={config.message}
+        type={config.type}
+      />
     </div>
   );
 }
