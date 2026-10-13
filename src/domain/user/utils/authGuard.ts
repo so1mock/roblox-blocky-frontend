@@ -16,6 +16,8 @@ export const verifyAuth = (requiredRoles: UserRole[] = []) => {
 
   if (userInfo && requiredRoles.includes(userInfo.role)) return;
 
-  // alert("접근 권한이 없습니다.");
-  // throw redirect({ to: "/", search: { redirect: window.location.pathname } });
+  // 권한이 없으면 역할에 맞는 홈으로 돌려보낸다.
+  // "/" 의 beforeLoad 가 역할(EDUCATOR/LEARNER)별로 다시 분기하므로
+  // 여기서 목적지를 따로 계산하지 않는다.
+  throw redirect({ to: "/" });
 };

@@ -1,6 +1,7 @@
 # 프론트엔드 API 레이어 구조 가이드
 
 > COBLOCKS-47 에서 정리한 규칙입니다. 새 API 를 추가하거나 기존 호출부를 손볼 때 이 문서를 따라주세요.
+> 에러 처리 기준은 [frontend-error-handling.md](./frontend-error-handling.md) 를 참고하세요.
 
 ---
 

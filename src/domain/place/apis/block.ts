@@ -1,4 +1,3 @@
-import { AxiosError } from "axios";
 import { api } from "../../common/apis/axios";
 import { BLOCK_ENDPOINT } from "@place/constants/endpoint";
 import type {
@@ -37,51 +36,44 @@ export type ServerBlockListByCategory = {
 };
 
 export const getBlockList = async (): Promise<BlockListByCategory[]> => {
-  try {
-    const { data } = await api.get<ServerBlockListByCategory[]>(
-      BLOCK_ENDPOINT.LIST,
+  const { data } = await api.get<ServerBlockListByCategory[]>(
+    BLOCK_ENDPOINT.LIST,
+  );
+  const { data: categoryListResponse } = await api.get(
+    BLOCK_ENDPOINT.CUSTOM_CATEGORIES,
+  );
+
+  for (const categoryResponse of categoryListResponse.categories) {
+    const { data: category } = await api.get<ServerBlockListByCategory>(
+      BLOCK_ENDPOINT.LIST_BY_CATEGORY(categoryResponse.name),
     );
-    const { data: categoryListResponse } = await api.get(
-      BLOCK_ENDPOINT.CUSTOM_CATEGORIES,
-    );
 
-    for (const categoryResponse of categoryListResponse.categories) {
-      const { data: category } = await api.get<ServerBlockListByCategory>(
-        BLOCK_ENDPOINT.LIST_BY_CATEGORY(categoryResponse.name),
-      );
-
-      data.push(category);
-    }
-
-    // 변환/보정 로직
-    return data.map((category) => {
-      return {
-        categoryName: category.categoryName,
-        blocks: category.blocks.map((block) => {
-          return {
-            type: block.type,
-            toolboxDefinition: {
-              kind: block.toolBoxDefinition.kind,
-              inputs: block.toolBoxDefinition.toolboxInputs,
-              type: block.type, // 👈 Blockly에서 요구하므로 추가
-              // callbackKey: "" 추구 추가될 수 있는 속성
-            },
-            blockDefinition: {
-              style: block.definition?.style ?? "",
-              output: block.definition?.output ?? "",
-              inputsInline: block.definition?.inputsInline ?? true,
-              previousStatement: block.definition?.previousStatement ?? false,
-              nextStatement: block.definition?.nextStatement ?? false,
-              components: block.definition?.components ?? [],
-            },
-          };
-        }),
-      };
-    });
-  } catch (e) {
-    if (e instanceof AxiosError) {
-      throw e.message;
-    }
-    throw e;
+    data.push(category);
   }
+
+  // 변환/보정 로직
+  return data.map((category) => {
+    return {
+      categoryName: category.categoryName,
+      blocks: category.blocks.map((block) => {
+        return {
+          type: block.type,
+          toolboxDefinition: {
+            kind: block.toolBoxDefinition.kind,
+            inputs: block.toolBoxDefinition.toolboxInputs,
+            type: block.type, // 👈 Blockly에서 요구하므로 추가
+            // callbackKey: "" 추구 추가될 수 있는 속성
+          },
+          blockDefinition: {
+            style: block.definition?.style ?? "",
+            output: block.definition?.output ?? "",
+            inputsInline: block.definition?.inputsInline ?? true,
+            previousStatement: block.definition?.previousStatement ?? false,
+            nextStatement: block.definition?.nextStatement ?? false,
+            components: block.definition?.components ?? [],
+          },
+        };
+      }),
+    };
+  });
 };

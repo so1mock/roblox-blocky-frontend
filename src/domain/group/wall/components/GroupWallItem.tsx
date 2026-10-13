@@ -1,10 +1,16 @@
 import { formatIsoStringToDate } from "@common/utils/formatIsoStringToDate";
 import GroupWallOptions from "./GroupWallOptions";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ApiError } from "@common/apis/ApiError";
+import { useAlertModal } from "@common/hooks/useAlertModal";
+import AlertModal from "@common/components/AlertModal";
 import type { WallInfo } from "../types/wall";
 import { useAuthStore } from "@user/stores/authStore";
 import { useDeleteWallMutation } from "../hooks/useDeleteWallMutation";
 import { useEditWallMutation } from "../hooks/useEditWallMutation";
+import { wallMessageSchema, type WallMessageForm } from "../constants/schema";
 
 function GroupWallItem({
   wallInfo,
@@ -16,26 +22,42 @@ function GroupWallItem({
   const { userInfo } = useAuthStore();
   const [isOptionOpen, setIsOptionOpen] = useState(false);
   const [editingMode, setEditingMode] = useState<boolean>(false);
-  const [editedContent, setEditedContent] = useState<string>(wallInfo.content);
-  const editTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const { isOpen, config, showAlert, closeAlert } = useAlertModal();
   const { mutateAsync: deleteWallMutation, isPending: isDeletingWall } =
     useDeleteWallMutation(groupId);
-  const { mutateAsync: editWallMutation, isPending: isEditingWall } =
-    useEditWallMutation(groupId);
+  const { mutateAsync: editWallMutation } = useEditWallMutation(groupId);
 
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setFocus,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<WallMessageForm>({
+    resolver: zodResolver(wallMessageSchema),
+    defaultValues: { content: wallInfo.content },
+  });
+
+  // 편집 모드로 들어갈 때마다 원래 내용으로 되돌리고 전체 선택한다
   useEffect(() => {
-    if (editingMode) {
-      setEditedContent(wallInfo.content);
-      if (editTextareaRef.current) {
-        editTextareaRef.current.focus();
-        editTextareaRef.current.select();
-      }
-    }
-  }, [editingMode, wallInfo.content]);
+    if (!editingMode) return;
+    reset({ content: wallInfo.content });
+    setFocus("content", { shouldSelect: true });
+  }, [editingMode, wallInfo.content, reset, setFocus]);
 
   const handleDelete = async () => {
     if (isDeletingWall) return;
-    await deleteWallMutation(wallInfo.uuid);
+    try {
+      await deleteWallMutation(wallInfo.uuid);
+    } catch (error) {
+      showAlert({
+        title: "삭제 실패",
+        message:
+          error instanceof ApiError ? error.message : "삭제에 실패했습니다.",
+        type: "error",
+      });
+    }
   };
 
   const handleEdit = () => {
@@ -43,10 +65,21 @@ function GroupWallItem({
     setEditingMode(true);
   };
 
-  const handleUpdate = async (content: string) => {
-    if (isEditingWall) return;
-    await editWallMutation({ uuid: wallInfo.uuid, content });
+  const closeEditing = () => {
     setEditingMode(false);
+    setIsOptionOpen(false);
+  };
+
+  const handleUpdate = async ({ content }: WallMessageForm) => {
+    try {
+      await editWallMutation({ uuid: wallInfo.uuid, content });
+      closeEditing();
+    } catch (error) {
+      setError("root", {
+        message:
+          error instanceof ApiError ? error.message : "수정에 실패했습니다.",
+      });
+    }
   };
 
   return (
@@ -63,13 +96,18 @@ function GroupWallItem({
         <div className="flex flex-col gap-2">
           <span>{wallInfo.author.nickname}</span>
           {editingMode ? (
-            <textarea
-              ref={editTextareaRef}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
-              value={editedContent}
-              disabled={isEditingWall}
-              onChange={(e) => setEditedContent(e.target.value)}
-            />
+            <>
+              <textarea
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+                disabled={isSubmitting}
+                {...register("content")}
+              />
+              {(errors.content || errors.root) && (
+                <span className="text-sm text-red-600">
+                  {errors.content?.message ?? errors.root?.message}
+                </span>
+              )}
+            </>
           ) : (
             <span className="whitespace-break-spaces">{wallInfo.content}</span>
           )}
@@ -95,7 +133,7 @@ function GroupWallItem({
         <GroupWallOptions
           handleDelete={handleDelete}
           handleEdit={handleEdit}
-          disabled={isDeletingWall || isEditingWall || editingMode}
+          disabled={isDeletingWall || isSubmitting || editingMode}
         />
       )}
 
@@ -104,14 +142,12 @@ function GroupWallItem({
           <div className="bg-white rounded-t-xl py-[2px] border-[2px] border-solid border-[#DDDDDD]">
             <button
               type="button"
-              onClick={() => {
-                handleUpdate(editedContent.trim());
-              }}
-              disabled={isEditingWall || editedContent.trim().length === 0}
+              onClick={handleSubmit(handleUpdate)}
+              disabled={isSubmitting}
               className="cursor-pointer w-full text-left disabled:opacity-60"
             >
               <span className="text-xs px-2 text-[#F05460]">
-                {isEditingWall ? "저장 중..." : "저장"}
+                {isSubmitting ? "저장 중..." : "저장"}
               </span>
             </button>
           </div>
@@ -119,18 +155,21 @@ function GroupWallItem({
             <button
               type="button"
               className="cursor-pointer w-full text-left"
-              onClick={() => {
-                setEditedContent(wallInfo.content);
-                setEditingMode(false);
-                setIsOptionOpen(false);
-              }}
-              disabled={isEditingWall}
+              onClick={closeEditing}
+              disabled={isSubmitting}
             >
               <span className="text-xs px-2 text-[#666666]">취소</span>
             </button>
           </div>
         </div>
       )}
+      <AlertModal
+        isOpen={isOpen}
+        onClose={closeAlert}
+        title={config.title}
+        message={config.message}
+        type={config.type}
+      />
     </div>
   );
 }
