@@ -19,11 +19,28 @@ const refreshApi = axios.create({
   },
 });
 
-export const refreshToken = async (): Promise<RefreshTokenResponse> => {
+const requestRefresh = async (): Promise<RefreshTokenResponse> => {
   const response = await refreshApi.post(USER_ENDPOINT.REFRESH);
   const { token, info } = response.data;
   return {
     info,
     auth: { accessToken: token },
   };
+};
+
+// 진행 중인 갱신 요청. 동시에 여러 곳에서 불러도 실제 요청은 하나만 나간다.
+//
+// 백엔드는 갱신할 때마다 리프레시 토큰을 회전시키고 옛 토큰을 DB 에서 덮어쓴다.
+// 따라서 같은 토큰으로 두 번 갱신하면 늦게 도착한 쪽이 401 을 받고,
+// 그 결과 멀쩡히 쓰던 사용자가 로그아웃된다.
+// 호출 지점이 둘(라우터 beforeLoad / 401 인터셉터)이라 실제로 겹칠 수 있다.
+let inFlight: Promise<RefreshTokenResponse> | null = null;
+
+export const refreshToken = (): Promise<RefreshTokenResponse> => {
+  if (!inFlight) {
+    inFlight = requestRefresh().finally(() => {
+      inFlight = null;
+    });
+  }
+  return inFlight;
 };

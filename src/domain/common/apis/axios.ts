@@ -36,23 +36,6 @@ const isAuthRequest = (url?: string) =>
 
 type RetriableRequest = InternalAxiosRequestConfig & { _retry?: boolean };
 
-interface FailedRequest {
-  resolve: (token: string) => void;
-  reject: (error: unknown) => void;
-}
-
-let isRefreshing: boolean = false;
-let failedQueue: FailedRequest[] = [];
-
-// 갱신이 끝날 때까지 미뤄둔 요청들을 결과에 따라 처리한다
-const processQueue = (error: unknown, token: string | null = null) => {
-  failedQueue.forEach((request) => {
-    if (error || token === null) request.reject(error);
-    else request.resolve(token);
-  });
-  failedQueue = [];
-};
-
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -79,34 +62,20 @@ api.interceptors.response.use(
     }
     originalRequest._retry = true;
 
-    // 이미 갱신이 진행 중이면 끝날 때까지 기다렸다가 재요청한다
-    if (isRefreshing) {
-      return new Promise<string>((resolve, reject) => {
-        failedQueue.push({ resolve, reject });
-      }).then((token) => {
-        originalRequest.headers["Authorization"] = `Bearer ${token}`;
-        return api(originalRequest);
-      });
-    }
-
-    isRefreshing = true;
     try {
-      const response = await refreshToken();
-      const newToken = response.auth.accessToken;
+      // 동시에 401 이 여러 건 떠도 refreshToken 이 요청을 하나로 합쳐준다.
+      // 각 요청은 같은 Promise 를 기다렸다가 새 토큰으로 재시도하면 된다.
+      const { auth, info } = await refreshToken();
 
-      setAccessToken(newToken);
-      useAuthStore.getState().setAuth(response.info);
-      processQueue(null, newToken);
+      setAccessToken(auth.accessToken);
+      useAuthStore.getState().setAuth(info);
 
-      originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+      originalRequest.headers["Authorization"] = `Bearer ${auth.accessToken}`;
       return api(originalRequest);
     } catch (refreshError) {
-      processQueue(refreshError, null);
       setAccessToken(null);
       useAuthStore.getState().clearAuth();
       return Promise.reject(refreshError);
-    } finally {
-      isRefreshing = false;
     }
   },
 );

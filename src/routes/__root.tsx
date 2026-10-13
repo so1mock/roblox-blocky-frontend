@@ -15,7 +15,14 @@ const queryClient = new QueryClient({
 
 export const Route = createRootRoute({
   beforeLoad: async () => {
-    const { setAuth, clearAuth } = useAuthStore.getState();
+    const { isLogin, setAuth, clearAuth } = useAuthStore.getState();
+
+    // 루트 beforeLoad 는 화면을 이동할 때마다 실행된다.
+    // 여기서 하려는 일은 "앱을 처음 열었을 때 세션 복원" 한 가지뿐이므로,
+    // 로그인 여부가 이미 판별된 뒤에는 다시 갱신하지 않는다.
+    // (isLogin 의 null 은 "아직 확인 전" 을 뜻한다)
+    // 세션 도중 토큰이 만료되는 것은 401 인터셉터가 처리한다.
+    if (isLogin !== null) return;
 
     try {
       const response = await refreshToken();
