@@ -1,3 +1,7 @@
 # Ignore artifacts:
 build
 coverage
+
+# 패키지 매니저가 생성하는 파일. prettier 가 포맷하면 pnpm 이 쓰는 형식과
+# 서로 덮어쓰며 매번 파일 전체가 다시 쓰인다 (패키지 하나 추가에 5천 줄 diff).
+pnpm-lock.yaml

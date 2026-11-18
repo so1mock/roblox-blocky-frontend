@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Spinner from "@common/components/Spinner";
+import ErrorState from "@common/components/ErrorState";
 import { PlaceCard } from "./PlaceCard";
 import PlaceConnectGuideModal from "./PlaceConnectGuideModal";
 import Dropdown from "@common/components/Dropdown";
@@ -13,6 +15,7 @@ function MyPlacePage() {
     data: myPlaces = [],
     isLoading: isMyPlacesLoading,
     isError: isMyPlacesError,
+    refetch: refetchMyPlaces,
     error: myPlacesError,
   } = useMyPlacesQuery();
 
@@ -58,9 +61,12 @@ function MyPlacePage() {
             />
           </div>
         </div>
-        {isMyPlacesLoading && <div>로딩 중...</div>}
+        {isMyPlacesLoading && <Spinner label="플레이스를 불러오는 중..." />}
         {!isMyPlacesLoading && isMyPlacesError && (
-          <div>오류: {myPlacesError.message}</div>
+          <ErrorState
+            message={myPlacesError.message}
+            onRetry={() => refetchMyPlaces()}
+          />
         )}
         {!isMyPlacesLoading && !isMyPlacesError && myPlaces.length === 0 && (
           <div>플레이스가 없습니다.</div>

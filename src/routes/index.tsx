@@ -2,11 +2,14 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { SocialLoginButton } from "@user/components/SocialLoginButton";
 import { useUser } from "@user/hooks/useUser";
 import { useAuthStore } from "@user/stores/authStore";
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
 import AlertModal from "@common/components/AlertModal";
 import { useAlertModal } from "@common/hooks/useAlertModal";
-import { AxiosError } from "axios";
+import { ApiError } from "@common/apis/ApiError";
+import { loginSchema, type LoginForm } from "@user/constants/schema";
 
 export const Route = createFileRoute("/")({
   beforeLoad: () => {
@@ -23,21 +26,26 @@ export const Route = createFileRoute("/")({
 function Index() {
   const { isOpen, config, showAlert, closeAlert } = useAlertModal();
   const [isTeacherLoginOpen, setTeacherLoginOpen] = useState(false);
-  const [isTeacherLoggingIn, setIsTeacherLoggingIn] = useState(false);
-  const [teacherId, setTeacherId] = useState("");
-  const [teacherPw, setTeacherPw] = useState("");
   const { handleLogin } = useUser();
   const navigate = useNavigate();
 
-  const handleTeacherLogin = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (isTeacherLoggingIn) return;
-    setIsTeacherLoggingIn(true);
+  const {
+    register,
+    handleSubmit,
+    setError,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginForm>({ resolver: zodResolver(loginSchema) });
+
+  const closeTeacherLogin = () => {
+    setTeacherLoginOpen(false);
+    reset();
+  };
+
+  // 입력 형식 검증은 zod 가 먼저 끝낸 뒤에만 이 함수가 호출된다
+  const onSubmit = async (form: LoginForm) => {
     try {
-      await handleLogin({
-        username: teacherId,
-        password: teacherPw,
-      });
+      await handleLogin(form);
       const role = useAuthStore.getState().userInfo?.role;
       if (role === "EDUCATOR") {
         navigate({ to: "/teacher" });
@@ -51,17 +59,12 @@ function Index() {
         });
       }
     } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response?.data.errorCode === "M101") {
-          showAlert({
-            title: "사용자 정보 오류",
-            message: "사용자 역할을 찾지 못했습니다. 메인 페이지로 이동합니다.",
-            type: "error",
-          });
-        }
-      }
-    } finally {
-      setIsTeacherLoggingIn(false);
+      // 로그인 실패는 폼 에러이므로 토스트가 아니라 폼 안에 표시한다.
+      // 서버가 준 문구를 그대로 쓴다 (예: M400 "올바르지 않은 아이디 혹은 비밀번호입니다.")
+      setError("root", {
+        message:
+          error instanceof ApiError ? error.message : "로그인에 실패했습니다.",
+      });
     }
   };
 
@@ -97,17 +100,21 @@ function Index() {
             <h3 className="mb-4 text-lg font-semibold text-gray-900">
               선생님 로그인
             </h3>
-            <form onSubmit={handleTeacherLogin} className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div>
                 <label className="mb-1 block text-sm font-medium text-gray-700">
                   아이디
                 </label>
                 <input
                   className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-                  value={teacherId}
-                  onChange={(e) => setTeacherId(e.target.value)}
                   placeholder="아이디"
+                  {...register("username")}
                 />
+                {errors.username && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.username.message}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium text-gray-700">
@@ -116,28 +123,32 @@ function Index() {
                 <input
                   type="password"
                   className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-                  value={teacherPw}
-                  onChange={(e) => setTeacherPw(e.target.value)}
                   placeholder="비밀번호"
+                  {...register("password")}
                 />
+                {errors.password && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
+              {/* 서버가 돌려준 로그인 실패 사유 */}
+              {errors.root && (
+                <p className="text-sm text-red-600">{errors.root.message}</p>
+              )}
               <div className="mt-6 flex justify-end gap-2">
                 <button
                   type="button"
                   className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-800"
-                  disabled={isTeacherLoggingIn}
-                  onClick={() => {
-                    setTeacherLoginOpen(false);
-                    setTeacherId("");
-                    setTeacherPw("");
-                  }}
+                  disabled={isSubmitting}
+                  onClick={closeTeacherLogin}
                 >
                   취소
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white"
-                  disabled={isTeacherLoggingIn}
+                  disabled={isSubmitting}
                 >
                   로그인
                 </button>

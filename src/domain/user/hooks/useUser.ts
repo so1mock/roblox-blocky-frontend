@@ -1,7 +1,7 @@
 import { useAuthStore } from "@user/stores/authStore";
 import { useMutation } from "@tanstack/react-query";
 import { socialLogin, getUserInfo, logout, login } from "@user/apis/user.ts";
-import { api } from "@common/apis/axios.ts";
+import { setAccessToken } from "@common/apis/axios.ts";
 import { useNavigate } from "@tanstack/react-router";
 
 export const useUser = () => {
@@ -9,37 +9,31 @@ export const useUser = () => {
   const clearAuth = useAuthStore((state) => state.clearAuth);
   const navigate = useNavigate();
 
+  const applyLogin = async (accessToken: string) => {
+    setAccessToken(accessToken);
+    try {
+      setAuth(await getUserInfo());
+    } catch {
+      setAccessToken(null);
+      clearAuth();
+    }
+  };
+
   const handleSocialLogin = useMutation({
     mutationFn: socialLogin,
-    onSuccess: async (data) => {
-      api.defaults.headers.common["Authorization"] =
-        `Bearer ${data.auth.accessToken}`;
-      try {
-        const user = await getUserInfo();
-        setAuth(user);
-      } catch (error) {
-        clearAuth();
-      }
-    },
+    onSuccess: (data) => applyLogin(data.auth.accessToken),
   });
 
   const handleLogin = useMutation({
     mutationFn: login,
-    onSuccess: async (data) => {
-      api.defaults.headers.common["Authorization"] =
-        `Bearer ${data.auth.accessToken}`;
-      try {
-        const user = await getUserInfo();
-        setAuth(user);
-      } catch (error) {
-        clearAuth();
-      }
-    },
+    onSuccess: (data) => applyLogin(data.auth.accessToken),
   });
 
   const handleLogout = useMutation({
     mutationFn: logout,
-    onSuccess: () => {
+    // 서버 호출이 실패해도 클라이언트 상태는 반드시 정리한다
+    onSettled: () => {
+      setAccessToken(null);
       clearAuth();
       navigate({ to: "/" });
     },

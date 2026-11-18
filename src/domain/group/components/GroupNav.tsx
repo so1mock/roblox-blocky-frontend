@@ -1,10 +1,14 @@
 import { useNavigate, useLocation } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { useDeleteGroupMutation } from "../hooks/useDeleteGroupMutation";
+import { useAlertModal } from "@common/hooks/useAlertModal";
+import AlertModal from "@common/components/AlertModal";
+import { ApiError } from "@common/apis/ApiError";
 
 function GroupNav({ id }: { id: string }) {
   const navigate = useNavigate();
   const location = useLocation(); // 현재 URL 가져오기
+  const { isOpen, config, showAlert, closeAlert } = useAlertModal();
   const menuOptions = [
     {
       name: "반 상세보기",
@@ -40,8 +44,19 @@ function GroupNav({ id }: { id: string }) {
     if (isDeletingGroup) return;
     if (!confirm("정말 반을 삭제하시겠습니까?")) return;
 
-    await deleteGroupMutation(id);
-    navigate({ to: "/teacher/group" });
+    try {
+      await deleteGroupMutation(id);
+      navigate({ to: "/teacher/group" });
+    } catch (error) {
+      showAlert({
+        title: "반 삭제 실패",
+        message:
+          error instanceof ApiError
+            ? error.message
+            : "반을 삭제하지 못했습니다.",
+        type: "error",
+      });
+    }
   };
 
   // URL 경로 변경 시 활성 메뉴 갱신
@@ -94,6 +109,13 @@ function GroupNav({ id }: { id: string }) {
           반 삭제하기
         </span>
       </button>
+      <AlertModal
+        isOpen={isOpen}
+        onClose={closeAlert}
+        title={config.title}
+        message={config.message}
+        type={config.type}
+      />
     </nav>
   );
 }

@@ -8,6 +8,7 @@ import { useWorkspaceDataStore } from "../workspace/stores/useWorkspaceDataStore
 import VariableCreateModal from "./VariableCreateModal";
 import { useAlertModal } from "@common/hooks/useAlertModal";
 import AlertModal from "@common/components/AlertModal";
+import { ErrorBoundary } from "@common/components/ErrorBoundary";
 
 function BlockCodingPage({
   placeId,
@@ -98,8 +99,18 @@ function BlockCodingPage({
   return (
     <div className="flex bg-gray-100 h-screen">
       {/* 왼쪽 사이드바 - 워크스페이스 탐색기 */}
+      {/* 탐색기와 편집기는 서로 독립적이다. 한쪽이 터져도 다른 쪽은 쓸 수 있게 분리한다 */}
       <aside className="w-80 bg-white border-r border-gray-200">
-        <WorkspaceExplorer placeId={placeId} readOnly={readOnly} />
+        <ErrorBoundary
+          name="workspace-explorer"
+          fallback={
+            <div className="p-4 text-sm text-gray-500">
+              파일 목록을 표시할 수 없습니다.
+            </div>
+          }
+        >
+          <WorkspaceExplorer placeId={placeId} readOnly={readOnly} />
+        </ErrorBoundary>
       </aside>
       {/* 메인 영역 */}
       <div className="flex-1 flex flex-col">

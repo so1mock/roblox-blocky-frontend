@@ -6,6 +6,9 @@ import Button from "@common/components/Button";
 import { useUploadPlaceThumbnailMutation } from "@myPlace/hooks/useUploadPlaceThumbnailMutation";
 import { useUpdatePlaceInfoMutation } from "@myPlace/hooks/useUpdatePlaceInfoMutation";
 import { useDeletePlaceMutation } from "@myPlace/hooks/useDeletePlaceMutation";
+import { useAlertModal } from "@common/hooks/useAlertModal";
+import AlertModal from "@common/components/AlertModal";
+import { ApiError } from "@common/apis/ApiError";
 
 interface PlaceCardProps {
   place: PlaceSummary;
@@ -22,6 +25,16 @@ export function PlaceCard({ place }: PlaceCardProps) {
   } = useUpdatePlaceInfoMutation();
   const { mutateAsync: deletePlaceMutation, isPending: isDeletingPlace } =
     useDeletePlaceMutation();
+
+  const { isOpen, config, showAlert, closeAlert } = useAlertModal();
+
+  // 변경 작업이 실패하면 사용자에게 사유를 알린다 (서버 문구 우선)
+  const alertFailure = (title: string, error: unknown, fallback: string) =>
+    showAlert({
+      title,
+      message: error instanceof ApiError ? error.message : fallback,
+      type: "error",
+    });
 
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [isOptionOpen, setIsOptionOpen] = useState<boolean>(false);
@@ -49,17 +62,25 @@ export function PlaceCard({ place }: PlaceCardProps) {
     if (isUpdatingPlaceInfo) {
       return;
     }
-    await updatePlaceInfoMutation({
-      uuid: place.uuid,
-      editedPlaceName,
-    });
+    try {
+      await updatePlaceInfoMutation({
+        uuid: place.uuid,
+        editedPlaceName,
+      });
+    } catch (error) {
+      alertFailure("이름 변경 실패", error, "이름을 변경하지 못했습니다.");
+    }
   };
 
   const handlePlaceDelete = async () => {
     if (isDeletingPlace) {
       return;
     }
-    await deletePlaceMutation(place.uuid);
+    try {
+      await deletePlaceMutation(place.uuid);
+    } catch (error) {
+      alertFailure("삭제 실패", error, "플레이스를 삭제하지 못했습니다.");
+    }
   };
 
   const handleEditThumbnail = async (
@@ -74,10 +95,15 @@ export function PlaceCard({ place }: PlaceCardProps) {
       return;
     }
 
-    await uploadPlaceThumbnailMutation({ uuid: place.uuid, file });
-    setIsOptionOpen(false);
-    // 파일 입력 초기화 (같은 파일 다시 선택할 때도 이벤트 발생하도록)
-    e.target.value = "";
+    try {
+      await uploadPlaceThumbnailMutation({ uuid: place.uuid, file });
+      setIsOptionOpen(false);
+    } catch (error) {
+      alertFailure("이미지 변경 실패", error, "이미지를 변경하지 못했습니다.");
+    } finally {
+      // 파일 입력 초기화 (같은 파일 다시 선택할 때도 이벤트 발생하도록)
+      e.target.value = "";
+    }
   };
 
   return (
@@ -177,6 +203,13 @@ export function PlaceCard({ place }: PlaceCardProps) {
           {formatIsoStringToDate(place.lastModifiedAt)}
         </span>
       </div>
+      <AlertModal
+        isOpen={isOpen}
+        onClose={closeAlert}
+        title={config.title}
+        message={config.message}
+        type={config.type}
+      />
     </div>
   );
 }
