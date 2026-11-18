@@ -30,12 +30,26 @@ function GroupDetailedPage({ groupUuid }: { groupUuid: string }) {
       message: groupInfoError.message,
       type: "error",
     });
-    navigate({
-      to: `/${userInfo?.role === "EDUCATOR" ? "teacher" : "student"}/group`,
-    });
   }, [isGroupInfoError]);
 
-  if (isGroupInfoError) return null;
+  if (isGroupInfoError) {
+    return (
+      <AlertModal
+        isOpen={isOpen}
+        onClose={() => {
+          closeAlert();
+          if (isGroupInfoError) {
+            navigate({
+              to: `/${userInfo?.role === "EDUCATOR" ? "teacher" : "student"}/group`,
+            });
+          }
+        }}
+        title={config.title}
+        message={config.message}
+        type={config.type}
+      />
+    );
+  }
 
   if (isGroupInfoLoading || groupInfo === undefined)
     return <Spinner label="반 정보를 불러오는 중..." />;
@@ -78,13 +92,6 @@ function GroupDetailedPage({ groupUuid }: { groupUuid: string }) {
           <Wall groupUuid={groupInfo.groupSummary.uuid} />
         </div>
       </div>
-      <AlertModal
-        isOpen={isOpen}
-        onClose={closeAlert}
-        title={config.title}
-        message={config.message}
-        type={config.type}
-      />
     </div>
   );
 }

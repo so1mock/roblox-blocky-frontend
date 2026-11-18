@@ -155,12 +155,7 @@ function GroupEditPage({ id }: { id: string }) {
       message: groupInfoError.message,
       type: "error",
     });
-    navigate({
-      to: `/${userInfo?.role === "EDUCATOR" ? "teacher" : "student"}/group`,
-    });
   }, [isGroupInfoError]);
-
-  if (isGroupInfoError) return null;
 
   return (
     <div className="w-[1600px] mx-auto flex justify-center gap-24">
@@ -303,7 +298,14 @@ function GroupEditPage({ id }: { id: string }) {
       )}
       <AlertModal
         isOpen={isOpen}
-        onClose={closeAlert}
+        onClose={() => {
+          closeAlert();
+          if (isGroupInfoError) {
+            navigate({
+              to: `/${userInfo?.role === "EDUCATOR" ? "teacher" : "student"}/group`,
+            });
+          }
+        }}
         title={config.title}
         message={config.message}
         type={config.type}

@@ -42,9 +42,8 @@ function GroupWallItem({
   // 편집 모드로 들어갈 때마다 원래 내용으로 되돌리고 전체 선택한다
   useEffect(() => {
     if (!editingMode) return;
-    reset({ content: wallInfo.content });
     setFocus("content", { shouldSelect: true });
-  }, [editingMode, wallInfo.content, reset, setFocus]);
+  }, [editingMode, setFocus]);
 
   const handleDelete = async () => {
     if (isDeletingWall) return;
@@ -61,6 +60,7 @@ function GroupWallItem({
   };
 
   const handleEdit = () => {
+    reset({ content: wallInfo.content });
     setIsOptionOpen(false);
     setEditingMode(true);
   };

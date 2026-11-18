@@ -59,7 +59,6 @@ function BoardDetailedPage({
           : "게시글 정보를 불러오지 못했습니다.",
       type: "warning",
     });
-    navigate({ to: `/teacher/group/${groupUuid}/` });
   }, [error]);
 
   return (
@@ -144,7 +143,13 @@ function BoardDetailedPage({
       </div>
       <AlertModal
         isOpen={isOpen}
-        onClose={closeAlert}
+        onClose={() => {
+          closeAlert();
+          if (error)
+            navigate({
+              to: `/${userInfo?.role === "EDUCATOR" ? "teacher" : "student"}/group/${groupUuid}/`,
+            });
+        }}
         title={config.title}
         message={config.message}
         type={config.type}
